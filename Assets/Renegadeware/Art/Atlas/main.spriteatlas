@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: main
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 1
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 6bc5925d5cc8ae94aa9e98fea529a6a5, type: 3}
+    totalSpriteSurfaceArea: 106628
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: f4683e31b11d8c249ac19e37611319cd, type: 3}
+  - {fileID: 21300000, guid: 1bb0cc5141a073b4aa089346df8cd0a3, type: 3}
+  - {fileID: 21300000, guid: 2c182d91a96c3c949bcbade9ea5d4ba4, type: 3}
+  - {fileID: 21300000, guid: cfce0ce1b6c72e54f9981e474f39ca7c, type: 3}
+  - {fileID: 21300002, guid: bf8c0222be72dfd48a68e5cf2a7ed5c1, type: 3}
+  - {fileID: 21300000, guid: bf8c0222be72dfd48a68e5cf2a7ed5c1, type: 3}
+  - {fileID: 2383154019900357971, guid: c05e5e136fe7a084084e48c38b81b054, type: 3}
+  - {fileID: -4249189435241424335, guid: c05e5e136fe7a084084e48c38b81b054, type: 3}
+  - {fileID: 21300000, guid: d985b654a2dd4e54482f774cec3f7b9c, type: 3}
+  - {fileID: 21300000, guid: c41b7ac4773379f42bec55818efbfab5, type: 3}
+  - {fileID: 21300000, guid: e9c8ee955c09c344aa79e9bb93b94216, type: 3}
+  - {fileID: 21300000, guid: 326ab6c73d9e81346bb6774298a0d825, type: 3}
+  - {fileID: 21300000, guid: 5427e4f7e1cb9704892fb4854f1cf6a9, type: 3}
+  - {fileID: 21300000, guid: b5f1f248fc842084cb79fa132167e30b, type: 3}
+  - {fileID: 21300010, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
+  - {fileID: 21300006, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
+  - {fileID: 21300000, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
+  - {fileID: 21300008, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
+  - {fileID: 21300002, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
+  - {fileID: 5754809440454667916, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
+  - {fileID: 21300004, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
+  - {fileID: 21300000, guid: a44ac7793e05d8148a07b482a78da98e, type: 3}
+  - {fileID: 21300000, guid: bb8a087995e8ab149b0f5c36c07f3d96, type: 3}
+  - {fileID: 21300000, guid: 1936bac986127cb4bad904bfad92c266, type: 3}
+  - {fileID: 21300002, guid: 1936bac986127cb4bad904bfad92c266, type: 3}
+  - {fileID: 21300000, guid: 7168da6aea1c4154bbc52d54856e6639, type: 3}
+  - {fileID: 21300000, guid: 5952baaa48d611842a22716276cee699, type: 3}
+  - {fileID: 21300000, guid: 8d268ada08728e64f89466e44eec3b74, type: 3}
+  - {fileID: 21300000, guid: 6e46d65c795b56344b389f1886fb3982, type: 3}
+  - {fileID: 21300000, guid: 36ce24ec9ae04524289ce0e80bf270be, type: 3}
+  - {fileID: 21300000, guid: c5a54a7e88b59e547a8905c1ad93d892, type: 3}
+  - {fileID: 21300000, guid: d100bf3fba8e48343b4f69fe5447d682, type: 3}
+  - {fileID: 21300000, guid: 49f63cbf9fa458c4cbc656fbdbb5124a, type: 3}
+  - {fileID: 21300000, guid: 49d782ef45be5004b9edb429ea0994ce, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - downArrow
+  - triangle
+  - tutorialArrow2
+  - edge_shade_left_8x1
+  - shadeWhite_bottomLeft
+  - shadeWhite
+  - roundRectGlow
+  - roundRectGlow_bottom
+  - circleGlow
+  - devicerBody
+  - outline1x1
+  - circle32x32
+  - dot
+  - tutorialHandPointDown
+  - blank4x4_top
+  - blank4x4_bottomLeft
+  - blank4x4_bottom
+  - blank4x4_border
+  - blank4x4
+  - blank4x4_border2
+  - blank4x4_topLeft
+  - circleOutline32x32
+  - optionButton
+  - shade
+  - shade_bottom
+  - gradient8x8
+  - ringGlow
+  - circleQuarter_256
+  - devicerMouthClose
+  - circleGlowTiny
+  - edge_shade
+  - tutorialHandPoint
+  - devicerMouthOpen
+  - circle128x128
+  m_Tag: main
+  m_IsVariant: 0

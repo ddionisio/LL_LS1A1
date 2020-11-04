@@ -1,0 +1,11 @@
+{
+  "_meta": {
+    "maxChars": {
+      "welcome": "50"
+    }
+  },
+  "en": {
+    "welcome": "Welcome!",
+    "title": "TBD"
+  }
+}
