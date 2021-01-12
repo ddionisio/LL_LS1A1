@@ -61,6 +61,8 @@ namespace LoLExt {
         [SerializeField]
         LoLSaveData _userData = null;
         [SerializeField]
+        M8.UserData _settingsData = null;
+        [SerializeField]
         float _speakQueueStartDelay = 0.3f;
 
         [Header("Audio")]
@@ -116,6 +118,7 @@ namespace LoLExt {
         }
 
         public LoLSaveData userData { get { return _userData; } }
+        public M8.UserData settingsData { get { return _settingsData; } }
 
         public virtual bool isAutoSpeechEnabled { get { return true; } }
 
@@ -330,8 +333,8 @@ namespace LoLExt {
             if(mIsSpeechMute != isMute) {
                 mIsSpeechMute = isMute;
 
-                if(_userData)
-                    _userData.SetInt(settingsSpeechMuteKey, mIsSpeechMute ? 1 : 0);
+                if(_settingsData)
+                    _settingsData.SetInt(settingsSpeechMuteKey, mIsSpeechMute ? 1 : 0);
             }
         }
 
@@ -406,15 +409,44 @@ namespace LoLExt {
                 mLanguageJson = null;
             }
 
-            //load user data
-            if(userData) {
-                userData.Load();
-                while(!userData.isLoaded)
-                    yield return null;
+            const float timeOutDelay = 20.0f;
 
-                mCurScore = userData.score;
-                mCurProgress = userData.currentProgress;
+            float lastTime = Time.time;
+
+            //load user data
+            if(_userData) {
+                _userData.Load();
+                while(!_userData.isLoaded) {
+                    //time-out?
+                    if(Time.time - lastTime >= timeOutDelay) {
+                        Debug.LogWarning("User Data loading timed-out.");
+                        break;
+                    }
+
+                    yield return null;
+                }
+
+                mCurScore = _userData.score;
+                mCurProgress = _userData.currentProgress;
             }
+
+            lastTime = Time.time;
+
+            //load settings data
+            if(_settingsData && _settingsData != _userData) {
+                _settingsData.Load();
+                while(!_settingsData.isLoaded) {
+                    //time-out?
+                    if(Time.time - lastTime >= timeOutDelay) {
+                        Debug.LogWarning("Settings Data loading timed-out.");
+                        break;
+                    }
+
+                    yield return null;
+                }
+            }
+
+            yield return null;
 
             //initialize audio
             if(M8.MusicPlaylist.instance)
@@ -422,8 +454,6 @@ namespace LoLExt {
 
             if(M8.SoundPlaylist.instance)
                 M8.SoundPlaylist.instance.SetupSourceRoot(soundPlaylistRootGO);
-
-            yield return null;
 
             ApplySettings();
 
@@ -459,8 +489,8 @@ namespace LoLExt {
         }
 
         protected void ApplySettings() {
-            if(_userData) {
-                mIsSpeechMute = _userData.GetInt(settingsSpeechMuteKey) != 0;
+            if(_settingsData) {
+                mIsSpeechMute = _settingsData.GetInt(settingsSpeechMuteKey) != 0;
 
                 var audioSettings = GetComponent<M8.UserSettingAudio>();
                 if(audioSettings)

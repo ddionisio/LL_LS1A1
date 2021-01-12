@@ -106,6 +106,7 @@ MonoBehaviour:
   _gameID: com.daviddionisio.Game
   _progressMax: 0
   _userData: {fileID: 11400000, guid: d1570a9011293b94a9b3d84278169e34, type: 2}
+  _settingsData: {fileID: 11400000, guid: 9d49958e44f75d147a748c1b9fa7ee0e, type: 2}
   _speakQueueStartDelay: 0.3
   musicPlaylistRootGO: {fileID: 1947313511617272651}
   soundPlaylistRootGO: {fileID: 2941013351346169412}
@@ -123,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9fea65cecb960d4395a4abcbbeb8691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _userData: {fileID: 11400000, guid: d1570a9011293b94a9b3d84278169e34, type: 2}
+  _userData: {fileID: 11400000, guid: 9d49958e44f75d147a748c1b9fa7ee0e, type: 2}
   _loadOnInstance: 0
   _masterVolumeDefault: 1
   _soundVolumeDefault: 0.5
