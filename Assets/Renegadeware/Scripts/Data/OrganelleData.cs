@@ -16,7 +16,7 @@ namespace Renegadeware.LL_LS1A1 {
         public string descRef;
 
         [Header("Game Data")]        
-        public float energyRate;
-        public float mass;
+        public float energyRate; //determines amount of energy consumption/regeneration
+        public float mass; //determines energy capacity for growth
     }
 }
