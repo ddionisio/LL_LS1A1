@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public abstract class CellComponent : ScriptableObject {
-        public int id;
+        public int ID;
 
         [Header("Info")]
         public Sprite icon;
@@ -12,7 +12,6 @@ namespace Renegadeware.LL_LS1A1 {
         public string nameRef;
         [M8.Localize]
         public string descRef;
-        public AnchorData anchorId;
 
         [Header("Templates")]
         public GameObject editPrefab; //use during edit mode
@@ -21,6 +20,6 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("General")]
         public float energy; //initial energy value upon spawn
         public float energyRate; //determines amount of energy consumption/regeneration
-        public float energyCapacity; //determines energy cap, when reached, allow division        
+        public float energyCapacity; //determines energy cap, when reached, allow division
     }
 }
