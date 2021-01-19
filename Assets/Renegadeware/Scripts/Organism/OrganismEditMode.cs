@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    public class CellEditMode : MonoBehaviour {
+    public class OrganismEditMode : MonoBehaviour {
 
     }
 }

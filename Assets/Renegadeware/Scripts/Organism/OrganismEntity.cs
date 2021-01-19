@@ -14,8 +14,7 @@ namespace Renegadeware.LL_LS1A1 {
         /// <summary>
         /// Call this after creating the prefab, before generating the pool.
         /// </summary>
-        /// <param name="cellTemplate"></param>
-        public void SetupTemplate(CellTemplate cellTemplate) {
+        public void SetupTemplate(OrganismTemplate organismTemplate) {
             //go through and initialize organelles
         }
 

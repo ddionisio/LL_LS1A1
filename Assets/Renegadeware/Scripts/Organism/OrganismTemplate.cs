@@ -5,25 +5,26 @@ using UnityEngine;
 using LoLExt;
 
 namespace Renegadeware.LL_LS1A1 {
-    [CreateAssetMenu(fileName = "cellTemplate", menuName = "Game/Cell Template")]
-    public class CellTemplate : ScriptableObject {
+    [CreateAssetMenu(fileName = "organismTemplate", menuName = "Game/Organism Template")]
+    public class OrganismTemplate : ScriptableObject {
+        public int ID;
         public int[] componentIDs;
 
-        private const string userDataKeySub = "_cellTemplate";
+        private const string userDataKeySub = "_organismTemplate";
         private const string userDataKeySubCompCount = "_compCount";
         private const string userDataKeySubComp = "_comp";
 
         /// <summary>
         /// Instantiate a template from user data. Remember to delete this when done.
         /// </summary>
-        public static CellTemplate LoadFrom(string key) {
+        public static OrganismTemplate LoadFrom(string key) {
             if(!LoLManager.isInstantiated)
                 return null;
 
             if(!LoLManager.instance.userData)
                 return null;
 
-            var newCellTemplate = CreateInstance<CellTemplate>();
+            var newCellTemplate = CreateInstance<OrganismTemplate>();
 
             var usrData = LoLManager.instance.userData;
 

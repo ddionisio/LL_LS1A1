@@ -7,8 +7,6 @@ namespace Renegadeware.LL_LS1A1 {
     public class LevelData : ScriptableObject {
         [System.Serializable]
         public struct EnvironmentInfo {
-            public string ID; //use for tracking progress, check if already completed
-
             [M8.Localize]
             public string nameRef;
             [M8.Localize]
@@ -24,7 +22,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Cell Bodies")]
         public CategoryData bodyCategory;
-        public CellComponent[] bodyComponents;
+        public OrganismComponent[] bodyComponents;
 
         //environment selections
 

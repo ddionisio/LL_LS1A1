@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "cellbody", menuName = "Game/Cell Component/Body")]
-    public class CellBody : CellComponent {
+    public class OrganismBody : OrganismComponent {
         [System.Serializable]
         public struct Category {
             public CategoryData info;
-            public CellComponent[] components;
+            public OrganismComponent[] components;
         }
 
         [Header("Body Info")]
