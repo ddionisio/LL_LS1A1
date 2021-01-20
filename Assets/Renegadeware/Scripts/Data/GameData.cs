@@ -7,15 +7,7 @@ using LoLExt;
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "gameData", menuName = "Game/Game Data", order = 0)]
     public class GameData : M8.SingletonScriptableObject<GameData> {
-        public struct EnvironmentStat {
-            public string levelName; //name of LevelData
-            public int index; //which environment index
-            public int organismTemplateID; //cell template used for this environment
-            public int count; //propagation count during play (cell or organism)
-        }
-
         [Header("Scene")]
-        public M8.SceneAssetPath introScene;
         public M8.SceneAssetPath endScene;
 
         [Header("Levels")]
@@ -26,8 +18,10 @@ namespace Renegadeware.LL_LS1A1 {
 
         public bool isGameStarted { get; private set; } //true: we got through start normally, false: debug
 
+        private const string userDataKeyOrganismTemplateCount = "organismCount";
+        private const string userDataKeyOrganismTemplate = "organism";
+
         private List<OrganismTemplate> mOrganismTemplateList; //saved organisms made by player
-        private List<EnvironmentStat> mEnvironmentStateList; //saved stats for environment
 
         /// <summary>
         /// Called in start scene
@@ -54,27 +48,23 @@ namespace Renegadeware.LL_LS1A1 {
 
             var curProgress = lolMgr.curProgress;
 
-            if(curProgress <= 0) { //intro
-                introScene.Load();
+            //grab level index, and load level scene
+            int levelIndex = 0;
+
+            int levelProgressCount = 0;
+            for(int i = 0; i < levels.Length; i++) {
+                levelProgressCount += levels[i].progressCount;
+                if(curProgress < levelProgressCount)
+                    break;
+
+                levelIndex++;
             }
-            else { //grab level index, and load level scene
-                int levelIndex = 0;
 
-                int levelProgressCount = 0;
-                for(int i = 0; i < levels.Length; i++) {
-                    levelProgressCount += levels[i].progressCount;
-                    if(curProgress < levelProgressCount)
-                        break;
-
-                    levelIndex++;
-                }
-
-                if(levelIndex < levels.Length) {
-                    levels[levelIndex].scene.Load();
-                }
-                else { //end
-                    endScene.Load();
-                }
+            if(levelIndex < levels.Length) {
+                levels[levelIndex].scene.Load();
+            }
+            else { //end
+                endScene.Load();
             }
         }
 
@@ -104,8 +94,11 @@ namespace Renegadeware.LL_LS1A1 {
                 isGameStarted = true;
             }
 
-            if(LoLManager.isInstantiated)
+            if(LoLManager.isInstantiated) {
+                SaveUserData();
+
                 LoLManager.instance.ApplyProgress(curProgress + 1);
+            }
 
             //load to new scene
             Current();
@@ -136,11 +129,91 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void LoadUserData() {
+            if(!LoLManager.isInstantiated)
+                return;
 
+            var usrData = LoLManager.instance.userData;
+            if(!usrData)
+                return;
+
+            //load level stats
+            for(int i = 0; i < levels.Length; i++) {
+                if(levels[i])
+                    levels[i].LoadStatsFrom(usrData);
+            }
+
+            //load organism templates
+            ClearOrganismTemplates();
+
+            int organismCount = usrData.GetInt(userDataKeyOrganismTemplateCount);
+            if(organismCount == 0)
+                return;
+
+            mOrganismTemplateList = new List<OrganismTemplate>(organismCount);
+
+            for(int i = 0; i < organismCount; i++)
+                mOrganismTemplateList.Add(OrganismTemplate.LoadFrom(usrData, userDataKeyOrganismTemplate + i));
+        }
+
+        private void SaveUserData() {
+            if(!LoLManager.isInstantiated)
+                return;
+
+            var usrData = LoLManager.instance.userData;
+            if(!usrData)
+                return;
+
+            //save level stats
+            for(int i = 0; i < levels.Length; i++) {
+                if(levels[i])
+                    levels[i].SaveStatsTo(usrData);
+            }
+
+            //save organism templates
+            int organismCount = mOrganismTemplateList != null ? mOrganismTemplateList.Count : 0;
+
+            usrData.SetInt(userDataKeyOrganismTemplateCount, organismCount);
+
+            int curInd = 0;
+            for(int i = 0; i < organismCount; i++) {
+                var organismTemplate = mOrganismTemplateList[i];
+                if(organismTemplate) {
+                    organismTemplate.SaveTo(usrData, userDataKeyOrganismTemplate + curInd);
+                    curInd++;
+                }
+            }
         }
 
         private void ResetUserData() {
+            if(!LoLManager.isInstantiated)
+                return;
 
+            var usrData = LoLManager.instance.userData;
+            if(!usrData)
+                return;
+
+            //clear level stats
+            for(int i = 0; i < levels.Length; i++) {
+                if(levels[i])
+                    levels[i].ResetStatsFrom(usrData);
+            }
+
+            //clear organism templates
+            usrData.Remove(userDataKeyOrganismTemplateCount);
+            usrData.RemoveAllByNameContain(userDataKeyOrganismTemplate);
+
+            ClearOrganismTemplates();
+        }
+
+        private void ClearOrganismTemplates() {
+            if(mOrganismTemplateList != null) {
+                for(int i = 0; i < mOrganismTemplateList.Count; i++) {
+                    if(mOrganismTemplateList[i])
+                        Destroy(mOrganismTemplateList[i]);
+                }
+
+                mOrganismTemplateList = null;
+            }
         }
     }
 }
