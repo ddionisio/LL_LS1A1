@@ -18,10 +18,31 @@ namespace Renegadeware.LL_LS1A1 {
 
         public bool isGameStarted { get; private set; } //true: we got through start normally, false: debug
 
+        public OrganismTemplate organismTemplateCurrent {
+            get {
+                if(!mOrganismTemplateCurrent) {
+                    var usrData = LoLManager.isInstantiated ? LoLManager.instance.userData : null;
+
+                    if(usrData)
+                        mOrganismTemplateCurrent = OrganismTemplate.LoadFrom(usrData, userDataKeyOrganismTemplateCurrent);
+                    else {
+                        mOrganismTemplateCurrent = OrganismTemplate.CreateEmpty();
+                    }
+                }
+
+                return mOrganismTemplateCurrent;
+            }
+        }
+
         private const string userDataKeyOrganismTemplateCount = "organismCount";
         private const string userDataKeyOrganismTemplate = "organism";
+        private const string userDataKeyOrganismTemplateCurrent = "organismCurrent";
+        private const string userDataKeyOrganismTemplateIDCounter = "organismIDCounter";
 
+        private OrganismTemplate mOrganismTemplateCurrent; //currently editting organism
         private List<OrganismTemplate> mOrganismTemplateList; //saved organisms made by player
+
+        private int mOrganismTemplateIDCounter = 1;
 
         /// <summary>
         /// Called in start scene
@@ -38,6 +59,21 @@ namespace Renegadeware.LL_LS1A1 {
             isGameStarted = true;
 
             Current();
+        }
+
+        /// <summary>
+        /// Call this if you need isGameStarted to be true
+        /// </summary>
+        public void GameStart(bool isResetUserData) {
+            if(isGameStarted)
+                return;
+
+            if(isResetUserData)
+                ResetUserData();
+            else
+                LoadUserData();
+
+            isGameStarted = true;
         }
 
         /// <summary>
@@ -85,6 +121,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                     if(lvl.scene == curScene) {
                         curProgress = levelProgressCount;
+                        curProgress += lvl.GetProgressCount();
                         break;
                     }
 
@@ -95,6 +132,9 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             if(LoLManager.isInstantiated) {
+                if(mOrganismTemplateCurrent)
+                    mOrganismTemplateCurrent.Reset();
+
                 SaveUserData();
 
                 LoLManager.instance.ApplyProgress(curProgress + 1);
@@ -114,6 +154,40 @@ namespace Renegadeware.LL_LS1A1 {
             return null;
         }
 
+        public void AddOrganismTemplateCurrentToList() {
+            if(!mOrganismTemplateCurrent)
+                return;
+
+            if(mOrganismTemplateList == null)
+                mOrganismTemplateList = new List<OrganismTemplate>();
+
+            if(mOrganismTemplateCurrent.ID != OrganismTemplate.invalidID) {
+                //check if already in list
+                OrganismTemplate template = null;
+                for(int i = 0; i < mOrganismTemplateList.Count; i++) {
+                    if(mOrganismTemplateList[i].ID == mOrganismTemplateCurrent.ID) {
+                        template = mOrganismTemplateList[i];
+                        break;
+                    }
+                }
+
+                if(template)
+                    template.CopyFrom(mOrganismTemplateCurrent);
+                else
+                    mOrganismTemplateList.Add(OrganismTemplate.Clone(mOrganismTemplateCurrent));
+
+                //TODO: invalidate current's ID?
+            }
+            else {
+                //generate ID, then add
+                mOrganismTemplateCurrent.ID = mOrganismTemplateIDCounter;
+
+                mOrganismTemplateIDCounter++;
+
+                mOrganismTemplateList.Add(OrganismTemplate.Clone(mOrganismTemplateCurrent));
+            }
+        }
+
         protected override void OnInstanceInit() {
             //compute max progress
             if(LoLManager.isInstantiated) {
@@ -126,6 +200,17 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             isGameStarted = false;
+        }
+
+        protected override void OnDestroy() {
+            if(mOrganismTemplateCurrent) {
+                Destroy(mOrganismTemplateCurrent);
+                mOrganismTemplateCurrent = null;
+            }
+
+            ClearOrganismTemplates();
+
+            base.OnDestroy();
         }
 
         private void LoadUserData() {
@@ -142,12 +227,19 @@ namespace Renegadeware.LL_LS1A1 {
                     levels[i].LoadStatsFrom(usrData);
             }
 
+            //load organism ID Counter
+            mOrganismTemplateIDCounter = usrData.GetInt(userDataKeyOrganismTemplateIDCounter, 1);
+
+            //load organism template current
+            if(mOrganismTemplateCurrent)
+                mOrganismTemplateCurrent.Load(usrData, userDataKeyOrganismTemplateCurrent);
+            else
+                mOrganismTemplateCurrent = OrganismTemplate.LoadFrom(usrData, userDataKeyOrganismTemplateCurrent);
+
             //load organism templates
             ClearOrganismTemplates();
 
             int organismCount = usrData.GetInt(userDataKeyOrganismTemplateCount);
-            if(organismCount == 0)
-                return;
 
             mOrganismTemplateList = new List<OrganismTemplate>(organismCount);
 
@@ -168,6 +260,13 @@ namespace Renegadeware.LL_LS1A1 {
                 if(levels[i])
                     levels[i].SaveStatsTo(usrData);
             }
+
+            //save organism template ID Counter
+            usrData.SetInt(userDataKeyOrganismTemplateIDCounter, mOrganismTemplateIDCounter);
+
+            //save organism template current
+            if(mOrganismTemplateCurrent)
+                mOrganismTemplateCurrent.SaveTo(usrData, userDataKeyOrganismTemplateCurrent);
 
             //save organism templates
             int organismCount = mOrganismTemplateList != null ? mOrganismTemplateList.Count : 0;
@@ -198,11 +297,22 @@ namespace Renegadeware.LL_LS1A1 {
                     levels[i].ResetStatsFrom(usrData);
             }
 
+            //clear organism template ID counter
+            mOrganismTemplateIDCounter = 1;
+            usrData.Remove(userDataKeyOrganismTemplateIDCounter);
+
+            //clear organism template current
+            if(mOrganismTemplateCurrent) {
+                mOrganismTemplateCurrent.Reset();
+
+                usrData.RemoveAllByNameContain(userDataKeyOrganismTemplateCurrent);
+            }
+
             //clear organism templates
+            ClearOrganismTemplates();
+
             usrData.Remove(userDataKeyOrganismTemplateCount);
             usrData.RemoveAllByNameContain(userDataKeyOrganismTemplate);
-
-            ClearOrganismTemplates();
         }
 
         private void ClearOrganismTemplates() {

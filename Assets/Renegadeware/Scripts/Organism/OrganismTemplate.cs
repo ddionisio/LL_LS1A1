@@ -22,20 +22,41 @@ namespace Renegadeware.LL_LS1A1 {
         public static OrganismTemplate LoadFrom(M8.UserData usrData, string key) {
             var newCellTemplate = CreateInstance<OrganismTemplate>();
 
+            newCellTemplate.Load(usrData, key);
+
+            return newCellTemplate;
+        }
+
+        public static OrganismTemplate CreateEmpty() {
+            var newCellTemplate = CreateInstance<OrganismTemplate>();
+            newCellTemplate.Reset();
+            return newCellTemplate;
+        }
+
+        public static OrganismTemplate Clone(OrganismTemplate src) {
+            var newCellTemplate = CreateInstance<OrganismTemplate>();
+            newCellTemplate.CopyFrom(src);
+            return newCellTemplate;
+        }
+
+        public void Reset() {
+            ID = invalidID;
+            componentIDs = new int[0];
+        }
+
+        public void Load(M8.UserData usrData, string key) {
             //grab ID
-            newCellTemplate.ID = usrData.GetInt(key + userDataKeySubID, -1);
+            ID = usrData.GetInt(key + userDataKeySubID, -1);
 
             //grab components
             int componentCount = usrData.GetInt(key + userDataKeySubCompCount);
 
-            newCellTemplate.componentIDs = new int[componentCount];
+            componentIDs = new int[componentCount];
 
             var keyComponent = key + userDataKeySubComp;
 
             for(int i = 0; i < componentCount; i++)
-                newCellTemplate.componentIDs[i] = usrData.GetInt(keyComponent + i, -1);
-
-            return newCellTemplate;
+                componentIDs[i] = usrData.GetInt(keyComponent + i, -1);
         }
 
         public void SaveTo(M8.UserData usrData, string key) {
@@ -47,6 +68,12 @@ namespace Renegadeware.LL_LS1A1 {
 
             for(int i = 0; i < componentIDs.Length; i++)
                 usrData.SetInt(key + userDataKeySubComp, componentIDs[i]);
+        }
+
+        public void CopyFrom(OrganismTemplate src) {
+            ID = src.ID;
+            componentIDs = new int[src.componentIDs.Length];
+            System.Array.Copy(src.componentIDs, componentIDs, componentIDs.Length);
         }
     }
 }

@@ -11,13 +11,11 @@ namespace Renegadeware.LL_LS1A1 {
             public string nameRef;
             [M8.Localize]
             public string descRef;
-
-            public Sprite previewImage;
         }
 
         public class EnvironmentStat {
             public int organismTemplateID = OrganismTemplate.invalidID; //cell template used for this environment
-            public int count = 0; //organism count made after play, if it is equal to criteriaCount, then this environment is complete
+            public int count = 0; //organism count made after play, if >= criteriaCount, then this environment is complete
 
             private const string userDataKeySubOrganismID = "_id";
             private const string userDataKeySubOrganismCount = "_count";
@@ -59,6 +57,23 @@ namespace Renegadeware.LL_LS1A1 {
         //environment selections
 
         //cell spawn restriction, etc.
+
+        public int GetProgressCount() {
+            if(mStats == null)
+                return 0;
+
+            int progressCount = 0;
+
+            for(int i = 0; i < mStats.Length; i++) {
+                if(mStats[i].count >= criteriaCount)
+                    progressCount++;
+            }
+
+            //fail-safe clamp count
+            progressCount = Mathf.Clamp(progressCount, 0, progressCount);
+
+            return progressCount;
+        }
 
         public void LoadStatsFrom(M8.UserData usrData) {
             var envCount = environments.Length;
