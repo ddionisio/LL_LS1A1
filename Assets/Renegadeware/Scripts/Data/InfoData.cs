@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     /// <summary>
-    /// General use for categorization.
+    /// General use for info
     /// </summary>
-    [CreateAssetMenu(fileName = "category", menuName = "Game/Category")]
-    public class CategoryData : ScriptableObject {
+    [CreateAssetMenu(fileName = "info", menuName = "Game/Info")]
+    public class InfoData : ScriptableObject {
         [Header("Info")]
         public Sprite icon;
         [M8.Localize]

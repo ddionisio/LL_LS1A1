@@ -62,21 +62,6 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         /// <summary>
-        /// Call this if you need isGameStarted to be true
-        /// </summary>
-        public void GameStart(bool isResetUserData) {
-            if(isGameStarted)
-                return;
-
-            if(isResetUserData)
-                ResetUserData();
-            else
-                LoadUserData();
-
-            isGameStarted = true;
-        }
-
-        /// <summary>
         /// Update level index based on current progress, and load scene
         /// </summary>
         public void Current() {
@@ -214,6 +199,9 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void LoadUserData() {
+            if(!isGameStarted)
+                return;
+
             if(!LoLManager.isInstantiated)
                 return;
 
@@ -248,6 +236,9 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void SaveUserData() {
+            if(!isGameStarted)
+                return;
+
             if(!LoLManager.isInstantiated)
                 return;
 

@@ -3,15 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    public abstract class OrganismComponent : ScriptableObject {
+    public abstract class OrganismComponent : InfoData {
+        [Header("Component Info")]
         public int ID;
-
-        [Header("Info")]
-        public Sprite icon;
-        [M8.Localize]
-        public string nameRef;
-        [M8.Localize]
-        public string descRef;
 
         [Header("Templates")]
         public GameObject editPrefab; //use during edit mode

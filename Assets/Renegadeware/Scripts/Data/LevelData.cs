@@ -42,13 +42,14 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Data")]
         public M8.SceneAssetPath scene;
+        
         public int progressCount = 2; //number of progress for this particular level before going to next (use LoL cur. progress)
+        
         public int criteriaCount; //number of organisms to grow to complete an environment
+        
         public EnvironmentInfo[] environments; //usually 4
 
-        [Header("Cell Bodies")]
-        public CategoryData bodyCategory;
-        public OrganismComponent[] bodyComponents;
+        public OrganismComponentGroup organismBodyGroup;
 
         private const string userDataKeyEnvironmentStat = "envStat";
 
