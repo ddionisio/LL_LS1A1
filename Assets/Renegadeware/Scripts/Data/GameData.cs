@@ -7,6 +7,8 @@ using LoLExt;
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "gameData", menuName = "Game/Game Data", order = 0)]
     public class GameData : M8.SingletonScriptableObject<GameData> {
+        public const int organismComponentCapacity = 8;
+
         [Header("Scene")]
         public M8.SceneAssetPath endScene;
 
@@ -129,11 +131,11 @@ namespace Renegadeware.LL_LS1A1 {
             Current();
         }
 
-        public OrganismComponent GetCellComponent(int id) {
+        public T GetOrganismComponent<T>(int id) where T : OrganismComponent {
             for(int i = 0; i < organismComponents.Length; i++) {
                 var comp = organismComponents[i];
                 if(comp && comp.ID == id)
-                    return comp;
+                    return comp as T;
             }
 
             return null;

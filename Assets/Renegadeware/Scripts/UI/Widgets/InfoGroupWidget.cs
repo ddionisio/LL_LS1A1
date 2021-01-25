@@ -2,17 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InfoGroupWidget : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+namespace Renegadeware.LL_LS1A1 {
+    public class InfoGroupWidget : MonoBehaviour {
+        public void Setup(InfoData datum) {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        }
+
+        public void Setup(InfoData firstDatum, InfoData[] data) {
+
+        }
+
+        public void Setup(InfoData[] data) {
+
+        }
+
+        public void SetSelect(int ind) {
+
+        }
     }
 }

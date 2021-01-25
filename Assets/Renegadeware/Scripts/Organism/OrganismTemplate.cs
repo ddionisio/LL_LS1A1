@@ -39,6 +39,12 @@ namespace Renegadeware.LL_LS1A1 {
             return newCellTemplate;
         }
 
+        //Game API
+
+
+
+        //User Data API
+
         public void Reset() {
             ID = invalidID;
             componentIDs = new int[0];
