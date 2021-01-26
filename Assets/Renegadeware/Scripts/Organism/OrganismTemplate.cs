@@ -41,7 +41,43 @@ namespace Renegadeware.LL_LS1A1 {
 
         //Game API
 
+        public void SetBody(OrganismBody newBody) {
+            var newCompIds = new int[newBody.componentGroups.Length + 1];
 
+            newCompIds[0] = newBody.ID;
+
+            //try to re-attach existing components that match new body
+            for(int i = 0; i < newBody.componentGroups.Length; i++) {
+                var grp = newBody.componentGroups[i];
+
+                //grab compatible component for this group
+                int compId = -1;
+                for(int j = 1; j < componentIDs.Length; j++) {
+                    if(componentIDs[j] != invalidID && grp.GetIndex(componentIDs[j]) != -1) {
+                        compId = componentIDs[j];
+                        componentIDs[j] = invalidID;
+                        break;
+                    }
+                }
+
+                newCompIds[i + 1] = compId;
+            }
+
+            componentIDs = newCompIds;
+
+            //signal body change
+            GameData.instance.signalOrganismBodyChanged.Invoke();
+        }
+
+        public void SetComponentID(int index, int id) {
+            if(index >= componentIDs.Length)
+                return;
+
+            componentIDs[index] = id;
+
+            //signal component change
+            GameData.instance.signalOrganismComponentChanged.Invoke(index);
+        }
 
         //User Data API
 

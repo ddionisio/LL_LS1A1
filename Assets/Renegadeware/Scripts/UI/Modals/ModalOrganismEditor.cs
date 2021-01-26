@@ -30,17 +30,21 @@ namespace Renegadeware.LL_LS1A1 {
         public InfoGroupWidget componentWidget;
 
         [Header("Signals")]
-        public M8.SignalInteger signalInvokeBodyChange; //new body component id
         public M8.SignalInteger signalInvokeBodyPreview; //body component id
-        public SignalOrganismComponent signalInvokeComponentChange; //component index, component id
+        public SignalIntegerPair signalInvokeComponentPreview; //component index, component id
+        public M8.Signal signalRefresh; //used when backing out without changes
 
         private Mode mCurMode;
 
         private OrganismComponentGroup mBodyGroup;
+        private OrganismTemplate mOrganismTemplate;
+
         private M8.CacheList<int> mComponentIds = new M8.CacheList<int>(GameData.organismComponentCapacity); //components of the organism template, first should be the body
 
         private int mCategoryIndex;
+
         private int mCompIndex;
+        private int mCompLastIndex;
 
         void M8.IModalPop.Pop() {
             ResetData();
@@ -57,31 +61,11 @@ namespace Renegadeware.LL_LS1A1 {
                 parms.TryGetValue(parmOrganismBodyGroup, out mBodyGroup);
 
                 //setup component ids
-                OrganismTemplate orgTemplate = null;
-                if(parms.TryGetValue(parmOrganismTemplate, out orgTemplate)) {
-                    if(orgTemplate.componentIDs != null) {
-                        for(int i = 0; i < orgTemplate.componentIDs.Length; i++)
-                            mComponentIds.Add(orgTemplate.componentIDs[i]);
-                    }
-                }
+                parms.TryGetValue(parmOrganismTemplate, out mOrganismTemplate);
+                RefreshComponentIds();
 
                 //setup categories
-                if(mComponentIds.Count <= 0 || mComponentIds[0] == OrganismTemplate.invalidID) {
-                    //only put body
-                    categoryWidget.Setup(mBodyGroup);
-                }
-                else {
-                    //get current body selected
-                    var bodyComp = GetBodyComp();
-                    if(bodyComp) {
-                        //put in other categories based on body
-                        categoryWidget.Setup(mBodyGroup, bodyComp.componentGroups);
-                    }
-                    else {
-                        //only put body
-                        categoryWidget.Setup(mBodyGroup);
-                    }
-                }
+                RefreshCategoryWidget();
             }
         }
 
@@ -148,7 +132,12 @@ namespace Renegadeware.LL_LS1A1 {
             if(index == 0) { //body selected
                 comps = mBodyGroup.components;
 
-                //setup component index
+                //setup current component index
+                var bodyComp = GetBodyComp();
+                if(bodyComp)
+                    mCompIndex = mBodyGroup.GetIndex(bodyComp);
+                else
+                    mCompIndex = -1;
             }
             else {
                 int subCatInd = index - 1;
@@ -158,9 +147,15 @@ namespace Renegadeware.LL_LS1A1 {
                     var subCategory = bodyComp.componentGroups[subCatInd];
                     comps = subCategory.components;
 
-                    //setup component index
+                    //setup current component index
+                    if(subCatInd < mComponentIds.Count)
+                        mCompIndex = subCategory.GetIndex(mComponentIds[subCatInd]);
+                    else
+                        mCompIndex = -1;
                 }
             }
+
+            mCompLastIndex = mCompIndex;
 
             if(comps != null) {
                 componentWidget.Setup(comps);
@@ -169,6 +164,53 @@ namespace Renegadeware.LL_LS1A1 {
 
                 StartCoroutine(DoTransition(Mode.Component));
             }
+        }
+
+        void ComponentSelect(int index, InfoData data) {
+            if(mCompIndex == index)
+                return;
+
+            mCompIndex = index;
+
+            if(mCategoryIndex == 0) { //body preview
+                var bodyComp = data as OrganismComponent;
+                signalInvokeBodyPreview.Invoke(bodyComp.ID);
+            }
+            else { //component preview
+                var comp = data as OrganismComponent;
+                signalInvokeComponentPreview.Invoke(mCategoryIndex - 1, comp.ID);
+            }
+        }
+
+        void ComponentConfirm() {
+            if(mCategoryIndex == 0) { //body apply
+                mOrganismTemplate.SetBody(mBodyGroup.components[mCompIndex] as OrganismBody);
+
+                RefreshComponentIds();
+
+                RefreshCategoryWidget();
+            }
+            else { //component apply
+                var bodyComp = GetBodyComp();
+
+                int subCatInd = mCategoryIndex - 1;
+                int compId = bodyComp.componentGroups[subCatInd].components[mCompIndex].ID;
+
+                mComponentIds[subCatInd] = compId;
+
+                mOrganismTemplate.SetComponentID(subCatInd, compId);
+            }
+
+            //transition back to categories
+            StartCoroutine(DoTransition(Mode.Category));
+        }
+
+        void ComponentCancel() {
+            //refresh (undo preview)
+            signalRefresh.Invoke();
+
+            //transition back to categories
+            StartCoroutine(DoTransition(Mode.Category));
         }
 
         private OrganismBody GetBodyComp() {
@@ -180,10 +222,39 @@ namespace Renegadeware.LL_LS1A1 {
 
         private void ResetData() {
             mBodyGroup = null;
+            mOrganismTemplate = null;
             mComponentIds.Clear();
 
             mCategoryIndex = 0;
             mCompIndex = -1;
+        }
+
+        private void RefreshCategoryWidget() {
+            if(mComponentIds.Count <= 0 || mComponentIds[0] == OrganismTemplate.invalidID) {
+                //only put body
+                categoryWidget.Setup(mBodyGroup);
+            }
+            else {
+                //get current body selected
+                var bodyComp = GetBodyComp();
+                if(bodyComp) {
+                    //put in other categories based on body
+                    categoryWidget.Setup(mBodyGroup, bodyComp.componentGroups);
+                }
+                else {
+                    //only put body
+                    categoryWidget.Setup(mBodyGroup);
+                }
+            }
+        }
+
+        private void RefreshComponentIds() {
+            mComponentIds.Clear();
+
+            if(mOrganismTemplate.componentIDs != null) {
+                for(int i = 0; i < mOrganismTemplate.componentIDs.Length; i++)
+                    mComponentIds.Add(mOrganismTemplate.componentIDs[i]);
+            }
         }
 
         private void HideAll() {

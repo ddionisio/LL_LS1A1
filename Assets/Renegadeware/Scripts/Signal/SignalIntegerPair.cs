@@ -6,8 +6,8 @@ namespace Renegadeware.LL_LS1A1 {
     /// <summary>
     /// component index, component id
     /// </summary>
-    [CreateAssetMenu(fileName = "signalOrganismComponent", menuName = "Game/Signals/Organism Component")]
-    public class SignalOrganismComponent : M8.SignalParam<int, int> {
+    [CreateAssetMenu(fileName = "signalIntegerPair", menuName = "Game/Signals/Integer Pair")]
+    public class SignalIntegerPair : M8.SignalParam<int, int> {
 
     }
 }
