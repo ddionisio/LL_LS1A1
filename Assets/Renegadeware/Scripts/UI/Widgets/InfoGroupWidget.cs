@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public class InfoGroupWidget : MonoBehaviour {
+
+        public int itemCount { get; private set; }
+
+        public InfoData GetItem(int index) {
+            return null;
+        }
+
         public void Setup(InfoData datum) {
 
         }
@@ -17,6 +24,18 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void SetSelect(int ind) {
+
+        }
+
+        public void Add(InfoData datum) {
+
+        }
+
+        public void Remove(InfoData datum) {
+
+        }
+
+        public void Clear() {
 
         }
     }

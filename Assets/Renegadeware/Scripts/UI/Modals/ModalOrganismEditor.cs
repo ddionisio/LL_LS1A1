@@ -13,6 +13,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         public enum Mode {
             Category,
+            ComponentEssential,
             Component
         }
 
@@ -29,8 +30,11 @@ namespace Renegadeware.LL_LS1A1 {
         public AnimatorEnterExit componentTransition;
         public InfoGroupWidget componentWidget;
 
+        public GameObject componentBackRootGO;
+
         [Header("Signals")]
         public M8.SignalInteger signalInvokeBodyPreview; //body component id
+        public SignalIntegerPair signalInvokeComponentEssentialPreview; //component index, component id
         public SignalIntegerPair signalInvokeComponentPreview; //component index, component id
         public M8.Signal signalRefresh; //used when backing out without changes
 
@@ -86,8 +90,10 @@ namespace Renegadeware.LL_LS1A1 {
                         yield return categoryTransition.PlayEnterWait();
                     break;
 
+                case Mode.ComponentEssential:
                 case Mode.Component:
                     if(componentRootGO) componentRootGO.SetActive(true);
+                    if(componentBackRootGO) componentBackRootGO.SetActive(mCurMode == Mode.Component); //don't allow going back in essential mode
 
                     if(componentTransition)
                         yield return componentTransition.PlayEnterWait();
@@ -104,6 +110,7 @@ namespace Renegadeware.LL_LS1A1 {
                     if(categoryRootGO) categoryRootGO.SetActive(false);
                     break;
 
+                case Mode.ComponentEssential:
                 case Mode.Component:
                     if(componentTransition)
                         yield return componentTransition.PlayExitWait();
@@ -188,21 +195,57 @@ namespace Renegadeware.LL_LS1A1 {
 
                 RefreshComponentIds();
 
-                RefreshCategoryWidget();
+                //check if essential components are filled
+                if(mOrganismTemplate.IsEssentialComponentsFilled()) {
+                    //transition back to categories
+                    RefreshCategoryWidget();
+                    StartCoroutine(DoTransition(Mode.Category));
+                }
+                else { //enter essential components mode
+                    var bodyComp = GetBodyComp();
+
+                    //add components
+                    componentWidget.Clear();
+
+                    for(int i = 0; i < bodyComp.componentEssentials.Length; i++) {
+                        var comp = bodyComp.componentEssentials[i];
+                        if(mOrganismTemplate.GetComponentEssentialIndex(comp.ID) == -1)
+                            componentWidget.Add(comp);
+                    }
+
+                    StartCoroutine(DoTransition(Mode.ComponentEssential));
+                }
             }
             else { //component apply
                 var bodyComp = GetBodyComp();
 
-                int subCatInd = mCategoryIndex - 1;
-                int compId = bodyComp.componentGroups[subCatInd].components[mCompIndex].ID;
+                if(mCurMode == Mode.Component) {
+                    int subCatInd = mCategoryIndex - 1;
+                    int compId = bodyComp.componentGroups[subCatInd].components[mCompIndex].ID;
 
-                mComponentIds[subCatInd] = compId;
+                    mComponentIds[subCatInd] = compId;
 
-                mOrganismTemplate.SetComponentID(subCatInd, compId);
+                    mOrganismTemplate.SetComponentID(subCatInd, compId);
+
+                    //transition back to categories
+                    StartCoroutine(DoTransition(Mode.Category));
+                }
+                else if(mCurMode == Mode.ComponentEssential) {
+                    var itm = componentWidget.GetItem(mCompIndex) as OrganismComponent;
+
+                    var ind = bodyComp.GetComponentEssentialIndex(itm.ID);
+
+                    mOrganismTemplate.SetComponentEssentialID(ind, itm.ID);
+
+                    //remove item
+                    componentWidget.Remove(itm);
+
+                    if(componentWidget.itemCount > 0)
+                        componentWidget.SetSelect(0);
+                    else
+                        StartCoroutine(DoTransition(Mode.Category));
+                }
             }
-
-            //transition back to categories
-            StartCoroutine(DoTransition(Mode.Category));
         }
 
         void ComponentCancel() {

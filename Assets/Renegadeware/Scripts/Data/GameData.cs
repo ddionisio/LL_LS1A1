@@ -20,6 +20,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Signals")]
         public M8.Signal signalOrganismBodyChanged;
+        public M8.SignalInteger signalOrganismComponentEssentialChanged; //component index
         public M8.SignalInteger signalOrganismComponentChanged; //component index
 
         public bool isGameStarted { get; private set; } //true: we got through start normally, false: debug
@@ -136,6 +137,9 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public T GetOrganismComponent<T>(int id) where T : OrganismComponent {
+            if(id == OrganismTemplate.invalidID)
+                return null;
+
             for(int i = 0; i < organismComponents.Length; i++) {
                 var comp = organismComponents[i];
                 if(comp && comp.ID == id)
