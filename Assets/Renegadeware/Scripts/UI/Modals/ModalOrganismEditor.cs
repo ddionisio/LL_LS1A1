@@ -30,7 +30,8 @@ namespace Renegadeware.LL_LS1A1 {
         public AnimatorEnterExit componentTransition;
         public InfoGroupWidget componentWidget;
 
-        public GameObject componentBackRootGO;
+        public Button componentAcceptButton;
+        public Button componentBackButton;
 
         [Header("Signals")]
         public M8.SignalInteger signalInvokeBodyPreview; //body component id
@@ -81,6 +82,10 @@ namespace Renegadeware.LL_LS1A1 {
             yield return DoExit();
         }
 
+        void Awake() {
+            //setup calls
+        }
+
         IEnumerator DoEnter() {
             switch(mCurMode) {
                 case Mode.Category:
@@ -93,7 +98,8 @@ namespace Renegadeware.LL_LS1A1 {
                 case Mode.ComponentEssential:
                 case Mode.Component:
                     if(componentRootGO) componentRootGO.SetActive(true);
-                    if(componentBackRootGO) componentBackRootGO.SetActive(mCurMode == Mode.Component); //don't allow going back in essential mode
+
+                    if(componentBackButton) componentBackButton.gameObject.SetActive(mCurMode == Mode.Component); //don't allow going back in essential mode
 
                     if(componentTransition)
                         yield return componentTransition.PlayEnterWait();
@@ -128,7 +134,7 @@ namespace Renegadeware.LL_LS1A1 {
             yield return DoEnter();
         }
 
-        void CategorySelect(int index, InfoData data) {
+        void CategoryClick(int index, InfoData data) {
             if(mCategoryIndex == index)
                 return;
 
@@ -136,11 +142,12 @@ namespace Renegadeware.LL_LS1A1 {
 
             OrganismComponent[] comps = null;
 
+            var bodyComp = GetBodyComp();
+
             if(index == 0) { //body selected
                 comps = mBodyGroup.components;
 
                 //setup current component index
-                var bodyComp = GetBodyComp();
                 if(bodyComp)
                     mCompIndex = mBodyGroup.GetIndex(bodyComp);
                 else
@@ -149,7 +156,6 @@ namespace Renegadeware.LL_LS1A1 {
             else {
                 int subCatInd = index - 1;
 
-                var bodyComp = GetBodyComp();
                 if(bodyComp) {
                     var subCategory = bodyComp.componentGroups[subCatInd];
                     comps = subCategory.components;
@@ -165,7 +171,9 @@ namespace Renegadeware.LL_LS1A1 {
             mCompLastIndex = mCompIndex;
 
             if(comps != null) {
-                componentWidget.Setup(comps);
+                componentWidget.Clear();
+
+                componentWidget.Add(comps);
 
                 componentWidget.SetSelect(mCompIndex);
 
@@ -273,20 +281,23 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void RefreshCategoryWidget() {
+            categoryWidget.Clear();
+
             if(mComponentIds.Count <= 0 || mComponentIds[0] == OrganismTemplate.invalidID) {
                 //only put body
-                categoryWidget.Setup(mBodyGroup);
+                categoryWidget.Add(mBodyGroup);
             }
             else {
                 //get current body selected
                 var bodyComp = GetBodyComp();
                 if(bodyComp) {
                     //put in other categories based on body
-                    categoryWidget.Setup(mBodyGroup, bodyComp.componentGroups);
+                    categoryWidget.Add(mBodyGroup);
+                    categoryWidget.Add(bodyComp.componentGroups);
                 }
                 else {
                     //only put body
-                    categoryWidget.Setup(mBodyGroup);
+                    categoryWidget.Add(mBodyGroup);
                 }
             }
         }
