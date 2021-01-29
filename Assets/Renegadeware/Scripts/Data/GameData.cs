@@ -96,6 +96,9 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        /// <summary>
+        /// Apply new progress, call Current afterwards to load scene
+        /// </summary>
         public void Progress() {
             int curProgress = 0;
 
@@ -131,9 +134,6 @@ namespace Renegadeware.LL_LS1A1 {
 
                 LoLManager.instance.ApplyProgress(curProgress + 1);
             }
-
-            //load to new scene
-            Current();
         }
 
         public T GetOrganismComponent<T>(int id) where T : OrganismComponent {

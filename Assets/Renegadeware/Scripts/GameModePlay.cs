@@ -15,5 +15,17 @@ namespace Renegadeware.LL_LS1A1 {
 
             //game flow
         }
+
+        IEnumerator DoEnvironmentSelect() {
+            yield return null;
+        }
+
+        IEnumerator DoOrganismEdit() {
+            yield return null;
+        }
+
+        IEnumerator DoSimulation() {
+            yield return null;
+        }
     }
 }

@@ -82,8 +82,22 @@ namespace Renegadeware.LL_LS1A1 {
             yield return DoExit();
         }
 
+        void OnDestroy() {
+            if(categoryWidget)
+                categoryWidget.clickCallback -= CategoryClick;
+
+            if(componentWidget)
+                componentWidget.selectCallback -= ComponentSelect;
+        }
+
         void Awake() {
             //setup calls
+            categoryWidget.clickCallback += CategoryClick;
+
+            componentWidget.selectCallback += ComponentSelect;
+
+            componentAcceptButton.onClick.AddListener(ComponentConfirm);
+            componentBackButton.onClick.AddListener(ComponentCancel);
         }
 
         IEnumerator DoEnter() {
@@ -203,10 +217,12 @@ namespace Renegadeware.LL_LS1A1 {
 
                 RefreshComponentIds();
 
+                RefreshCategoryWidget();
+
                 //check if essential components are filled
                 if(mOrganismTemplate.IsEssentialComponentsFilled()) {
                     //transition back to categories
-                    RefreshCategoryWidget();
+                    categoryWidget.SetSelect(1);
                     StartCoroutine(DoTransition(Mode.Category));
                 }
                 else { //enter essential components mode
@@ -236,6 +252,7 @@ namespace Renegadeware.LL_LS1A1 {
                     mOrganismTemplate.SetComponentID(subCatInd, compId);
 
                     //transition back to categories
+                    categoryWidget.SetSelect(mCategoryIndex);
                     StartCoroutine(DoTransition(Mode.Category));
                 }
                 else if(mCurMode == Mode.ComponentEssential) {
@@ -248,10 +265,13 @@ namespace Renegadeware.LL_LS1A1 {
                     //remove item
                     componentWidget.Remove(itm);
 
-                    if(componentWidget.itemCount > 0)
+                    if(componentWidget.itemCount > 0) //prep for next component
                         componentWidget.SetSelect(0);
-                    else
+                    else {
+                        //transition back to categories
+                        categoryWidget.SetSelect(1);
                         StartCoroutine(DoTransition(Mode.Category));
+                    }
                 }
             }
         }
@@ -261,6 +281,7 @@ namespace Renegadeware.LL_LS1A1 {
             signalRefresh.Invoke();
 
             //transition back to categories
+            categoryWidget.SetSelect(mCategoryIndex);
             StartCoroutine(DoTransition(Mode.Category));
         }
 

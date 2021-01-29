@@ -51,8 +51,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void SetSelect(int index) {
-            if(index >= mItems.Count)
-                return;
+            index = Mathf.Clamp(index, 0, mItems.Count - 1);
 
             var selectable = mItems[index].selectable;
             if(selectable)
