@@ -12,6 +12,10 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Scene")]
         public M8.SceneAssetPath endScene;
 
+        [Header("Modals")]
+        public string modalEnvironmentSelect = "environmentSelect";
+        public string modalOrganismEdit = "organismEdit";
+
         [Header("Levels")]
         public LevelData[] levels;
 
