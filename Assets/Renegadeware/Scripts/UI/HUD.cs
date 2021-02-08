@@ -19,6 +19,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Mode")]
         public GameObject modeSelectRootGO;
+        public GameObject modeSelectDisableGO; //active when mode select is disabled
         public AnimatorEnterExit modeSelectTransition;
         public Button[] modeSelectButtons; //corresponds to GameMode
 
@@ -28,12 +29,17 @@ namespace Renegadeware.LL_LS1A1 {
 
         public bool isBusy { get { return mRout != null; } }
 
+        public bool modeSelectInteractive { get { return mModeSelectInteractive; } set { mModeSelectInteractive = value; ApplyModeSelectInteractive(); } }
+
+        public ModeSelectFlags modeSelectFlags { get; private set; }
+
         public event System.Action<ModeSelect> modeSelectClickCallback;
 
         private M8.CacheList<TransitionQueue> mTransitionQueue = new M8.CacheList<TransitionQueue>(4);
 
-        private ModeSelectFlags mModeSelectFlags = ModeSelectFlags.None;
-        private Coroutine mRout;
+        private bool mModeSelectInteractive = true;
+        
+        private Coroutine mRout;        
 
         public bool ElementIsVisible(Element elem) {
             switch(elem) {
@@ -49,19 +55,23 @@ namespace Renegadeware.LL_LS1A1 {
         public void ElementShow(Element elem) {
             mTransitionQueue.Add(new TransitionQueue { elem = elem, isEnter = true });
 
-            if(mRout == null)
+            if(mRout == null) {
                 mRout = StartCoroutine(DoTransitions());
+                ApplyModeSelectInteractive();
+            }
         }
 
         public void ElementHide(Element elem) {
             mTransitionQueue.Add(new TransitionQueue { elem = elem, isEnter = false });
 
-            if(mRout == null)
+            if(mRout == null) {
                 mRout = StartCoroutine(DoTransitions());
+                ApplyModeSelectInteractive();
+            }
         }
 
         public void ModeSelectSetVisible(ModeSelectFlags flags) {
-            mModeSelectFlags = flags;
+            modeSelectFlags = flags;
             ApplyModeSelectVisible();
         }
 
@@ -69,7 +79,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(modeSelectRootGO) modeSelectRootGO.SetActive(false);
             if(gameplayRootGO) gameplayRootGO.SetActive(false);
 
-            mModeSelectFlags = ModeSelectFlags.None;
+            modeSelectFlags = ModeSelectFlags.None;
             ApplyModeSelectVisible();
 
             mTransitionQueue.Clear();
@@ -82,6 +92,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         void Awake() {
             HideAll();
+
+            if(modeSelectDisableGO) modeSelectDisableGO.SetActive(false);
 
             //hook up calls
             for(int i = 0; i < modeSelectButtons.Length; i++) {
@@ -122,6 +134,8 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             mRout = null;
+
+            ApplyModeSelectInteractive();
         }
 
         private void ApplyModeSelectVisible() {
@@ -143,8 +157,13 @@ namespace Renegadeware.LL_LS1A1 {
                         break;
                 }
 
-                go.SetActive((mModeSelectFlags & flag) == flag);
+                go.SetActive((modeSelectFlags & flag) == flag);
             }
+        }
+
+        private void ApplyModeSelectInteractive() {
+            if(modeSelectDisableGO)
+                modeSelectDisableGO.SetActive(!mModeSelectInteractive || mRout != null);
         }
     }
 }

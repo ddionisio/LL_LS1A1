@@ -59,6 +59,13 @@ namespace Renegadeware.LL_LS1A1 {
 
         //cell spawn restriction, etc.
 
+        public bool IsEnvironmentComplete(int envInd) {
+            if(mStats == null || envInd >= mStats.Length)
+                return false;
+
+            return mStats[envInd].count >= criteriaCount;
+        }
+
         public int GetProgressCount() {
             if(mStats == null)
                 return 0;

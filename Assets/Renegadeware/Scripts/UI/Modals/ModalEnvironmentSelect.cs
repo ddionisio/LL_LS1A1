@@ -24,9 +24,6 @@ namespace Renegadeware.LL_LS1A1 {
         [M8.Animator.TakeSelector(animatorField = "selectAnimator")]
         public string selectTakeExit;
 
-        [Header("Signals")]
-        public M8.SignalInteger signalInvokeEnvChange;
-
         private int mEnvCurInd;
         private LevelData.EnvironmentInfo[] mEnvInfos;
 
@@ -36,11 +33,9 @@ namespace Renegadeware.LL_LS1A1 {
             if(mRout != null || mEnvInfos.Length <= 1) //fail-safe: transition in process, only one environment?
                 return;
 
-            //TODO: confirm if there are organisms already spawned (warning about reset)
-
             mEnvCurInd = (mEnvCurInd + 1) % mEnvInfos.Length;
 
-            signalInvokeEnvChange?.Invoke(mEnvCurInd);
+            GameData.instance.signalEnvironmentChanged.Invoke(mEnvCurInd);
 
             mRout = StartCoroutine(DoEnvironmentSelect());
         }
@@ -49,11 +44,9 @@ namespace Renegadeware.LL_LS1A1 {
             if(mRout != null || mEnvInfos.Length <= 1) //fail-safe: transition in process, only one environment?
                 return;
 
-            //TODO: confirm if there are organisms already spawned (warning about reset)
-
             mEnvCurInd = (mEnvCurInd - 1) % mEnvInfos.Length;
 
-            signalInvokeEnvChange?.Invoke(mEnvCurInd);
+            GameData.instance.signalEnvironmentChanged.Invoke(mEnvCurInd);
 
             mRout = StartCoroutine(DoEnvironmentSelect());
         }

@@ -6,15 +6,66 @@ using LoLExt;
 
 namespace Renegadeware.LL_LS1A1 {
     public class GameModePlay : GameModeController<GameModePlay> {
+        public enum TransitionState {
+            Shown,
+            Hidden,
+            Enter,
+            Exit
+        }
+
+        [System.Serializable]
+        public class Environment {
+            public GameObject rootGO;
+            public GameBounds2D bounds;
+
+            public bool isActive {
+                get { return rootGO ? rootGO.activeSelf : false; }
+                set { if(rootGO) rootGO.SetActive(value); }
+            }
+
+            public void ApplyBoundsToCamera(GameCamera cam) {
+                var boundRect = bounds.rect;
+
+                cam.SetBounds(boundRect, false);
+                cam.SetPosition(boundRect.center);
+            }
+        }
+
         [Header("Level Data")]
         public LevelData level;
 
-        public int environmentCurrent { get; private set; }
+        [Header("Camera")]
+        public GameCamera cameraControl;
+        public float cameraMoveSpeed = 1f;
+        public float cameraMoveSmoothDelay = 0.05f;
+
+        [Header("Organism Edit")]
+        public GameObject editRoot; //should include a camera and OrganismEditMode
+
+        [Header("Transition")]
+        public M8.Animator.Animate transitionAnimator; //this is also treated as the root GO of transition
+        [M8.Animator.TakeSelector(animatorField = "transitionAnimator")]
+        public string transitionTakeEnter;
+        [M8.Animator.TakeSelector(animatorField = "transitionAnimator")]
+        public string transitionTakeExit;
+
+        [Header("Environments")]
+        public Environment[] environments; //corrolates to level.environments
+
+        public int environmentCurrentIndex { get; private set; }
         public ModeSelect modeSelect { get; private set; }
 
+        public bool isTransitioning { get { return mTransitionState == TransitionState.Enter || mTransitionState == TransitionState.Exit; } }
+
+        //general
         private M8.GenericParams mModalParms = new M8.GenericParams();
 
         private ModeSelect mModeSelectNext;
+
+        //edit stuff
+        private OrganismEditMode mOrganismEdit;
+
+        private TransitionState mTransitionState = TransitionState.Shown;
 
         protected override void OnInstanceDeinit() {
             if(HUD.isInstantiated) {
@@ -31,8 +82,33 @@ namespace Renegadeware.LL_LS1A1 {
         protected override void OnInstanceInit() {
             base.OnInstanceInit();
 
-            //initialize some data
-            environmentCurrent = 0;
+            var gameDat = GameData.instance;
+
+            /////////////////////////////
+            //initialize environment            
+            for(int i = 0; i < environments.Length; i++)
+                environments[i].isActive = false;
+
+            environmentCurrentIndex = 0;
+            EnvironmentInitCurrent();
+
+            /////////////////////////////
+            //initialize edit
+            editRoot.SetActive(false);
+
+            //grab organism edit
+            mOrganismEdit = editRoot.GetComponentInChildren<OrganismEditMode>();
+
+            /////////////////////////////
+            //initialize simulation
+
+            /////////////////////////////
+            //initialize transition
+            if(transitionAnimator) transitionAnimator.gameObject.SetActive(false);
+
+            /////////////////////////////
+            //initialize signals
+            gameDat.signalEnvironmentChanged.callback += OnEnvironmentChanged;
         }
 
         protected override IEnumerator Start() {
@@ -47,35 +123,76 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoEnvironmentSelect() {
-            //show initial environment
+            var hud = HUD.instance;
+
+            //initialize environment
+            EnvironmentInitCurrent();
+
+            //start transition
+            if(mTransitionState == TransitionState.Hidden)
+                StartCoroutine(DoTransitionShow());
 
             //open environment modal
             mModalParms[ModalEnvironmentSelect.parmEnvironmentInfos] = level.environments;
-            mModalParms[ModalEnvironmentSelect.parmEnvironmentIndex] = environmentCurrent;
+            mModalParms[ModalEnvironmentSelect.parmEnvironmentIndex] = environmentCurrentIndex;
 
             M8.ModalManager.main.Open(GameData.instance.modalEnvironmentSelect, mModalParms);
 
-            HUD.instance.ElementShow(HUD.Element.ModeSelect);
-            
+            //don't show mode select if no buttons available
+            if(hud.modeSelectFlags != ModeSelectFlags.None)
+                hud.ElementShow(HUD.Element.ModeSelect);
 
             //wait for mode select
             mModeSelectNext = ModeSelect.None;
             while(mModeSelectNext == ModeSelect.None)
                 yield return null;
 
-            //hide environment
+            //hide environment if we are editing
+            if(mModeSelectNext == ModeSelect.Edit)
+                StartCoroutine(DoTransitionHide());
 
             //hide hud
-            HUD.instance.ElementHide(HUD.Element.ModeSelect);
+            if(hud.modeSelectFlags != ModeSelectFlags.None)
+                hud.ElementHide(HUD.Element.ModeSelect);
 
             //close environment modal
             M8.ModalManager.main.CloseUpTo(GameData.instance.modalEnvironmentSelect, true);
 
             //wait for transitions
-            while(M8.ModalManager.main.isBusy || HUD.instance.isBusy)
+            while(M8.ModalManager.main.isBusy || hud.isBusy || isTransitioning)
                 yield return null;
 
             ChangeToMode(mModeSelectNext);
+        }
+
+        IEnumerator DoEnvironmentChange(int toEnvInd) {
+            var hud = HUD.instance;
+
+            hud.modeSelectInteractive = false;
+
+            yield return DoTransitionHide();
+
+            EnvironmentDenitCurrent();
+
+            environmentCurrentIndex = toEnvInd;
+
+            EnvironmentInitCurrent();
+
+            //show/hide hud?
+            var modeSelectFlags = HUDGetModeSelectFlags();
+            if(modeSelectFlags != ModeSelectFlags.None) {
+                if(hud.ElementIsVisible(HUD.Element.ModeSelect))
+                    hud.ElementHide(HUD.Element.ModeSelect);
+            }
+            else if(!hud.ElementIsVisible(HUD.Element.ModeSelect))
+                hud.ElementShow(HUD.Element.ModeSelect);
+
+            yield return DoTransitionShow();
+
+            while(hud.isBusy)
+                yield return null;
+
+            hud.modeSelectInteractive = true;
         }
 
         IEnumerator DoOrganismEdit() {
@@ -114,11 +231,43 @@ namespace Renegadeware.LL_LS1A1 {
             yield return null;
         }
 
+        IEnumerator DoTransitionShow() {
+            if(mTransitionState == TransitionState.Shown || mTransitionState == TransitionState.Enter)
+                yield break;
+
+            if(transitionAnimator && !string.IsNullOrEmpty(transitionTakeEnter)) {
+                mTransitionState = TransitionState.Enter;
+                yield return transitionAnimator.PlayWait(transitionTakeEnter);
+            }
+
+            mTransitionState = TransitionState.Shown;
+        }
+
+        IEnumerator DoTransitionHide() {
+            if(mTransitionState == TransitionState.Hidden || mTransitionState == TransitionState.Exit)
+                yield break;
+
+            if(transitionAnimator) {
+                transitionAnimator.gameObject.SetActive(true);
+
+                if(!string.IsNullOrEmpty(transitionTakeExit)) {
+                    mTransitionState = TransitionState.Enter;
+                    yield return transitionAnimator.PlayWait(transitionTakeExit);
+                }
+            }
+
+            mTransitionState = TransitionState.Shown;
+        }
+
         void OnModeSelect(ModeSelect toMode) {
             mModeSelectNext = toMode;
         }
 
-        private void HUDApplyModeSelect() {
+        void OnEnvironmentChanged(int envInd) {
+            StartCoroutine(DoEnvironmentChange(envInd));
+        }
+
+        private ModeSelectFlags HUDGetModeSelectFlags() {
             var hud = HUD.instance;
 
             //check if current organism template is valid
@@ -129,10 +278,13 @@ namespace Renegadeware.LL_LS1A1 {
 
             switch(modeSelect) {
                 case ModeSelect.Environment:
-                    if(organismTemplateValid)
-                        modeFlags |= ModeSelectFlags.Play;
+                    //check if environment is already completed. if it is, then no mode change is shown
+                    if(!level.IsEnvironmentComplete(environmentCurrentIndex)) {
+                        if(organismTemplateValid)
+                            modeFlags |= ModeSelectFlags.Play;
 
-                    modeFlags |= ModeSelectFlags.Edit;
+                        modeFlags |= ModeSelectFlags.Edit;
+                    }
                     break;
                 case ModeSelect.Edit:
                     if(organismTemplateValid)
@@ -145,13 +297,13 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
             }
 
-            hud.ModeSelectSetVisible(modeFlags);
+            return modeFlags;
         }
 
         private void ChangeToMode(ModeSelect toMode) {
             modeSelect = toMode;
 
-            HUDApplyModeSelect();
+            HUD.instance.ModeSelectSetVisible(HUDGetModeSelectFlags());
 
             switch(toMode) {
                 case ModeSelect.Environment:
@@ -162,6 +314,47 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
                 case ModeSelect.Play:
                     StartCoroutine(DoSimulation());
+                    break;
+            }
+        }
+
+        private void EnvironmentInitCurrent() {
+            var env = environments[environmentCurrentIndex];
+            if(env.isActive) //already initialized
+                return;
+
+            //init stuff
+            env.ApplyBoundsToCamera(cameraControl);
+
+            env.isActive = true;
+        }
+
+        private void EnvironmentDenitCurrent() {
+            var env = environments[environmentCurrentIndex];
+            if(!env.isActive) //already deinitialized
+                return;
+
+            env.isActive = false;
+        }
+
+        private void TransitionCancel() {
+            switch(mTransitionState) {
+                case TransitionState.Enter:
+                    if(transitionAnimator) {
+                        transitionAnimator.gameObject.SetActive(true);
+
+                        if(!string.IsNullOrEmpty(transitionTakeEnter))
+                            transitionAnimator.ResetTake(transitionTakeEnter);
+
+                        mTransitionState = TransitionState.Hidden;
+                    }
+                    else
+                        mTransitionState = TransitionState.Shown;
+                    break;
+
+                case TransitionState.Exit:
+                    if(transitionAnimator) transitionAnimator.gameObject.SetActive(false);
+                    mTransitionState = TransitionState.Shown;                    
                     break;
             }
         }

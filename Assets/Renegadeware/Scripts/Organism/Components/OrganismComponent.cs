@@ -6,6 +6,7 @@ namespace Renegadeware.LL_LS1A1 {
     public abstract class OrganismComponent : InfoData {
         [Header("Component Info")]
         public int ID;
+        public string anchorName;
 
         [Header("Templates")]
         public GameObject editPrefab; //use during edit mode

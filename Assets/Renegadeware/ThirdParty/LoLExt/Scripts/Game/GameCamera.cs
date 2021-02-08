@@ -10,7 +10,7 @@ namespace LoLExt {
         public M8.Signal signalBoundsChangeFinish;
 
         [Header("Move Settings")]
-        public DG.Tweening.Ease moveEase;
+        public DG.Tweening.Ease moveToEase;
         public float moveToSpeed = 10f;
 
         [Header("Bounds")]
@@ -146,7 +146,7 @@ namespace LoLExt {
             float dist = (dest - start).magnitude;
             float delay = dist / moveToSpeed;
 
-            var easeFunc = DG.Tweening.Core.Easing.EaseManager.ToEaseFunction(moveEase);
+            var easeFunc = DG.Tweening.Core.Easing.EaseManager.ToEaseFunction(moveToEase);
 
             while(curTime < delay) {
                 float t = easeFunc(curTime, delay, 0f, 0f);

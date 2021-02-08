@@ -23,9 +23,12 @@ namespace Renegadeware.LL_LS1A1 {
         public OrganismComponent[] organismComponents;
 
         [Header("Signals")]
+        public M8.SignalInteger signalEnvironmentChanged;
+
         public M8.Signal signalOrganismBodyChanged;
         public M8.SignalInteger signalOrganismComponentEssentialChanged; //component index
         public M8.SignalInteger signalOrganismComponentChanged; //component index
+        
 
         public bool isGameStarted { get; private set; } //true: we got through start normally, false: debug
 
