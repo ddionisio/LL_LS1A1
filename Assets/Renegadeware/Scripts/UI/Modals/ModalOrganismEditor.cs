@@ -33,12 +33,6 @@ namespace Renegadeware.LL_LS1A1 {
         public Button componentAcceptButton;
         public Button componentBackButton;
 
-        [Header("Signals")]
-        public M8.SignalInteger signalInvokeBodyPreview; //body component id
-        public SignalIntegerPair signalInvokeComponentEssentialPreview; //component index, component id
-        public SignalIntegerPair signalInvokeComponentPreview; //component index, component id
-        public M8.Signal signalRefresh; //used when backing out without changes
-
         private Mode mCurMode;
 
         private OrganismComponentGroup mBodyGroup;
@@ -199,15 +193,21 @@ namespace Renegadeware.LL_LS1A1 {
             if(mCompIndex == index)
                 return;
 
+            var gameDat = GameData.instance;
+
             mCompIndex = index;
 
             if(mCategoryIndex == 0) { //body preview
                 var bodyComp = data as OrganismComponent;
-                signalInvokeBodyPreview.Invoke(bodyComp.ID);
+                gameDat.signalEditBodyPreview.Invoke(bodyComp.ID);
             }
             else { //component preview
                 var comp = data as OrganismComponent;
-                signalInvokeComponentPreview.Invoke(mCategoryIndex - 1, comp.ID);
+
+                if(mCurMode == Mode.Component)
+                    gameDat.signalEditComponentPreview.Invoke(mCategoryIndex - 1, comp.ID);
+                else if(mCurMode == Mode.ComponentEssential)
+                    gameDat.signalEditComponentEssentialPreview.Invoke(mCompIndex, comp.ID);
             }
         }
 
@@ -277,8 +277,10 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void ComponentCancel() {
+            var gameDat = GameData.instance;
+
             //refresh (undo preview)
-            signalRefresh.Invoke();
+            gameDat.signalEditRefresh.Invoke();
 
             //transition back to categories
             categoryWidget.SetSelect(mCategoryIndex);

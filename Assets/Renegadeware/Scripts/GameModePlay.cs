@@ -67,7 +67,13 @@ namespace Renegadeware.LL_LS1A1 {
 
         private TransitionState mTransitionState = TransitionState.Shown;
 
-        protected override void OnInstanceDeinit() {
+        protected override void OnInstanceDeinit() {            
+            if(GameData.isInstantiated) {
+                var gameDat = GameData.instance;
+
+                gameDat.signalEnvironmentChanged.callback -= OnEnvironmentChanged;
+            }
+
             if(HUD.isInstantiated) {
                 var hud = HUD.instance;
 
@@ -128,9 +134,7 @@ namespace Renegadeware.LL_LS1A1 {
             //initialize environment
             EnvironmentInitCurrent();
 
-            //start transition
-            if(mTransitionState == TransitionState.Hidden)
-                StartCoroutine(DoTransitionShow());
+            yield return DoTransitionShow();
 
             //open environment modal
             mModalParms[ModalEnvironmentSelect.parmEnvironmentInfos] = level.environments;
@@ -196,7 +200,11 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoOrganismEdit() {
-            //show organism edit
+            //setup organism edit display
+
+            editRoot.SetActive(true);
+
+            yield return DoTransitionShow();
 
             //open organism edit modal
             mModalParms[ModalOrganismEditor.parmOrganismBodyGroup] = level.organismBodyGroup;
@@ -212,6 +220,7 @@ namespace Renegadeware.LL_LS1A1 {
                 yield return null;
 
             //hide organism edit
+            StartCoroutine(DoTransitionHide());
 
             //hide hud
             HUD.instance.ElementHide(HUD.Element.ModeSelect);
@@ -220,14 +229,23 @@ namespace Renegadeware.LL_LS1A1 {
             M8.ModalManager.main.CloseUpTo(GameData.instance.modalOrganismEdit, true);
 
             //wait for transitions
-            while(M8.ModalManager.main.isBusy || HUD.instance.isBusy)
+            while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || isTransitioning)
                 yield return null;
+
+            editRoot.SetActive(false);
 
             ChangeToMode(mModeSelectNext);
         }
 
         IEnumerator DoSimulation() {
+            //start up entities
+
+            //
+
+            yield return DoTransitionShow();
+
             //setup hud
+
             yield return null;
         }
 
