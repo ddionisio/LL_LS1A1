@@ -213,14 +213,14 @@ namespace Renegadeware.LL_LS1A1 {
 
         void ComponentConfirm() {
             if(mCategoryIndex == 0) { //body apply
-                mOrganismTemplate.SetBody(mBodyGroup.components[mCompIndex] as OrganismBody);
+                mOrganismTemplate.body = mBodyGroup.components[mCompIndex] as OrganismBody;
 
                 RefreshComponentIds();
 
                 RefreshCategoryWidget();
 
                 //check if essential components are filled
-                if(mOrganismTemplate.IsEssentialComponentsFilled()) {
+                if(mOrganismTemplate.isEssentialComponentsFilled) {
                     //transition back to categories
                     categoryWidget.SetSelect(1);
                     StartCoroutine(DoTransition(Mode.Category));
@@ -244,12 +244,11 @@ namespace Renegadeware.LL_LS1A1 {
                 var bodyComp = GetBodyComp();
 
                 if(mCurMode == Mode.Component) {
-                    int subCatInd = mCategoryIndex - 1;
-                    int compId = bodyComp.componentGroups[subCatInd].components[mCompIndex].ID;
+                    int compId = bodyComp.componentGroups[mCategoryIndex - 1].components[mCompIndex].ID;
 
-                    mComponentIds[subCatInd] = compId;
+                    mComponentIds[mCategoryIndex] = compId;
 
-                    mOrganismTemplate.SetComponentID(subCatInd, compId);
+                    mOrganismTemplate.SetComponentID(mCategoryIndex, compId);
 
                     //transition back to categories
                     categoryWidget.SetSelect(mCategoryIndex);

@@ -13,6 +13,85 @@ namespace Renegadeware.LL_LS1A1 {
         public int[] componentEssentialIDs;
         public int[] componentIDs;
 
+        public OrganismBody body {
+            get {
+                if(componentIDs != null && componentIDs.Length > 0)
+                    return GameData.instance.GetOrganismComponent<OrganismBody>(componentIDs[0]);
+                else
+                    return null;
+            }
+
+            set {
+                //try to re-attach essential components
+                var newCompEssentialIds = new int[value.componentEssentials.Length];
+
+                for(int i = 0; i < value.componentEssentials.Length; i++) {
+                    var comp = value.componentEssentials[i];
+
+                    //grab compatible component for this group
+                    int compId = -1;
+                    if(componentEssentialIDs != null) {
+                        for(int j = 0; j < componentEssentialIDs.Length; j++) {
+                            if(componentEssentialIDs[j] != invalidID && componentEssentialIDs[j] == comp.ID) {
+                                compId = componentEssentialIDs[j];
+                                componentEssentialIDs[j] = invalidID;
+                                break;
+                            }
+                        }
+                    }
+
+                    newCompEssentialIds[i] = compId;
+                }
+
+                componentEssentialIDs = newCompEssentialIds;
+
+                //try to re-attach existing components that match new body
+                var newCompIds = new int[value.componentGroups.Length + 1];
+                newCompIds[0] = value.ID;
+
+                for(int i = 0; i < value.componentGroups.Length; i++) {
+                    var grp = value.componentGroups[i];
+
+                    //grab compatible component for this group
+                    int compId = -1;
+                    if(componentIDs != null) {
+                        for(int j = 1; j < componentIDs.Length; j++) {
+                            if(componentIDs[j] != invalidID && grp.GetIndex(componentIDs[j]) != -1) {
+                                compId = componentIDs[j];
+                                componentIDs[j] = invalidID;
+                                break;
+                            }
+                        }
+                    }
+
+                    newCompIds[i + 1] = compId;
+                }
+
+                componentIDs = newCompIds;
+
+                //signal body change
+                GameData.instance.signalOrganismBodyChanged.Invoke();
+            }
+        }
+
+        public bool isEssentialComponentsFilled {
+            get {
+                if(componentEssentialIDs == null)
+                    return false;
+
+                if(!body)
+                    return false;
+
+                int fillCount = 0;
+                for(int i = 0; i < componentEssentialIDs.Length; i++) {
+                    if(componentEssentialIDs[i] != invalidID)
+                        fillCount++;
+                }
+
+                return fillCount == componentEssentialIDs.Length;
+            }
+        }
+
         private const string userDataKeySubID = "_id";
 
         private const string userDataKeySubCompEssentialCount = "_compECount";
@@ -45,82 +124,6 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         //Game API
-
-        public OrganismBody GetBody() {
-            if(componentIDs != null && componentIDs.Length > 0)
-                return GameData.instance.GetOrganismComponent<OrganismBody>(componentIDs[0]);
-            else
-                return null;
-        }
-
-        public bool IsEssentialComponentsFilled() {
-            if(componentEssentialIDs == null)
-                return false;
-
-            var body = GetBody();
-            if(!body)
-                return false;
-
-            int fillCount = 0;
-            for(int i = 0; i < componentEssentialIDs.Length; i++) {
-                if(componentEssentialIDs[i] != invalidID)
-                    fillCount++;
-            }
-
-            return fillCount == componentEssentialIDs.Length;
-        }
-
-        public void SetBody(OrganismBody newBody) {
-            //try to re-attach essential components
-            var newCompEssentialIds = new int[newBody.componentEssentials.Length];
-
-            for(int i = 0; i < newBody.componentEssentials.Length; i++) {
-                var comp = newBody.componentEssentials[i];
-
-                //grab compatible component for this group
-                int compId = -1;
-                if(componentEssentialIDs != null) {
-                    for(int j = 0; j < componentEssentialIDs.Length; j++) {
-                        if(componentEssentialIDs[j] != invalidID && componentEssentialIDs[j] == comp.ID) {
-                            compId = componentEssentialIDs[j];
-                            componentEssentialIDs[j] = invalidID;
-                            break;
-                        }
-                    }
-                }
-
-                newCompEssentialIds[i] = compId;
-            }
-
-            componentEssentialIDs = newCompEssentialIds;
-
-            //try to re-attach existing components that match new body
-            var newCompIds = new int[newBody.componentGroups.Length + 1];
-            newCompIds[0] = newBody.ID;
-
-            for(int i = 0; i < newBody.componentGroups.Length; i++) {
-                var grp = newBody.componentGroups[i];
-
-                //grab compatible component for this group
-                int compId = -1;
-                if(componentIDs != null) {
-                    for(int j = 1; j < componentIDs.Length; j++) {
-                        if(componentIDs[j] != invalidID && grp.GetIndex(componentIDs[j]) != -1) {
-                            compId = componentIDs[j];
-                            componentIDs[j] = invalidID;
-                            break;
-                        }
-                    }
-                }
-
-                newCompIds[i + 1] = compId;
-            }
-
-            componentIDs = newCompIds;
-
-            //signal body change
-            GameData.instance.signalOrganismBodyChanged.Invoke();
-        }
 
         public void SetComponentEssentialID(int index, int id) {
             if(index >= componentEssentialIDs.Length)

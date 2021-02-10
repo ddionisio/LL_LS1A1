@@ -63,7 +63,7 @@ namespace Renegadeware.LL_LS1A1 {
         private ModeSelect mModeSelectNext;
 
         //edit stuff
-        private OrganismEditMode mOrganismEdit;
+        private OrganismDisplayEdit mOrganismEdit;
 
         private TransitionState mTransitionState = TransitionState.Shown;
 
@@ -103,7 +103,7 @@ namespace Renegadeware.LL_LS1A1 {
             editRoot.SetActive(false);
 
             //grab organism edit
-            mOrganismEdit = editRoot.GetComponentInChildren<OrganismEditMode>();
+            mOrganismEdit = editRoot.GetComponentInChildren<OrganismDisplayEdit>();
 
             /////////////////////////////
             //initialize simulation
@@ -290,7 +290,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             //check if current organism template is valid
             var organismTemplate = GameData.instance.organismTemplateCurrent;
-            var organismTemplateValid = organismTemplate.IsEssentialComponentsFilled();
+            var organismTemplateValid = organismTemplate.isEssentialComponentsFilled;
 
             ModeSelectFlags modeFlags = ModeSelectFlags.None;
 
