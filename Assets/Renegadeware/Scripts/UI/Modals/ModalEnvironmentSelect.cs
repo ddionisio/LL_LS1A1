@@ -100,8 +100,8 @@ namespace Renegadeware.LL_LS1A1 {
         private void RefreshDisplay() {
             var envInf = mEnvInfos[mEnvCurInd];
 
-            titleText.text = M8.Localize.Get(envInf.nameRef);
-            descText.text = M8.Localize.Get(envInf.descRef);
+            if(titleText) titleText.text = M8.Localize.Get(envInf.nameRef);
+            if(descText) descText.text = M8.Localize.Get(envInf.descRef);
         }
 
         private void ClearRout() {

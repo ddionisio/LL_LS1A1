@@ -7,6 +7,8 @@ using LoLExt;
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "gameData", menuName = "Game/Game Data", order = 0)]
     public class GameData : M8.SingletonScriptableObject<GameData> {
+        public const int invalidID = 0;
+
         public const int organismComponentCapacity = 8;
 
         [Header("Scene")]
@@ -19,7 +21,7 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Levels")]
         public LevelData[] levels;
 
-        [Header("Cell Components")]
+        [Header("Organism Components")]
         public OrganismComponent[] organismComponents;
 
         [Header("Signals")]
@@ -149,7 +151,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public T GetOrganismComponent<T>(int id) where T : OrganismComponent {
-            if(id == OrganismTemplate.invalidID)
+            if(id == invalidID)
                 return null;
 
             for(int i = 0; i < organismComponents.Length; i++) {
@@ -168,7 +170,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(mOrganismTemplateList == null)
                 mOrganismTemplateList = new List<OrganismTemplate>();
 
-            if(mOrganismTemplateCurrent.ID != OrganismTemplate.invalidID) {
+            if(mOrganismTemplateCurrent.ID != invalidID) {
                 //check if already in list
                 OrganismTemplate template = null;
                 for(int i = 0; i < mOrganismTemplateList.Count; i++) {

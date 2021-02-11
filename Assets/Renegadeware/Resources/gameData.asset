@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1120d6571995834295bca95b4d5cb2c, type: 3}
+  m_Name: gameData
+  m_EditorClassIdentifier: 
+  endScene:
+    name: 
+    path: 
+  modalEnvironmentSelect: environmentSelect
+  modalOrganismEdit: organismEdit
+  levels: []
+  organismComponents:
+  - {fileID: 11400000, guid: cbd6eb6404e248945ba36779697e098a, type: 2}
+  - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}
+  signalEnvironmentChanged: {fileID: 11400000, guid: 3a152a70959bc3b4397fabc399cde072,
+    type: 2}
+  signalEditBodyPreview: {fileID: 11400000, guid: 7a56574c6a2ddf74b8d0565befd99fab,
+    type: 2}
+  signalEditComponentEssentialPreview: {fileID: 11400000, guid: 7c7d91536df49754f9ded33eb074188a,
+    type: 2}
+  signalEditComponentPreview: {fileID: 11400000, guid: 9467385704521f3438091bc829c24c20,
+    type: 2}
+  signalEditRefresh: {fileID: 11400000, guid: e3de5840b49236e498740e0b627edd51, type: 2}
+  signalOrganismBodyChanged: {fileID: 11400000, guid: cdf962a27a86dac4fab67b8dac06c0af,
+    type: 2}
+  signalOrganismComponentEssentialChanged: {fileID: 11400000, guid: 04ca6fffc0469f14fbdb71c27b1c1c8c,
+    type: 2}
+  signalOrganismComponentChanged: {fileID: 11400000, guid: 5d2bada3684b9654c9eb505c49310b9d,
+    type: 2}

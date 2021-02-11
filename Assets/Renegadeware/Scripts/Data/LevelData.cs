@@ -14,7 +14,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public class EnvironmentStat {
-            public int organismTemplateID = OrganismTemplate.invalidID; //cell template used for this environment
+            public int organismTemplateID = GameData.invalidID; //cell template used for this environment
             public int count = 0; //organism count made after play, if >= criteriaCount, then this environment is complete
 
             private const string userDataKeySubOrganismID = "_id";
@@ -25,7 +25,7 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             public void LoadFrom(M8.UserData usrData, string key) {
-                organismTemplateID = usrData.GetInt(key + userDataKeySubOrganismID, OrganismTemplate.invalidID);
+                organismTemplateID = usrData.GetInt(key + userDataKeySubOrganismID, GameData.invalidID);
                 count = usrData.GetInt(key + userDataKeySubOrganismCount);
             }
 
@@ -35,7 +35,7 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             public void Reset() {
-                organismTemplateID = OrganismTemplate.invalidID;
+                organismTemplateID = GameData.invalidID;
                 count = 0;
             }
         }

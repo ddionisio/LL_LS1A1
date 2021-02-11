@@ -5,12 +5,13 @@ using UnityEngine;
 using LoLExt;
 
 namespace Renegadeware.LL_LS1A1 {
-    [CreateAssetMenu(fileName = "organismTemplate", menuName = "Game/Organism Template")]
+    [CreateAssetMenu(fileName = "organismTemplate", menuName = "Game/Organism/Template")]
     public class OrganismTemplate : ScriptableObject {
-        public const int invalidID = -1;
-
+        [ID(group = "organismTemplate", invalidID = GameData.invalidID)]
         public int ID;
+        [OrganismComponentID]
         public int[] componentEssentialIDs;
+        [OrganismComponentID]
         public int[] componentIDs;
 
         public OrganismBody body {
@@ -29,12 +30,12 @@ namespace Renegadeware.LL_LS1A1 {
                     var comp = value.componentEssentials[i];
 
                     //grab compatible component for this group
-                    int compId = -1;
+                    int compId = GameData.invalidID;
                     if(componentEssentialIDs != null) {
                         for(int j = 0; j < componentEssentialIDs.Length; j++) {
-                            if(componentEssentialIDs[j] != invalidID && componentEssentialIDs[j] == comp.ID) {
+                            if(componentEssentialIDs[j] != GameData.invalidID && componentEssentialIDs[j] == comp.ID) {
                                 compId = componentEssentialIDs[j];
-                                componentEssentialIDs[j] = invalidID;
+                                componentEssentialIDs[j] = GameData.invalidID;
                                 break;
                             }
                         }
@@ -53,12 +54,15 @@ namespace Renegadeware.LL_LS1A1 {
                     var grp = value.componentGroups[i];
 
                     //grab compatible component for this group
-                    int compId = -1;
+
+                    //default id to first item from group
+                    int compId = grp.components.Length > 1 ? grp.components[0].ID : GameData.invalidID;
+
                     if(componentIDs != null) {
                         for(int j = 1; j < componentIDs.Length; j++) {
-                            if(componentIDs[j] != invalidID && grp.GetIndex(componentIDs[j]) != -1) {
+                            if(componentIDs[j] != GameData.invalidID && grp.GetIndex(componentIDs[j]) != -1) {
                                 compId = componentIDs[j];
-                                componentIDs[j] = invalidID;
+                                componentIDs[j] = GameData.invalidID;
                                 break;
                             }
                         }
@@ -84,7 +88,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                 int fillCount = 0;
                 for(int i = 0; i < componentEssentialIDs.Length; i++) {
-                    if(componentEssentialIDs[i] != invalidID)
+                    if(componentEssentialIDs[i] != GameData.invalidID)
                         fillCount++;
                 }
 
@@ -172,14 +176,14 @@ namespace Renegadeware.LL_LS1A1 {
         //User Data API
 
         public void Reset() {
-            ID = invalidID;
+            ID = GameData.invalidID;
             componentEssentialIDs = new int[0];
             componentIDs = new int[0];
         }
 
         public void Load(M8.UserData usrData, string key) {
             //grab ID
-            ID = usrData.GetInt(key + userDataKeySubID, -1);
+            ID = usrData.GetInt(key + userDataKeySubID, GameData.invalidID);
 
             //grab component essentials
             int componentEssentialCount = usrData.GetInt(key + userDataKeySubCompEssentialCount);
@@ -189,7 +193,7 @@ namespace Renegadeware.LL_LS1A1 {
             var keyComponent = key + userDataKeySubCompEssential;
 
             for(int i = 0; i < componentEssentialCount; i++)
-                componentEssentialIDs[i] = usrData.GetInt(keyComponent + i, -1);
+                componentEssentialIDs[i] = usrData.GetInt(keyComponent + i, GameData.invalidID);
 
             //grab components
             int componentCount = usrData.GetInt(key + userDataKeySubCompCount);
@@ -199,7 +203,7 @@ namespace Renegadeware.LL_LS1A1 {
             keyComponent = key + userDataKeySubComp;
 
             for(int i = 0; i < componentCount; i++)
-                componentIDs[i] = usrData.GetInt(keyComponent + i, -1);
+                componentIDs[i] = usrData.GetInt(keyComponent + i, GameData.invalidID);
         }
 
         public void SaveTo(M8.UserData usrData, string key) {

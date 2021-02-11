@@ -305,7 +305,7 @@ namespace Renegadeware.LL_LS1A1 {
         private void RefreshCategoryWidget() {
             categoryWidget.Clear();
 
-            if(mComponentIds.Count <= 0 || mComponentIds[0] == OrganismTemplate.invalidID) {
+            if(mComponentIds.Count <= 0 || mComponentIds[0] == GameData.invalidID) {
                 //only put body
                 categoryWidget.Add(mBodyGroup);
             }

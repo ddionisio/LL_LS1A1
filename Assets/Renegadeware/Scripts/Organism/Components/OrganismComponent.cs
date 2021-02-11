@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Renegadeware.LL_LS1A1 {
     public abstract class OrganismComponent : InfoData {
         [Header("Component Info")]
+        [ID(group = "organismComponent", invalidID = GameData.invalidID)]
         public int ID;
         public string anchorName;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    [CreateAssetMenu(fileName = "cellbody", menuName = "Game/Organism Component/Body")]
+    [CreateAssetMenu(fileName = "body", menuName = "Game/Organism/Component/Body")]
     public class OrganismBody : OrganismComponent {
         [Header("Body Info")]
         public OrganismComponent[] componentEssentials; //essential organelles for this body (used after picking body the first time)

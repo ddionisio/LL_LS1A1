@@ -34,13 +34,20 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Level Data")]
         public LevelData level;
 
-        [Header("Camera")]
+        [Header("Environments")]
+        public GameObject environmentRootGO; //should have Environment components here
+        public Environment[] environments; //corrolates to level.environments
+
+        [Header("Organism Edit")]
+        public GameObject editRootGO; //should include a camera and OrganismEditMode
+
+        [Header("Game Camera")]
         public GameCamera cameraControl;
         public float cameraMoveSpeed = 1f;
         public float cameraMoveSmoothDelay = 0.05f;
 
-        [Header("Organism Edit")]
-        public GameObject editRoot; //should include a camera and OrganismEditMode
+        [Header("Game")]
+        public GameObject gameRootGO;
 
         [Header("Transition")]
         public M8.Animator.Animate transitionAnimator; //this is also treated as the root GO of transition
@@ -49,13 +56,15 @@ namespace Renegadeware.LL_LS1A1 {
         [M8.Animator.TakeSelector(animatorField = "transitionAnimator")]
         public string transitionTakeExit;
 
-        [Header("Environments")]
-        public Environment[] environments; //corrolates to level.environments
+        /////////////////////////////
 
         public int environmentCurrentIndex { get; private set; }
         public ModeSelect modeSelect { get; private set; }
 
+        //Transition
         public bool isTransitioning { get { return mTransitionState == TransitionState.Enter || mTransitionState == TransitionState.Exit; } }
+
+        /////////////////////////////
 
         //general
         private M8.GenericParams mModalParms = new M8.GenericParams();
@@ -91,22 +100,27 @@ namespace Renegadeware.LL_LS1A1 {
             var gameDat = GameData.instance;
 
             /////////////////////////////
-            //initialize environment            
+            //initialize environment
             for(int i = 0; i < environments.Length; i++)
                 environments[i].isActive = false;
 
             environmentCurrentIndex = 0;
             EnvironmentInitCurrent();
 
+            environmentRootGO.SetActive(true);
+
             /////////////////////////////
             //initialize edit
-            editRoot.SetActive(false);
 
             //grab organism edit
-            mOrganismEdit = editRoot.GetComponentInChildren<OrganismDisplayEdit>();
+            mOrganismEdit = editRootGO.GetComponentInChildren<OrganismDisplayEdit>();
+
+            editRootGO.SetActive(false);
 
             /////////////////////////////
             //initialize simulation
+
+            gameRootGO.SetActive(false);
 
             /////////////////////////////
             //initialize transition
@@ -133,6 +147,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             //initialize environment
             EnvironmentInitCurrent();
+
+            environmentRootGO.SetActive(true);
 
             yield return DoTransitionShow();
 
@@ -165,6 +181,9 @@ namespace Renegadeware.LL_LS1A1 {
             //wait for transitions
             while(M8.ModalManager.main.isBusy || hud.isBusy || isTransitioning)
                 yield return null;
+
+            if(mModeSelectNext == ModeSelect.Edit)
+                environmentRootGO.SetActive(false);
 
             ChangeToMode(mModeSelectNext);
         }
@@ -202,7 +221,7 @@ namespace Renegadeware.LL_LS1A1 {
         IEnumerator DoOrganismEdit() {
             //setup organism edit display
 
-            editRoot.SetActive(true);
+            editRootGO.SetActive(true);
 
             yield return DoTransitionShow();
 
@@ -232,7 +251,7 @@ namespace Renegadeware.LL_LS1A1 {
             while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || isTransitioning)
                 yield return null;
 
-            editRoot.SetActive(false);
+            editRootGO.SetActive(false);
 
             ChangeToMode(mModeSelectNext);
         }
@@ -242,11 +261,35 @@ namespace Renegadeware.LL_LS1A1 {
 
             //
 
+            environmentRootGO.SetActive(true);
+
+            gameRootGO.SetActive(true);
+
             yield return DoTransitionShow();
 
             //setup hud
 
+            mModeSelectNext = ModeSelect.None;
+
             yield return null;
+
+            //clear out entities
+            
+
+            //hide environment if we are editing
+            if(mModeSelectNext == ModeSelect.Edit)
+                StartCoroutine(DoTransitionHide());
+
+            //wait for transitions
+            while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || isTransitioning)
+                yield return null;
+
+            if(mModeSelectNext == ModeSelect.Edit)
+                environmentRootGO.SetActive(false);
+
+            gameRootGO.SetActive(false);
+
+            ChangeToMode(mModeSelectNext);
         }
 
         IEnumerator DoTransitionShow() {

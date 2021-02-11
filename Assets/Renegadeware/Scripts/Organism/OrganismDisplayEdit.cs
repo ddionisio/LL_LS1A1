@@ -232,7 +232,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void ApplyComponent(int compID) {
-            if(compID == OrganismTemplate.invalidID)
+            if(compID == GameData.invalidID)
                 return;
 
             var comp = GameData.instance.GetOrganismComponent<OrganismComponent>(compID);
@@ -259,7 +259,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void ClearComponent(int compID) {
-            if(compID == OrganismTemplate.invalidID)
+            if(compID == GameData.invalidID)
                 return;
 
             ComponentAnchorData anchorDat;
