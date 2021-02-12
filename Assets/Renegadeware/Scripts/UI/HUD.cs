@@ -12,34 +12,35 @@ namespace Renegadeware.LL_LS1A1 {
             Gameplay
         }
 
-        public struct TransitionQueue {
-            public Element elem;
-            public bool isEnter;
-        }
-
         [Header("Mode")]
         public GameObject modeSelectRootGO;
-        public GameObject modeSelectDisableGO; //active when mode select is disabled
+        public CanvasGroup modeSelectCanvasGroup; //use to enable/disable mode select
         public AnimatorEnterExit modeSelectTransition;
-        public Button[] modeSelectButtons; //corresponds to GameMode
+        public Button[] modeSelectButtons; //corresponds to ModeSelect
 
         [Header("Gameplay")]
         public GameObject gameplayRootGO;
         public AnimatorEnterExit gameplayTransition;
 
-        public bool isBusy { get { return mRout != null; } }
+        public bool isBusy { 
+            get {
+                return (modeSelectTransition && modeSelectTransition.isPlaying) || (gameplayTransition && gameplayTransition.isPlaying);
+            } 
+        }
 
-        public bool modeSelectInteractive { get { return mModeSelectInteractive; } set { mModeSelectInteractive = value; ApplyModeSelectInteractive(); } }
+        public bool modeSelectInteractive { 
+            get { return mModeSelectInteractive; } 
+            set { 
+                mModeSelectInteractive = value;
+                ApplyModeSelectInteractive();
+            } 
+        }
 
         public ModeSelectFlags modeSelectFlags { get; private set; }
 
         public event System.Action<ModeSelect> modeSelectClickCallback;
 
-        private M8.CacheList<TransitionQueue> mTransitionQueue = new M8.CacheList<TransitionQueue>(4);
-
         private bool mModeSelectInteractive = true;
-        
-        private Coroutine mRout;        
 
         public bool ElementIsVisible(Element elem) {
             switch(elem) {
@@ -53,21 +54,11 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void ElementShow(Element elem) {
-            mTransitionQueue.Add(new TransitionQueue { elem = elem, isEnter = true });
-
-            if(mRout == null) {
-                mRout = StartCoroutine(DoTransitions());
-                ApplyModeSelectInteractive();
-            }
+            StartCoroutine(DoTransitionEnter(elem));
         }
 
         public void ElementHide(Element elem) {
-            mTransitionQueue.Add(new TransitionQueue { elem = elem, isEnter = false });
-
-            if(mRout == null) {
-                mRout = StartCoroutine(DoTransitions());
-                ApplyModeSelectInteractive();
-            }
+            StartCoroutine(DoTransitionExit(elem));
         }
 
         public void ModeSelectSetVisible(ModeSelectFlags flags) {
@@ -76,24 +67,23 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void HideAll() {
+            StopAllCoroutines();
+
             if(modeSelectRootGO) modeSelectRootGO.SetActive(false);
+            if(modeSelectTransition) modeSelectTransition.Stop();
+
             if(gameplayRootGO) gameplayRootGO.SetActive(false);
+            if(gameplayTransition) gameplayTransition.Stop();
 
             modeSelectFlags = ModeSelectFlags.None;
             ApplyModeSelectVisible();
-
-            mTransitionQueue.Clear();
-
-            if(mRout != null) {
-                StopCoroutine(mRout);
-                mRout = null;
-            }
         }
 
         void Awake() {
             HideAll();
 
-            if(modeSelectDisableGO) modeSelectDisableGO.SetActive(false);
+            if(modeSelectCanvasGroup)
+                mModeSelectInteractive = modeSelectCanvasGroup.interactable;
 
             //hook up calls
             for(int i = 0; i < modeSelectButtons.Length; i++) {
@@ -102,40 +92,53 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
-        IEnumerator DoTransitions() {
-            while(mTransitionQueue.Count > 0) {
-                var itm = mTransitionQueue.Remove();
+        IEnumerator DoTransitionEnter(Element elem) {
+            switch(elem) {
+                case Element.ModeSelect:
+                    if(modeSelectRootGO) modeSelectRootGO.SetActive(true);
 
-                GameObject rootGO = null;
-                AnimatorEnterExit trans = null;
+                    if(modeSelectTransition) {
+                        modeSelectTransition.PlayEnter();
+                        
+                        ApplyModeSelectInteractive();
 
-                switch(itm.elem) {
-                    case Element.ModeSelect:
-                        rootGO = modeSelectRootGO;
-                        trans = modeSelectTransition;
-                        break;
+                        while(modeSelectTransition.isPlaying)
+                            yield return null;
 
-                    case Element.Gameplay:
-                        rootGO = gameplayRootGO;
-                        trans = gameplayTransition;
-                        break;
-                }
+                        ApplyModeSelectInteractive();
+                    }
+                    break;
 
-                if(itm.isEnter) {
-                    if(rootGO) rootGO.SetActive(true);
+                case Element.Gameplay:
+                    if(gameplayRootGO) gameplayRootGO.SetActive(true);
 
-                    if(trans) yield return trans.PlayEnterWait();
-                }
-                else {
-                    if(trans) yield return trans.PlayExitWait();
-
-                    if(rootGO) rootGO.SetActive(false);
-                }
+                    gameplayTransition.PlayEnter();
+                    break;
             }
+        }
 
-            mRout = null;
+        IEnumerator DoTransitionExit(Element elem) {
+            switch(elem) {
+                case Element.ModeSelect:
+                    if(modeSelectTransition) {
+                        modeSelectTransition.PlayExit();
 
-            ApplyModeSelectInteractive();
+                        ApplyModeSelectInteractive();
+
+                        while(modeSelectTransition.isPlaying)
+                            yield return null;
+                    }
+
+                    if(modeSelectRootGO) modeSelectRootGO.SetActive(false);
+                    break;
+
+                case Element.Gameplay:
+                    if(gameplayTransition)
+                        yield return gameplayTransition.PlayExitWait();
+
+                    if(gameplayRootGO) gameplayRootGO.SetActive(false);
+                    break;
+            }
         }
 
         private void ApplyModeSelectVisible() {
@@ -162,8 +165,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void ApplyModeSelectInteractive() {
-            if(modeSelectDisableGO)
-                modeSelectDisableGO.SetActive(!mModeSelectInteractive || mRout != null);
+            if(modeSelectCanvasGroup)
+                modeSelectCanvasGroup.interactable = mModeSelectInteractive && !(modeSelectTransition && modeSelectTransition.isPlaying);
         }
     }
 }

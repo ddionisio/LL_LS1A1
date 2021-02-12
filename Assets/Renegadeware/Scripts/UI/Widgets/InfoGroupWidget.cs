@@ -128,7 +128,7 @@ namespace Renegadeware.LL_LS1A1 {
         private InfoWidget AllocateItem() {
             InfoWidget newItem;
 
-            if(mItemCache.Count > 0) {
+            if(mItemCache.Count == 0) {
                 newItem = Instantiate(infoTemplate);
                 newItem.transform.SetParent(infoRoot, false);
 

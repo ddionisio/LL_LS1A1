@@ -50,11 +50,7 @@ namespace Renegadeware.LL_LS1A1 {
         public GameObject gameRootGO;
 
         [Header("Transition")]
-        public M8.Animator.Animate transitionAnimator; //this is also treated as the root GO of transition
-        [M8.Animator.TakeSelector(animatorField = "transitionAnimator")]
-        public string transitionTakeEnter;
-        [M8.Animator.TakeSelector(animatorField = "transitionAnimator")]
-        public string transitionTakeExit;
+        public AnimatorEnterExit transition; //this is also treated as the root GO of transition
 
         /////////////////////////////
 
@@ -124,7 +120,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             /////////////////////////////
             //initialize transition
-            if(transitionAnimator) transitionAnimator.gameObject.SetActive(false);
+            if(transition) transition.gameObject.SetActive(false);
 
             /////////////////////////////
             //initialize signals
@@ -296,9 +292,12 @@ namespace Renegadeware.LL_LS1A1 {
             if(mTransitionState == TransitionState.Shown || mTransitionState == TransitionState.Enter)
                 yield break;
 
-            if(transitionAnimator && !string.IsNullOrEmpty(transitionTakeEnter)) {
+            if(transition) {
                 mTransitionState = TransitionState.Enter;
-                yield return transitionAnimator.PlayWait(transitionTakeEnter);
+
+                yield return transition.PlayEnterWait();
+
+                transition.gameObject.SetActive(false);
             }
 
             mTransitionState = TransitionState.Shown;
@@ -308,13 +307,12 @@ namespace Renegadeware.LL_LS1A1 {
             if(mTransitionState == TransitionState.Hidden || mTransitionState == TransitionState.Exit)
                 yield break;
 
-            if(transitionAnimator) {
-                transitionAnimator.gameObject.SetActive(true);
+            if(transition) {
+                transition.gameObject.SetActive(true);
 
-                if(!string.IsNullOrEmpty(transitionTakeExit)) {
-                    mTransitionState = TransitionState.Enter;
-                    yield return transitionAnimator.PlayWait(transitionTakeExit);
-                }
+                mTransitionState = TransitionState.Enter;
+
+                yield return transition.PlayExitWait();
             }
 
             mTransitionState = TransitionState.Shown;
@@ -396,28 +394,6 @@ namespace Renegadeware.LL_LS1A1 {
                 return;
 
             env.isActive = false;
-        }
-
-        private void TransitionCancel() {
-            switch(mTransitionState) {
-                case TransitionState.Enter:
-                    if(transitionAnimator) {
-                        transitionAnimator.gameObject.SetActive(true);
-
-                        if(!string.IsNullOrEmpty(transitionTakeEnter))
-                            transitionAnimator.ResetTake(transitionTakeEnter);
-
-                        mTransitionState = TransitionState.Hidden;
-                    }
-                    else
-                        mTransitionState = TransitionState.Shown;
-                    break;
-
-                case TransitionState.Exit:
-                    if(transitionAnimator) transitionAnimator.gameObject.SetActive(false);
-                    mTransitionState = TransitionState.Shown;                    
-                    break;
-            }
         }
     }
 }

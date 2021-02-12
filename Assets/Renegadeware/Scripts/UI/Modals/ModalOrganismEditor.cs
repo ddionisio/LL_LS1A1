@@ -209,6 +209,8 @@ namespace Renegadeware.LL_LS1A1 {
                 else if(mCurMode == Mode.ComponentEssential)
                     gameDat.signalEditComponentEssentialPreview.Invoke(mCompIndex, comp.ID);
             }
+
+            //update info window
         }
 
         void ComponentConfirm() {

@@ -4,18 +4,17 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public abstract class OrganismComponent : InfoData {
-        [Header("Component Info")]
         [ID(group = "organismComponent", invalidID = GameData.invalidID)]
-        public int ID;
-        public string anchorName;
+        public int ID;        
 
-        [Header("Templates")]
-        public GameObject editPrefab; //use during edit mode
-        public GameObject gamePrefab; //use for spawned, added to cell's template
+        //[Header("General")]
+        //public float energy; //initial energy value upon spawn
+        //public float energyRate; //determines amount of energy consumption/regeneration
+        //public float energyCapacity; //determines energy cap, when reached, allow division
 
-        [Header("General")]
-        public float energy; //initial energy value upon spawn
-        public float energyRate; //determines amount of energy consumption/regeneration
-        public float energyCapacity; //determines energy cap, when reached, allow division
+        public virtual string anchorName { get { return ""; } } //used for attaching component to body
+
+        public virtual GameObject editPrefab { get { return null; } } //used during edit mode
+        public virtual GameObject gamePrefab { get { return null; } } //used during simulation mode
     }
 }
