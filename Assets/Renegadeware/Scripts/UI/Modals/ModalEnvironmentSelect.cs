@@ -44,7 +44,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(mRout != null || mEnvInfos.Length <= 1) //fail-safe: transition in process, only one environment?
                 return;
 
-            mEnvCurInd = (mEnvCurInd - 1) % mEnvInfos.Length;
+            mEnvCurInd = Mathf.Abs((mEnvCurInd - 1) % mEnvInfos.Length);
 
             GameData.instance.signalEnvironmentChanged.Invoke(mEnvCurInd);
 

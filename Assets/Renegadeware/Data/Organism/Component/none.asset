@@ -13,12 +13,6 @@ MonoBehaviour:
   m_Name: none
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  nameRef: 
+  nameRef: none
   descRef: 
   ID: 1
-  anchorName: 
-  editPrefab: {fileID: 0}
-  gamePrefab: {fileID: 0}
-  energy: 0
-  energyRate: 0
-  energyCapacity: 0

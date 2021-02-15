@@ -209,11 +209,20 @@ namespace Renegadeware.LL_LS1A1 {
                 mBodyDisplay = null;
             }
 
+            //no body?
+            if(!body)
+                return;
+
             //setup body display
             if(!mBodyCache.TryGetValue(body.ID, out mBodyDisplay)) {
                 //instantiate body
                 var bodyGOInst = Instantiate(body.editPrefab);
-                bodyGOInst.transform.SetParent(transform, false);
+                var bodyTrans = bodyGOInst.transform;
+
+                bodyTrans.SetParent(transform, false);
+
+                bodyTrans.localPosition = Vector3.zero;
+                bodyTrans.localRotation = Quaternion.identity;
 
                 mBodyDisplay = bodyGOInst.GetComponent<OrganismBodyDisplay>();
 

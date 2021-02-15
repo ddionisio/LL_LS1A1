@@ -26,13 +26,38 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
-        private M8.CacheList<InfoWidget> mItems = new M8.CacheList<InfoWidget>(GameData.organismComponentCapacity);
-        private M8.CacheList<InfoWidget> mItemCache = new M8.CacheList<InfoWidget>(GameData.organismComponentCapacity);
+        public int selectIndex { 
+            get { return mSelectIndex; }
+            set {
+                if(mSelectIndex == value)
+                    return;
+
+                if(mSelectIndex != -1) {
+                    if(mSelectIndex < mItems.Count)
+                        mItems[mSelectIndex].isSelected = false;
+                }
+
+                mSelectIndex = value;
+
+                if(mSelectIndex != -1) {
+                    var selectItm = mItems[mSelectIndex];
+
+                    selectItm.isSelected = true;
+
+                    selectCallback?.Invoke(mSelectIndex, selectItm.data);
+                }
+            }
+        }
 
         public int itemCount { get { return mItems.Count; } }
 
         public event System.Action<int, InfoData> selectCallback;
         public event System.Action<int, InfoData> clickCallback;
+
+        private M8.CacheList<InfoWidget> mItems = new M8.CacheList<InfoWidget>(GameData.organismComponentCapacity);
+        private M8.CacheList<InfoWidget> mItemCache = new M8.CacheList<InfoWidget>(GameData.organismComponentCapacity);
+
+        private int mSelectIndex;
 
         public int GetIndex(InfoData info) {
             for(int i = 0; i < mItems.Count; i++) {
@@ -48,14 +73,6 @@ namespace Renegadeware.LL_LS1A1 {
                 return null;
 
             return mItems[index].data;
-        }
-
-        public void SetSelect(int index) {
-            index = Mathf.Clamp(index, 0, mItems.Count - 1);
-
-            var selectable = mItems[index].selectable;
-            if(selectable)
-                selectable.Select();
         }
 
         public void Add(InfoData[] infos) {
@@ -86,6 +103,9 @@ namespace Renegadeware.LL_LS1A1 {
 
             mItemCache.Add(itm);
 
+            if(mSelectIndex == index)
+                mSelectIndex = -1;
+
             RefreshNavigation();
         }
 
@@ -107,20 +127,16 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             mItems.Clear();
-        }
 
-        void ItemSelect(InfoWidget itm) {
-            var dat = itm.data;
-
-            var ind = GetIndex(dat);
-
-            selectCallback?.Invoke(ind, dat);
+            mSelectIndex = -1;
         }
 
         void ItemClick(InfoWidget itm) {
             var dat = itm.data;
 
             var ind = GetIndex(dat);
+
+            selectIndex = ind;
 
             clickCallback?.Invoke(ind, dat);
         }
@@ -132,7 +148,6 @@ namespace Renegadeware.LL_LS1A1 {
                 newItem = Instantiate(infoTemplate);
                 newItem.transform.SetParent(infoRoot, false);
 
-                newItem.selectCallback += ItemSelect;
                 newItem.clickCallback += ItemClick;
             }
             else

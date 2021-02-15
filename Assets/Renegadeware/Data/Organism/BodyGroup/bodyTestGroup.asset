@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
+  m_Name: bodyTestGroup
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  nameRef: categoryBody
+  descRef: 
+  components:
+  - {fileID: 11400000, guid: cbd6eb6404e248945ba36779697e098a, type: 2}
+  - {fileID: 11400000, guid: 4049816e31a17704b93e9e8c2e7876f5, type: 2}

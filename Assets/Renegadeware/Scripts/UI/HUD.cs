@@ -150,10 +150,10 @@ namespace Renegadeware.LL_LS1A1 {
 
                 switch(mode) {
                     case ModeSelect.Environment:
-                        flag = ModeSelectFlags.Edit;
+                        flag = ModeSelectFlags.Environment;
                         break;
                     case ModeSelect.Edit:
-                        flag = ModeSelectFlags.Environment;
+                        flag = ModeSelectFlags.Edit;
                         break;
                     case ModeSelect.Play:
                         flag = ModeSelectFlags.Play;

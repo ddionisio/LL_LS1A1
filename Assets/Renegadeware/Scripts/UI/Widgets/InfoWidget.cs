@@ -6,18 +6,21 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Renegadeware.LL_LS1A1 {
-    public class InfoWidget : MonoBehaviour, IPointerClickHandler, ISelectHandler {
+    public class InfoWidget : MonoBehaviour, IPointerClickHandler {
         [Header("Display")]
         public TMP_Text titleText;
         public TMP_Text descText;
         public Image iconImage;
+        public GameObject selectGO;
 
         public InfoData data { get; private set; }
 
-        public Selectable selectable { get; private set; }
+        public bool isSelected {
+            get { return selectGO ? selectGO.activeSelf : false; }
+            set { if(selectGO) selectGO.SetActive(value); }
+        }
 
         public event System.Action<InfoWidget> clickCallback;
-        public event System.Action<InfoWidget> selectCallback;
 
         public void Setup(InfoData aData) {
             data = aData;
@@ -26,18 +29,12 @@ namespace Renegadeware.LL_LS1A1 {
             if(descText) descText.text = M8.Localize.Get(data.descRef);
 
             if(iconImage) iconImage.sprite = data.icon;
-        }
 
-        void Awake() {
-            selectable = GetComponent<Selectable>();
+            isSelected = false;
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
             clickCallback?.Invoke(this);
-        }
-
-        void ISelectHandler.OnSelect(BaseEventData eventData) {
-            selectCallback?.Invoke(this);
         }
     }
 }

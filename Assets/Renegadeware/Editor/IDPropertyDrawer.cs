@@ -13,22 +13,34 @@ namespace Renegadeware.LL_LS1A1 {
                 var attrib = this.attribute as IDAttribute;
 
                 //apply ID if invalid
-                if(property.intValue == attrib.invalidID) {
-                    var key = "ID." + attrib.group;
+                if(property.intValue == attrib.invalidID)
+                    ApplyID(attrib.group, attrib.startID, property);
 
-                    int id = EditorPrefs.GetInt(key, attrib.startID);
+                const float labelSize = 20f;
+                const float editSpace = 4f;
 
-                    property.intValue = id;
+                var labelPos = new Rect(position.x, position.y, position.width - labelSize - editSpace, position.height);
+                var editPos = new Rect(position.x + position.width - labelSize, position.y, labelSize, position.height);
 
-                    EditorPrefs.SetInt(key, id + 1);
-                }
+                EditorGUI.LabelField(labelPos, label, new GUIContent(property.intValue.ToString()));
 
-                EditorGUI.LabelField(position, label, new GUIContent(property.intValue.ToString()));
+                if(GUI.Button(editPos, new GUIContent("R", "Apply a new ID.")))
+                    ApplyID(attrib.group, attrib.startID, property);
 
                 EditorGUI.EndProperty();
             }
             else
                 EditorGUI.PropertyField(position, property, label);
+        }
+
+        private void ApplyID(string grp, int defaultID, SerializedProperty property) {
+            var key = "ID." + grp;
+
+            int id = EditorPrefs.GetInt(key, defaultID);
+
+            property.intValue = id;
+
+            EditorPrefs.SetInt(key, id + 1);
         }
     }
 }

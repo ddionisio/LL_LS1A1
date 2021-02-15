@@ -13,30 +13,11 @@ namespace Renegadeware.LL_LS1A1 {
             Exit
         }
 
-        [System.Serializable]
-        public class Environment {
-            public GameObject rootGO;
-            public GameBounds2D bounds;
-
-            public bool isActive {
-                get { return rootGO ? rootGO.activeSelf : false; }
-                set { if(rootGO) rootGO.SetActive(value); }
-            }
-
-            public void ApplyBoundsToCamera(GameCamera cam) {
-                var boundRect = bounds.rect;
-
-                cam.SetBounds(boundRect, false);
-                cam.SetPosition(boundRect.center);
-            }
-        }
-
         [Header("Level Data")]
         public LevelData level;
 
         [Header("Environments")]
         public GameObject environmentRootGO; //should have Environment components here
-        public Environment[] environments; //corrolates to level.environments
 
         [Header("Organism Edit")]
         public GameObject editRootGO; //should include a camera and OrganismEditMode
@@ -54,7 +35,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         /////////////////////////////
 
+        public EnvironmentControl[] environments { get; private set; }
         public int environmentCurrentIndex { get; private set; }
+
         public ModeSelect modeSelect { get; private set; }
 
         //Transition
@@ -97,8 +80,17 @@ namespace Renegadeware.LL_LS1A1 {
 
             /////////////////////////////
             //initialize environment
-            for(int i = 0; i < environments.Length; i++)
-                environments[i].isActive = false;
+            var envRootTrans = environmentRootGO.transform;
+            var envList = new List<EnvironmentControl>();
+            for(int i = 0; i < envRootTrans.childCount; i++) {
+                var envCtrl = envRootTrans.GetChild(i).GetComponent<EnvironmentControl>();
+                if(envCtrl) {
+                    envCtrl.gameObject.SetActive(false);
+                    envList.Add(envCtrl);
+                }
+            }
+
+            environments = envList.ToArray();
 
             environmentCurrentIndex = 0;
             EnvironmentInitCurrent();
@@ -215,9 +207,10 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoOrganismEdit() {
-            //setup organism edit display
-
             editRootGO.SetActive(true);
+
+            //setup organism edit display
+            mOrganismEdit.Setup(GameData.instance.organismTemplateCurrent);
 
             yield return DoTransitionShow();
 
@@ -310,12 +303,12 @@ namespace Renegadeware.LL_LS1A1 {
             if(transition) {
                 transition.gameObject.SetActive(true);
 
-                mTransitionState = TransitionState.Enter;
+                mTransitionState = TransitionState.Exit;
 
                 yield return transition.PlayExitWait();
             }
 
-            mTransitionState = TransitionState.Shown;
+            mTransitionState = TransitionState.Hidden;
         }
 
         void OnModeSelect(ModeSelect toMode) {

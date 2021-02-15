@@ -186,22 +186,20 @@ namespace Renegadeware.LL_LS1A1 {
             ID = usrData.GetInt(key + userDataKeySubID, GameData.invalidID);
 
             //grab component essentials
-            int componentEssentialCount = usrData.GetInt(key + userDataKeySubCompEssentialCount);
-
-            componentIDs = new int[componentEssentialCount];
-
             var keyComponent = key + userDataKeySubCompEssential;
 
+            int componentEssentialCount = usrData.GetInt(key + userDataKeySubCompEssentialCount);
+
+            componentEssentialIDs = new int[componentEssentialCount];
             for(int i = 0; i < componentEssentialCount; i++)
                 componentEssentialIDs[i] = usrData.GetInt(keyComponent + i, GameData.invalidID);
 
             //grab components
+            keyComponent = key + userDataKeySubComp;
+
             int componentCount = usrData.GetInt(key + userDataKeySubCompCount);
 
             componentIDs = new int[componentCount];
-
-            keyComponent = key + userDataKeySubComp;
-
             for(int i = 0; i < componentCount; i++)
                 componentIDs[i] = usrData.GetInt(keyComponent + i, GameData.invalidID);
         }

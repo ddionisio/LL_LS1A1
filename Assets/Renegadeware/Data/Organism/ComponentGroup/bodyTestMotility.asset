@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
-  m_Name: bodyGroupTest
+  m_Name: bodyTestMotility
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  nameRef: 
+  nameRef: categoryMotility
   descRef: 
   components:
-  - {fileID: 11400000, guid: cbd6eb6404e248945ba36779697e098a, type: 2}
+  - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}

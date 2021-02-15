@@ -65,6 +65,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         private int mOrganismTemplateIDCounter = 1;
 
+        private Dictionary<int, OrganismComponent> mOrganismLookup;
+
         /// <summary>
         /// Called in start scene
         /// </summary>
@@ -154,13 +156,10 @@ namespace Renegadeware.LL_LS1A1 {
             if(id == invalidID)
                 return null;
 
-            for(int i = 0; i < organismComponents.Length; i++) {
-                var comp = organismComponents[i];
-                if(comp && comp.ID == id)
-                    return comp as T;
-            }
+            OrganismComponent ret;
+            mOrganismLookup.TryGetValue(id, out ret);
 
-            return null;
+            return ret as T;
         }
 
         public void AddOrganismTemplateCurrentToList() {
@@ -198,6 +197,13 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         protected override void OnInstanceInit() {
+            //generate organism component look-up
+            mOrganismLookup = new Dictionary<int, OrganismComponent>(organismComponents.Length);
+            for(int i = 0; i < organismComponents.Length; i++) {
+                var comp = organismComponents[i];
+                mOrganismLookup.Add(comp.ID, comp);
+            }
+
             //compute max progress
             if(LoLManager.isInstantiated) {
                 int progressCount = 0;
