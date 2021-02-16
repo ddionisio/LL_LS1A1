@@ -57,7 +57,7 @@ namespace Renegadeware.LL_LS1A1 {
             mKeys = new string[comps.Length + 1];
 
             mKeyIDs[0] = GameData.invalidID;
-            mKeys[0] = "Invalid";
+            mKeys[0] = "- Invalid -";
 
             for(int i = 0; i < comps.Length; i++) {
                 mKeyIDs[i + 1] = comps[i].ID;

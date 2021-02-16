@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   editorExcelPath: D:\Lab\Legends of Learning\LL_LS1A1\Language\language.xlsx
   editorLanguageCode: en
-  editorLanguageRef: language.json
+  editorLanguageRef: Renegadeware\language.json
   editorLanguagePathExtra: D:\Lab\Legends of Learning\LL_LS1A1\Assets\Renegadeware\Data\language.json
   languageExtraInfos:
   - key: welcome

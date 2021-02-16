@@ -19,7 +19,8 @@
         START_GAME: 'StartGameDataReceived',
         PLAYER_ACTIVITY_ID: 'PlayerActivityIdReceived',
         LOAD_STATE: 'StateDataReceived',
-        SAVE_STATE_RESULT: 'SaveResultDataReceived'
+        SAVE_STATE_RESULT: 'SaveResultDataReceived',
+        ANSWER_RESULT: 'AnswerResultDataReceived'
       },
       RECEIVED: {
         PAUSE: 'pause',
@@ -30,7 +31,8 @@
         INIT: 'init',
         PLAYER_ACTIVITY_ID: 'playerActivityId',
         LOAD_STATE: 'loadState',
-        SAVE_STATE_RESULT: 'saveStateResult'
+        SAVE_STATE_RESULT: 'saveStateResult',
+		    ANSWER_RESULT: "answerResult"
       }
     };
 
