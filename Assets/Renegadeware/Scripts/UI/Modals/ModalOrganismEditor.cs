@@ -103,11 +103,13 @@ namespace Renegadeware.LL_LS1A1 {
                         yield return categoryTransition.PlayEnterWait();
                     break;
 
+                case Mode.ComponentBody:
                 case Mode.ComponentEssential:
                 case Mode.Component:
                     if(componentRootGO) componentRootGO.SetActive(true);
 
-                    if(componentBackButton) componentBackButton.gameObject.SetActive(mCurMode == Mode.Component); //don't allow going back in essential mode
+                    if(componentAcceptButton) componentAcceptButton.interactable = mCompIndex != -1;
+                    if(componentBackButton) componentBackButton.gameObject.SetActive(mCurMode != Mode.ComponentEssential && GetBodyComp()); //don't allow going back in essential mode, or if there's no body
 
                     if(componentTransition)
                         yield return componentTransition.PlayEnterWait();
@@ -124,6 +126,7 @@ namespace Renegadeware.LL_LS1A1 {
                     if(categoryRootGO) categoryRootGO.SetActive(false);
                     break;
 
+                case Mode.ComponentBody:
                 case Mode.ComponentEssential:
                 case Mode.Component:
                     if(componentTransition)
@@ -149,6 +152,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             var bodyComp = GetBodyComp();
 
+            Mode toMode;
+
             if(index == 0) { //body selected
                 comps = mBodyGroup.components;
 
@@ -157,6 +162,8 @@ namespace Renegadeware.LL_LS1A1 {
                     mCompIndex = mBodyGroup.GetIndex(bodyComp);
                 else
                     mCompIndex = -1;
+
+                toMode = Mode.ComponentBody;
             }
             else {
                 int subCatInd = index - 1;
@@ -167,10 +174,12 @@ namespace Renegadeware.LL_LS1A1 {
 
                     //setup current component index
                     if(subCatInd < mComponentIds.Count)
-                        mCompIndex = subCategory.GetIndex(mComponentIds[subCatInd]);
+                        mCompIndex = subCategory.GetIndex(mComponentIds[index]);
                     else
                         mCompIndex = -1;
                 }
+
+                toMode = Mode.Component;
             }
 
             if(comps != null) {
@@ -180,7 +189,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                 componentWidget.selectIndex = mCompIndex;
 
-                StartCoroutine(DoTransition(Mode.Component));
+                StartCoroutine(DoTransition(toMode));
             }
         }
 
@@ -192,76 +201,82 @@ namespace Renegadeware.LL_LS1A1 {
 
             mCompIndex = index;
 
-            if(mCategoryIndex == 0) { //body preview
-                var bodyComp = data as OrganismComponent;
-                gameDat.signalEditBodyPreview.Invoke(bodyComp.ID);
-            }
-            else { //component preview
-                var comp = data as OrganismComponent;
+            switch(mCurMode) {
+                case Mode.ComponentBody:
+                    var bodyComp = data as OrganismComponent;
+                    gameDat.signalEditBodyPreview.Invoke(bodyComp.ID);
+                    break;
 
-                if(mCurMode == Mode.Component)
-                    gameDat.signalEditComponentPreview.Invoke(mCategoryIndex - 1, comp.ID);
-                else if(mCurMode == Mode.ComponentEssential)
-                    gameDat.signalEditComponentEssentialPreview.Invoke(mCompIndex, comp.ID);
+                case Mode.ComponentEssential:
+                    gameDat.signalEditComponentEssentialPreview.Invoke((data as OrganismComponent).ID);
+                    break;
+
+                case Mode.Component:
+                    gameDat.signalEditComponentPreview.Invoke(mCategoryIndex - 1, (data as OrganismComponent).ID);
+                    break;
             }
+
+            if(componentAcceptButton) componentAcceptButton.interactable = mCompIndex != -1;
 
             //update info window
         }
 
         void ComponentConfirm() {
-            if(mCurMode == Mode.ComponentEssential) {
-                var bodyComp = GetBodyComp();
+            switch(mCurMode) {
+                case Mode.ComponentBody: //body apply
+                    mOrganismTemplate.body = mBodyGroup.components[mCompIndex] as OrganismBody;
 
-                var itm = componentWidget.GetItem(mCompIndex) as OrganismComponent;
+                    RefreshComponentIds();
 
-                var ind = bodyComp.GetComponentEssentialIndex(itm.ID);
+                    RefreshCategoryWidget();
 
-                mOrganismTemplate.SetComponentEssentialID(ind, itm.ID);
-
-                //remove item
-                componentWidget.Remove(itm);
-
-                if(componentWidget.itemCount > 0) //prep for next component
-                    componentWidget.selectIndex = 0;
-                else {
-                    //transition back to categories
-                    categoryWidget.selectIndex = 1;
-                    StartCoroutine(DoTransition(Mode.Category));
-                }
-            }
-            else if(mCategoryIndex == 0) { //body apply
-                mOrganismTemplate.body = mBodyGroup.components[mCompIndex] as OrganismBody;
-
-                RefreshComponentIds();
-
-                RefreshCategoryWidget();
-
-                //check if essential components are filled
-                if(mOrganismTemplate.isEssentialComponentsFilled) {
-                    //transition back to categories
-                    categoryWidget.selectIndex = 1;
-                    StartCoroutine(DoTransition(Mode.Category));
-                }
-                else { //enter essential components mode
-                    var bodyComp = GetBodyComp();
-
-                    //add components
-                    componentWidget.Clear();
-
-                    for(int i = 0; i < bodyComp.componentEssentials.Length; i++) {
-                        var comp = bodyComp.componentEssentials[i];
-                        if(mOrganismTemplate.GetComponentEssentialIndex(comp.ID) == -1)
-                            componentWidget.Add(comp);
+                    //check if essential components are filled
+                    if(mOrganismTemplate.isEssentialComponentsFilled) {
+                        //transition back to categories
+                        categoryWidget.selectIndex = 1;
+                        StartCoroutine(DoTransition(Mode.Category));
                     }
+                    else { //enter essential components mode
+                        var bodyComp = GetBodyComp();
 
-                    StartCoroutine(DoTransition(Mode.ComponentEssential));
-                }
-            }
-            else { //component apply
-                var bodyComp = GetBodyComp();
+                        //add components
+                        componentWidget.Clear();
 
-                if(mCurMode == Mode.Component) {
-                    int compId = bodyComp.componentGroups[mCategoryIndex - 1].components[mCompIndex].ID;
+                        for(int i = 0; i < bodyComp.componentEssentials.Length; i++) {
+                            var comp = bodyComp.componentEssentials[i];
+                            if(mOrganismTemplate.GetComponentEssentialIndex(comp.ID) == -1)
+                                componentWidget.Add(comp);
+                        }
+
+                        mCompIndex = -1;
+
+                        StartCoroutine(DoTransition(Mode.ComponentEssential));
+                    }
+                    break;
+
+                case Mode.ComponentEssential:
+                    var itm = componentWidget.GetItem(mCompIndex) as OrganismComponent;
+
+                    var ind = GetBodyComp().GetComponentEssentialIndex(itm.ID);
+
+                    mOrganismTemplate.SetComponentEssentialID(ind, itm.ID);
+
+                    //remove item
+                    componentWidget.Remove(itm);
+
+                    mCompIndex = -1;
+
+                    if(componentWidget.itemCount > 0) //prep for next component
+                        componentWidget.selectIndex = 0;
+                    else {
+                        //transition back to categories
+                        categoryWidget.selectIndex = 1;
+                        StartCoroutine(DoTransition(Mode.Category));
+                    }
+                    break;
+
+                case Mode.Component:
+                    int compId = GetBodyComp().componentGroups[mCategoryIndex - 1].components[mCompIndex].ID;
 
                     mComponentIds[mCategoryIndex] = compId;
 
@@ -270,7 +285,7 @@ namespace Renegadeware.LL_LS1A1 {
                     //transition back to categories
                     categoryWidget.selectIndex = mCategoryIndex;
                     StartCoroutine(DoTransition(Mode.Category));
-                }
+                    break;
             }
         }
 

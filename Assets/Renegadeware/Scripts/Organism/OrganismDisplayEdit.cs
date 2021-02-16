@@ -138,7 +138,7 @@ namespace Renegadeware.LL_LS1A1 {
             SetBody(body);
         }
 
-        void OnEditComponentEssentialPreview(int compIndex, int compID) {
+        void OnEditComponentEssentialPreview(int compID) {
             //clear out component essentials
             for(int i = 0; i < mComponentEssentialIDs.Length; i++)
                 ClearComponent(mComponentEssentialIDs[i]);
@@ -147,7 +147,9 @@ namespace Renegadeware.LL_LS1A1 {
             System.Array.Copy(mTemplate.componentEssentialIDs, mComponentEssentialIDs, mComponentEssentialIDs.Length);
 
             //set component and refresh display
-            mComponentEssentialIDs[compIndex] = compID;
+            var compIndex = mTemplate.body.GetComponentEssentialIndex(compID);
+            if(compIndex != -1)
+                mComponentEssentialIDs[compIndex] = compID;
 
             for(int i = 0; i < mComponentEssentialIDs.Length; i++)
                 ApplyComponent(mComponentEssentialIDs[i]);
@@ -166,10 +168,6 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnRefresh() {
-            //refresh component IDs from template
-            System.Array.Copy(mTemplate.componentEssentialIDs, mComponentEssentialIDs, mComponentEssentialIDs.Length);
-            System.Array.Copy(mTemplate.componentIDs, mComponentIDs, mComponentIDs.Length);
-
             //just refresh the entire thing
             SetBody(mTemplate.body);
         }
@@ -229,11 +227,36 @@ namespace Renegadeware.LL_LS1A1 {
                 mBodyCache.Add(body.ID, mBodyDisplay);
             }
 
-            //setup essentials
+            //refresh component essential IDs
+            mComponentEssentialIDs = new int[body.componentEssentials.Length];
+            for(int i = 0; i < mComponentEssentialIDs.Length; i++) {
+                int ind = mTemplate.GetComponentEssentialIndex(body.componentEssentials[i].ID);
+                if(ind != -1)
+                    mComponentEssentialIDs[i] = mTemplate.componentEssentialIDs[ind];
+                else
+                    mComponentEssentialIDs[i] = GameData.invalidID;
+            }
+            //
+
+            //refresh component IDs
+            mComponentIDs = new int[body.componentGroups.Length + 1];
+            mComponentIDs[0] = body.ID;
+
+            for(int i = 0; i < body.componentGroups.Length; i++) {
+                var grp = body.componentGroups[i];
+                var grpCompInd = grp.GetIndex(mTemplate.componentIDs, 1);
+                if(grpCompInd != -1)
+                    mComponentIDs[i + 1] = grp.components[grpCompInd].ID;
+                else
+                    mComponentIDs[i + 1] = GameData.invalidID;
+            }
+            //
+
+            //setup essential displays
             for(int i = 0; i < mComponentEssentialIDs.Length; i++)
                 ApplyComponent(mComponentEssentialIDs[i]);
 
-            //setup components
+            //setup component displays
             for(int i = 1; i < mComponentIDs.Length; i++)
                 ApplyComponent(mComponentIDs[i]);
 

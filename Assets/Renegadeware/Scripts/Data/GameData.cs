@@ -28,7 +28,7 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.SignalInteger signalEnvironmentChanged;
 
         public M8.SignalInteger signalEditBodyPreview; //body component id
-        public SignalIntegerPair signalEditComponentEssentialPreview; //component essential index, component id
+        public M8.SignalInteger signalEditComponentEssentialPreview; //component essential index, component id
         public SignalIntegerPair signalEditComponentPreview; //component index, component id
         public M8.Signal signalEditRefresh; //used when backing out without changes
 

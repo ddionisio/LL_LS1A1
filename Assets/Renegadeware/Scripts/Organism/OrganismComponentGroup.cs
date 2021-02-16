@@ -25,5 +25,20 @@ namespace Renegadeware.LL_LS1A1 {
 
             return -1;
         }
+
+        public int GetIndex(int[] ids, int startIndex) {
+            if(ids == null)
+                return -1;
+
+            for(int i = startIndex; i < ids.Length; i++) {
+                var id = ids[i];
+                for(int j = 0; j < components.Length; j++) {
+                    if(components[j].ID == id)
+                        return j;
+                }
+            }
+
+            return -1;
+        }
     }
 }

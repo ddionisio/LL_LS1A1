@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6154a490c5ac029499cb3b2879a86044, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d70e94758494f747a1f218a8b6d46d6, type: 3}
   m_Name: signalEditComponentEssentialPreview
   m_EditorClassIdentifier: 

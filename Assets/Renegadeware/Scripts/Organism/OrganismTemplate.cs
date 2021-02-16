@@ -23,28 +23,32 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             set {
+                if(!value) { //clear out?
+                    componentEssentialIDs = new int[0];
+                    componentIDs = new int[0];
+
+                    //signal body change
+                    GameData.instance.signalOrganismBodyChanged.Invoke();
+
+                    return;
+                }
+
+                if(componentIDs.Length > 1 && componentIDs[0] == value.ID) //check if already set
+                    return;
+
                 //try to re-attach essential components
                 var newCompEssentialIds = new int[value.componentEssentials.Length];
 
-                for(int i = 0; i < value.componentEssentials.Length; i++) {
-                    var comp = value.componentEssentials[i];
-
-                    //grab compatible component for this group
-                    int compId = GameData.invalidID;
-                    if(componentEssentialIDs != null) {
-                        for(int j = 0; j < componentEssentialIDs.Length; j++) {
-                            if(componentEssentialIDs[j] != GameData.invalidID && componentEssentialIDs[j] == comp.ID) {
-                                compId = componentEssentialIDs[j];
-                                componentEssentialIDs[j] = GameData.invalidID;
-                                break;
-                            }
-                        }
-                    }
-
-                    newCompEssentialIds[i] = compId;
+                for(int i = 0; i < newCompEssentialIds.Length; i++) {
+                    int ind = GetComponentEssentialIndex(value.componentEssentials[i].ID);
+                    if(ind != -1)
+                        newCompEssentialIds[i] = componentEssentialIDs[ind];
+                    else
+                        newCompEssentialIds[i] = GameData.invalidID;
                 }
 
                 componentEssentialIDs = newCompEssentialIds;
+                //
 
                 //try to re-attach existing components that match new body
                 var newCompIds = new int[value.componentGroups.Length + 1];
@@ -52,23 +56,13 @@ namespace Renegadeware.LL_LS1A1 {
 
                 for(int i = 0; i < value.componentGroups.Length; i++) {
                     var grp = value.componentGroups[i];
-
-                    //grab compatible component for this group
-
-                    //default id to first item from group
-                    int compId = grp.components.Length > 1 ? grp.components[0].ID : GameData.invalidID;
-
-                    if(componentIDs != null) {
-                        for(int j = 1; j < componentIDs.Length; j++) {
-                            if(componentIDs[j] != GameData.invalidID && grp.GetIndex(componentIDs[j]) != -1) {
-                                compId = componentIDs[j];
-                                componentIDs[j] = GameData.invalidID;
-                                break;
-                            }
-                        }
-                    }
-
-                    newCompIds[i + 1] = compId;
+                    var grpCompInd = grp.GetIndex(componentIDs, 1);
+                    if(grpCompInd != -1)
+                        newCompIds[i + 1] = grp.components[grpCompInd].ID;
+                    else if(grp.components.Length > 0) //set as first item in the group
+                        newCompIds[i + 1] = grp.components[0].ID;
+                    else
+                        newCompIds[i + 1] = GameData.invalidID;
                 }
 
                 componentIDs = newCompIds;

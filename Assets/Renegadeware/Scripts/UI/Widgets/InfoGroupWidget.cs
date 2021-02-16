@@ -152,8 +152,9 @@ namespace Renegadeware.LL_LS1A1 {
             }
             else
                 newItem = mItemCache.RemoveLast();
-            
-            newItem.gameObject.SetActive(true);
+
+            newItem.transform.SetAsLastSibling();
+            newItem.gameObject.SetActive(true);            
 
             mItems.Add(newItem);
 

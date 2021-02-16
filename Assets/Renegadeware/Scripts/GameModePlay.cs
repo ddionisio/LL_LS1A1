@@ -60,6 +60,10 @@ namespace Renegadeware.LL_LS1A1 {
                 var gameDat = GameData.instance;
 
                 gameDat.signalEnvironmentChanged.callback -= OnEnvironmentChanged;
+
+                gameDat.signalOrganismBodyChanged.callback -= OnOrganismBodyChanged;
+                gameDat.signalOrganismComponentEssentialChanged.callback -= OnOrganismComponentEssentialChanged;
+                gameDat.signalOrganismComponentChanged.callback -= OnOrganismComponentChanged;
             }
 
             if(HUD.isInstantiated) {
@@ -117,6 +121,10 @@ namespace Renegadeware.LL_LS1A1 {
             /////////////////////////////
             //initialize signals
             gameDat.signalEnvironmentChanged.callback += OnEnvironmentChanged;
+
+            gameDat.signalOrganismBodyChanged.callback += OnOrganismBodyChanged;
+            gameDat.signalOrganismComponentEssentialChanged.callback += OnOrganismComponentEssentialChanged;
+            gameDat.signalOrganismComponentChanged.callback += OnOrganismComponentChanged;
         }
 
         protected override IEnumerator Start() {
@@ -317,6 +325,18 @@ namespace Renegadeware.LL_LS1A1 {
 
         void OnEnvironmentChanged(int envInd) {
             StartCoroutine(DoEnvironmentChange(envInd));
+        }
+        
+        void OnOrganismBodyChanged() {
+            HUD.instance.ModeSelectSetVisible(HUDGetModeSelectFlags());
+        }
+
+        void OnOrganismComponentEssentialChanged(int ind) {
+            HUD.instance.ModeSelectSetVisible(HUDGetModeSelectFlags());
+        }
+
+        void OnOrganismComponentChanged(int ind) {
+            HUD.instance.ModeSelectSetVisible(HUDGetModeSelectFlags());
         }
 
         private ModeSelectFlags HUDGetModeSelectFlags() {
