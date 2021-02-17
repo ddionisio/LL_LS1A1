@@ -53,6 +53,21 @@ namespace Renegadeware.LL_LS1A1 {
 
                 return mOrganismTemplateCurrent;
             }
+
+            set {
+                if(value) {
+                    if(mOrganismTemplateCurrent != value) {
+                        if(mOrganismTemplateCurrent)
+                            mOrganismTemplateCurrent.CopyFrom(value);
+                        else
+                            mOrganismTemplateCurrent = OrganismTemplate.Clone(value);
+                    }
+                }
+                else if(mOrganismTemplateCurrent) {
+                    Destroy(mOrganismTemplateCurrent);
+                    mOrganismTemplateCurrent = null;
+                }
+            }
         }
 
         private const string userDataKeyOrganismTemplateCount = "organismCount";
@@ -218,10 +233,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         protected override void OnDestroy() {
-            if(mOrganismTemplateCurrent) {
-                Destroy(mOrganismTemplateCurrent);
-                mOrganismTemplateCurrent = null;
-            }
+            organismTemplateCurrent = null;            
 
             ClearOrganismTemplates();
 

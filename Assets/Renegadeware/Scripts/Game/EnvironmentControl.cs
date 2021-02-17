@@ -7,6 +7,13 @@ using LoLExt;
 namespace Renegadeware.LL_LS1A1 {
     public class EnvironmentControl : MonoBehaviour {
 
+        public Rect bounds;
+
+        [Header("Editor")]
+        public float editBoundsSteps = 1.0f;
+        public bool editSyncBoxCollider = true;
+        public Color editBoundsColor = Color.cyan;
+
         public bool isActive {
             get {
                 return gameObject.activeSelf;
@@ -17,21 +24,29 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
-        public GameBounds2D bounds {
-            get {
-                if(!mBounds)
-                    mBounds = GetComponent<GameBounds2D>();
-                return mBounds;
-            }
+        public Vector2 Clamp(Vector2 center, Vector2 ext) {
+            Vector2 min = (Vector2)bounds.min + ext;
+            Vector2 max = (Vector2)bounds.max - ext;
+
+            float extX = bounds.width * 0.5f;
+            float extY = bounds.height * 0.5f;
+
+            if(extX > ext.x)
+                center.x = Mathf.Clamp(center.x, min.x, max.x);
+            else
+                center.x = bounds.center.x;
+
+            if(extY > ext.y)
+                center.y = Mathf.Clamp(center.y, min.y, max.y);
+            else
+                center.y = bounds.center.y;
+
+            return center;
         }
 
-        private GameBounds2D mBounds;
-
-        public void ApplyBoundsToCamera(GameCamera cam) {
-            var boundRect = bounds.rect;
-
-            cam.SetBounds(boundRect, false);
-            cam.SetPosition(boundRect.center);
+        void OnDrawGizmos() {
+            Gizmos.color = editBoundsColor;
+            Gizmos.DrawWireCube(bounds.center, bounds.size);
         }
     }
 }

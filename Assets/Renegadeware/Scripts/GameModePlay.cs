@@ -17,26 +17,28 @@ namespace Renegadeware.LL_LS1A1 {
         public LevelData level;
 
         [Header("Environments")]
-        public GameObject environmentRootGO; //should have Environment components here
+        public GameObject environmentRootGO; //should have Environment components and CameraControl here
 
         [Header("Organism Edit")]
         public GameObject editRootGO; //should include a camera and OrganismEditMode
-
-        [Header("Game Camera")]
-        public GameCamera cameraControl;
-        public float cameraMoveSpeed = 1f;
-        public float cameraMoveSmoothDelay = 0.05f;
-
+        
         [Header("Game")]
         public GameObject gameRootGO;
 
         [Header("Transition")]
         public AnimatorEnterExit transition; //this is also treated as the root GO of transition
 
+        [Header("Debug")]
+        public bool debugPlay; //set to true to directly go to Play with given env. index and template
+        public int debugPlayEnvIndex;
+        public OrganismTemplate debugPlayOrganism;
+
         /////////////////////////////
 
         public EnvironmentControl[] environments { get; private set; }
         public int environmentCurrentIndex { get; private set; }
+
+        public CameraControl environmentCamera { get; private set; }
 
         public ModeSelect modeSelect { get; private set; }
 
@@ -53,7 +55,7 @@ namespace Renegadeware.LL_LS1A1 {
         //edit stuff
         private OrganismDisplayEdit mOrganismEdit;
 
-        private TransitionState mTransitionState = TransitionState.Shown;
+        private TransitionState mTransitionState;
 
         protected override void OnInstanceDeinit() {            
             if(GameData.isInstantiated) {
@@ -87,16 +89,22 @@ namespace Renegadeware.LL_LS1A1 {
             var envRootTrans = environmentRootGO.transform;
             var envList = new List<EnvironmentControl>();
             for(int i = 0; i < envRootTrans.childCount; i++) {
-                var envCtrl = envRootTrans.GetChild(i).GetComponent<EnvironmentControl>();
+                var child = envRootTrans.GetChild(i);
+
+                var envCtrl = child.GetComponent<EnvironmentControl>();
                 if(envCtrl) {
                     envCtrl.gameObject.SetActive(false);
                     envList.Add(envCtrl);
+                }
+                else if(!environmentCamera) {
+                    environmentCamera = child.GetComponent<CameraControl>();
                 }
             }
 
             environments = envList.ToArray();
 
-            environmentCurrentIndex = 0;
+            //set current environment
+            environmentCurrentIndex = debugPlay ? debugPlayEnvIndex : 0;
             EnvironmentInitCurrent();
 
             environmentRootGO.SetActive(true);
@@ -118,6 +126,8 @@ namespace Renegadeware.LL_LS1A1 {
             //initialize transition
             if(transition) transition.gameObject.SetActive(false);
 
+            mTransitionState = TransitionState.Shown;
+
             /////////////////////////////
             //initialize signals
             gameDat.signalEnvironmentChanged.callback += OnEnvironmentChanged;
@@ -135,7 +145,13 @@ namespace Renegadeware.LL_LS1A1 {
             HUD.instance.modeSelectClickCallback += OnModeSelect;
 
             //game flow
-            ChangeToMode(ModeSelect.Environment);
+            if(debugPlay) {
+                GameData.instance.organismTemplateCurrent = debugPlayOrganism;
+
+                ChangeToMode(ModeSelect.Play);
+            }
+            else
+                ChangeToMode(ModeSelect.Environment);
         }
 
         IEnumerator DoEnvironmentSelect() {
@@ -396,7 +412,7 @@ namespace Renegadeware.LL_LS1A1 {
                 return;
 
             //init stuff
-            env.ApplyBoundsToCamera(cameraControl);
+            //env.ApplyBoundsToCamera(cameraControl);
 
             env.isActive = true;
         }
