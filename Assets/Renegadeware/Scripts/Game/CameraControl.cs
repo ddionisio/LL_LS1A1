@@ -4,12 +4,221 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public class CameraControl : MonoBehaviour {
-        public Camera cameraSource { get; private set; }
+        [Header("Move Info")]
+        public float moveDelay = 0.01f;
 
-        private Rect mBoundsRect;
+        [Header("Zoom Info")]
+        public float[] zoomLevels;
+        public float zoomDelay = 0.1f;
 
-        void Awake() {
-            cameraSource = GetComponentInChildren<Camera>();
+        public Camera cameraSource { 
+            get {
+                if(!mCamSrc)
+                    mCamSrc = GetComponentInChildren<Camera>();
+                return mCamSrc; 
+            }
+        }
+
+        public Vector2 position { 
+            get { return transform.position; } 
+            set {
+                transform.position = ClampCenterWorldToBounds(value);
+                mIsMove = false;
+            }
+        }
+
+        public bool isMoving { get { return mIsMove; } }
+
+        public int zoomIndex {
+            get { return mZoomIndex; }
+            set {
+                if(mZoomIndex != value) {
+                    mZoomIndex = value;
+
+                    var camPos = cameraSource.transform.localPosition;
+                    camPos.z = zoomLevels[mZoomIndex];
+
+                    cameraSource.transform.localPosition = camPos;
+
+                    mIsZoom = false;
+
+                    ApplyBounds();
+                }
+            }
+        }
+
+        public bool isZooming { get { return mIsZoom; } }
+
+        public Rect bounds { get; private set; }
+
+        private Vector2 mMoveToPos;
+        private Vector2 mMoveToVel;
+        private float mMoveLastTime;
+        private bool mIsMove;
+
+        private int mZoomIndex;
+        private float mZoomToVel;
+        private float mZoomLastTime;
+        private bool mIsZoom;
+
+        private Camera mCamSrc;
+        private Vector3[] mCamFrustumCorners = new Vector3[4];
+
+        public void SetBounds(Rect newBounds, int toZoomIndex, bool setPositionToBounds) {
+            bounds = newBounds;
+
+            mZoomIndex = toZoomIndex;
+            var camPos = cameraSource.transform.localPosition;
+            camPos.z = zoomLevels[mZoomIndex];
+            cameraSource.transform.localPosition = camPos;
+
+            if(setPositionToBounds) {
+                transform.position = newBounds.center;
+                mIsMove = false;
+            }
+
+            ApplyBounds();
+        }
+
+        public void MoveTo(Vector2 toPos) {
+            mMoveToPos = ClampCenterWorldToBounds(toPos);
+            mMoveToVel = Vector2.zero;
+
+            if(!mIsMove) {
+                mIsMove = true;
+                mMoveLastTime = Time.realtimeSinceStartup;
+            }
+        }
+
+        public void Move(Vector2 delta) {
+            if(mIsMove)
+                mMoveToPos = ClampCenterWorldToBounds(mMoveToPos + delta);
+            else {
+                mMoveToPos = ClampCenterWorldToBounds(position + delta);
+
+                mIsMove = true;
+                mMoveLastTime = Time.realtimeSinceStartup;
+            }
+        }
+
+        public void ZoomTo(int zoomIndex) {
+            mZoomIndex = zoomIndex;
+
+            mIsZoom = true;
+            mZoomLastTime = Time.realtimeSinceStartup;
+        }
+
+        void OnEnable() {
+            mIsMove = false;
+        }
+
+        void Update() {
+            if(mIsMove) {
+                Vector2 curPos = transform.position;
+                if(curPos != mMoveToPos) {
+                    var curTime = Time.realtimeSinceStartup;
+
+                    curPos = Vector2.SmoothDamp(curPos, mMoveToPos, ref mMoveToVel, moveDelay, Mathf.Infinity, curTime - mMoveLastTime);
+
+                    mMoveLastTime = curTime;
+
+                    transform.position = curPos;
+                }
+                else
+                    mIsMove = false;
+            }
+
+            if(mIsZoom) {
+                var camPos = cameraSource.transform.localPosition;
+                var curZoom = zoomLevels[mZoomIndex];
+                if(camPos.z != curZoom) {
+                    var curTime = Time.realtimeSinceStartup;
+
+                    camPos.z = Mathf.SmoothDamp(camPos.z, curZoom, ref mZoomToVel, zoomDelay, Mathf.Infinity, curTime - mZoomLastTime);
+
+                    mZoomLastTime = curTime;
+
+                    cameraSource.transform.localPosition = camPos;
+
+                    ApplyBounds();
+                }
+                else
+                    mIsZoom = false;
+            }
+        }
+
+        private void OnDrawGizmos() {
+            //display camera rect
+            var cam = cameraSource;
+            if(cam) {
+                var rect = GetCameraRectWorld();
+
+                Vector2 min = rect.min;
+                Vector2 max = rect.max;
+
+                Gizmos.color = new Color(0.75f, 0f, 0.75f);
+
+                Gizmos.DrawLine(new Vector3(min.x, min.y, 0f), new Vector3(max.x, min.y, 0f));
+                Gizmos.DrawLine(new Vector3(max.x, min.y, 0f), new Vector3(max.x, max.y, 0f));
+                Gizmos.DrawLine(new Vector3(max.x, max.y, 0f), new Vector3(min.x, max.y, 0f));
+                Gizmos.DrawLine(new Vector3(min.x, max.y, 0f), new Vector3(min.x, min.y, 0f));
+            }
+        }
+
+        private Rect GetCameraRectWorld() {
+            var r = new Rect();
+
+            var cam = cameraSource;
+            if(cam) {
+                cam.CalculateFrustumCorners(cam.rect, -cam.transform.localPosition.z, Camera.MonoOrStereoscopicEye.Mono, mCamFrustumCorners);
+
+                var camT = cam.transform;
+                var pos = camT.position;
+
+                r.min = pos + mCamFrustumCorners[0];
+                r.max = pos + mCamFrustumCorners[2];
+            }
+
+            return r;
+        }
+
+        private void ApplyBounds() {
+            //clamp position
+            var camRect = GetCameraRectWorld();
+            transform.position = ClampCenterWorldRectToBounds(camRect);
+
+            //clamp moveTo
+            if(mIsMove)
+                mMoveToPos = ClampCenterWorldToBounds(mMoveToPos);
+        }
+
+        private Vector2 ClampCenterWorldToBounds(Vector2 center) {
+            var camRect = GetCameraRectWorld();
+            camRect.center = center;
+
+            return ClampCenterWorldRectToBounds(camRect);
+        }
+
+        private Vector2 ClampCenterWorldRectToBounds(Rect worldRect) {
+            var center = worldRect.center;
+
+            //adjust X
+            if(worldRect.width <= bounds.width)
+                center.x = bounds.center.x;
+            else if(worldRect.xMin < bounds.xMin)
+                center.x = bounds.xMin + (worldRect.width * 0.5f);
+            else if(worldRect.xMax > bounds.xMax)
+                center.x = bounds.xMax - (worldRect.width * 0.5f);
+
+            //adjust Y
+            if(worldRect.height >= bounds.height)
+                center.y = bounds.center.y;
+            else if(worldRect.yMin < bounds.yMin)
+                center.y = bounds.yMin + (worldRect.height * 0.5f);
+            else if(worldRect.yMax > bounds.yMax)
+                center.y = bounds.yMax - (worldRect.height * 0.5f);
+
+            return center;
         }
     }
 }

@@ -44,6 +44,13 @@ namespace Renegadeware.LL_LS1A1 {
             return center;
         }
 
+        /// <summary>
+        /// Set camera's bounds, camera's position to bounds center, and zoom out to last level.
+        /// </summary>
+        public void ApplyBoundsToCamera(CameraControl camCtrl) {
+            camCtrl.SetBounds(bounds, camCtrl.zoomLevels.Length - 1, true);
+        }
+
         void OnDrawGizmos() {
             Gizmos.color = editBoundsColor;
             Gizmos.DrawWireCube(bounds.center, bounds.size);

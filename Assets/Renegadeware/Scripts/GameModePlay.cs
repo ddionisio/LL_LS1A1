@@ -412,8 +412,7 @@ namespace Renegadeware.LL_LS1A1 {
                 return;
 
             //init stuff
-            //env.ApplyBoundsToCamera(cameraControl);
-
+            env.ApplyBoundsToCamera(environmentCamera);
             env.isActive = true;
         }
 
