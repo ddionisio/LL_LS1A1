@@ -332,9 +332,9 @@ MonoBehaviour:
   editRootGO: {fileID: 2005665436}
   gameRootGO: {fileID: 1344762203}
   transition: {fileID: 830167073}
-  debugPlay: 0
+  debugPlay: 1
   debugPlayEnvIndex: 0
-  debugPlayOrganism: {fileID: 0}
+  debugPlayOrganism: {fileID: 11400000, guid: d61054d2df859dd489e24b0c482d92ae, type: 2}
 --- !u!1001 &265448750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1820,12 +1820,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9020c142a6d092346a48fa81678950d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDelay: 0.01
+  moveToDelay: 0.01
   zoomLevels:
   - -4
   - -8
   - -16
   zoomDelay: 0.1
+  inputMoveSpeed: 5
+  inputZoom: {fileID: 11400000, guid: 8af5ec60f2110ee4a85c05f09c80d7a6, type: 2}
+  inputMoveX: {fileID: 11400000, guid: d1c75cb5a37a4414488f49a2e9bcae8f, type: 2}
+  inputMoveY: {fileID: 11400000, guid: bfdfaa2220c7c1d4181b9f6f2b35f586, type: 2}
 --- !u!1 &2005665436
 GameObject:
   m_ObjectHideFlags: 0

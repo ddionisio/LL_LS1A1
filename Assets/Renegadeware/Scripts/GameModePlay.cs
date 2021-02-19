@@ -45,6 +45,33 @@ namespace Renegadeware.LL_LS1A1 {
         //Transition
         public bool isTransitioning { get { return mTransitionState == TransitionState.Enter || mTransitionState == TransitionState.Exit; } }
 
+        public bool isGameInputEnabled {
+            get { return mGameInputEnabled; }
+            set {
+                if(mGameInputEnabled != value) {
+                    mGameInputEnabled = value;
+
+                    if(GameData.isInstantiated) {
+                        var gameDat = GameData.instance;
+
+                        if(mGameInputEnabled) {
+                            gameDat.signalEnvironmentDragBegin.callback += OnEnvironmentDragBegin;
+                            gameDat.signalEnvironmentDrag.callback += OnEnvironmentDrag;
+                            gameDat.signalEnvironmentDragEnd.callback += OnEnvironmentDragEnd;
+                        }
+                        else {
+                            gameDat.signalEnvironmentDragBegin.callback -= OnEnvironmentDragBegin;
+                            gameDat.signalEnvironmentDrag.callback -= OnEnvironmentDrag;
+                            gameDat.signalEnvironmentDragEnd.callback -= OnEnvironmentDragEnd;
+                        }
+                    }
+
+                    if(environmentCamera)
+                        environmentCamera.inputEnabled = value;
+                }
+            }
+        }
+
         /////////////////////////////
 
         //general
@@ -57,7 +84,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         private TransitionState mTransitionState;
 
-        protected override void OnInstanceDeinit() {            
+        private bool mGameInputEnabled;
+
+        protected override void OnInstanceDeinit() {
             if(GameData.isInstantiated) {
                 var gameDat = GameData.instance;
 
@@ -75,6 +104,8 @@ namespace Renegadeware.LL_LS1A1 {
 
                 hud.HideAll();
             }
+
+            isGameInputEnabled = false;
 
             base.OnInstanceDeinit();
         }
@@ -282,12 +313,18 @@ namespace Renegadeware.LL_LS1A1 {
 
             //setup hud
 
-            mModeSelectNext = ModeSelect.None;
+            isGameInputEnabled = true;
 
-            yield return null;
+            mModeSelectNext = ModeSelect.None;
+            while(mModeSelectNext == ModeSelect.None) {
+                //some simulation update
+                yield return null;
+            }
+
+            isGameInputEnabled = false;
 
             //clear out entities
-            
+
 
             //hide environment if we are editing
             if(mModeSelectNext == ModeSelect.Edit)
@@ -341,6 +378,18 @@ namespace Renegadeware.LL_LS1A1 {
 
         void OnEnvironmentChanged(int envInd) {
             StartCoroutine(DoEnvironmentChange(envInd));
+        }
+
+        void OnEnvironmentDragBegin() {
+
+        }
+
+        void OnEnvironmentDrag(Vector2 delta) {
+
+        }
+
+        void OnEnvironmentDragEnd() {
+
         }
         
         void OnOrganismBodyChanged() {

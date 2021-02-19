@@ -27,6 +27,10 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Signals")]
         public M8.SignalInteger signalEnvironmentChanged;
 
+        public M8.Signal signalEnvironmentDragBegin;
+        public M8.SignalVector2 signalEnvironmentDrag; //receive delta
+        public M8.Signal signalEnvironmentDragEnd;
+
         public M8.SignalInteger signalEditBodyPreview; //body component id
         public M8.SignalInteger signalEditComponentEssentialPreview; //component essential index, component id
         public SignalIntegerPair signalEditComponentPreview; //component index, component id
@@ -35,7 +39,6 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.Signal signalOrganismBodyChanged;
         public M8.SignalInteger signalOrganismComponentEssentialChanged; //component index
         public M8.SignalInteger signalOrganismComponentChanged; //component index
-        
 
         public bool isGameStarted { get; private set; } //true: we got through start normally, false: debug
 

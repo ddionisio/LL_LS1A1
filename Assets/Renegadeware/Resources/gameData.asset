@@ -26,6 +26,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}
   signalEnvironmentChanged: {fileID: 11400000, guid: 3a152a70959bc3b4397fabc399cde072,
     type: 2}
+  signalEnvironmentDragBegin: {fileID: 11400000, guid: 7433fe8b40cd609409be89c81e89fc82,
+    type: 2}
+  signalEnvironmentDrag: {fileID: 11400000, guid: abdd5e573747d7843b32848a444b9bfd,
+    type: 2}
+  signalEnvironmentDragEnd: {fileID: 11400000, guid: c2329f0651d7c554c9d0438bec06e37c,
+    type: 2}
   signalEditBodyPreview: {fileID: 11400000, guid: 7a56574c6a2ddf74b8d0565befd99fab,
     type: 2}
   signalEditComponentEssentialPreview: {fileID: 11400000, guid: 0b71a6c940647b741830c619f1be3f8f,

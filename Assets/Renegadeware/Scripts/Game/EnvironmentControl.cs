@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 using LoLExt;
 
 namespace Renegadeware.LL_LS1A1 {
-    public class EnvironmentControl : MonoBehaviour {
+    public class EnvironmentControl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
         public Rect bounds;
 
@@ -25,8 +26,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public Vector2 Clamp(Vector2 center, Vector2 ext) {
-            Vector2 min = (Vector2)bounds.min + ext;
-            Vector2 max = (Vector2)bounds.max - ext;
+            Vector2 min = bounds.min + ext;
+            Vector2 max = bounds.max - ext;
 
             float extX = bounds.width * 0.5f;
             float extY = bounds.height * 0.5f;
@@ -54,6 +55,18 @@ namespace Renegadeware.LL_LS1A1 {
         void OnDrawGizmos() {
             Gizmos.color = editBoundsColor;
             Gizmos.DrawWireCube(bounds.center, bounds.size);
+        }
+
+        void IBeginDragHandler.OnBeginDrag(PointerEventData eventData) {
+
+        }
+
+        void IDragHandler.OnDrag(PointerEventData eventData) {
+
+        }
+
+        void IEndDragHandler.OnEndDrag(PointerEventData eventData) {
+
         }
     }
 }
