@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    public class CellEntity : MonoBehaviour {
+    public class OrganismEntity : MonoBehaviour {
+        public OrganismBodyDisplay bodyDisplay { get; private set; }
 
-        public Rigidbody2D body { get { return mBody; } }
-        public M8.SpriteColorGroup color { get { return mColor; } }
-
-        private Rigidbody2D mBody;
-        private M8.SpriteColorGroup mColor;
+        public M8.SpriteColorGroup color { get; private set; }
 
         /// <summary>
         /// Call this after creating the prefab, before generating the pool.
@@ -17,13 +14,6 @@ namespace Renegadeware.LL_LS1A1 {
         public void SetupTemplate(OrganismTemplate organismTemplate) {
             //go through and initialize organelles
         }
-
-        void Awake() {
-            mBody = GetComponent<Rigidbody2D>();
-            mColor = GetComponent<M8.SpriteColorGroup>();
-        }
-
-
 
         void OnTriggerEnter2D(Collider2D collision) {
             

@@ -18,6 +18,15 @@ namespace Renegadeware.LL_LS1A1 {
         public string modalEnvironmentSelect = "environmentSelect";
         public string modalOrganismEdit = "organismEdit";
 
+        [Header("Organism Spawn Settings")]
+        [M8.TagSelector]
+        public string organismSpawnTag;
+
+        [Header("Input Settings")]
+        public float inputEnvironmentDragScale = 0.5f;
+        [M8.TagSelector]
+        public string[] inputSpawnTagFilter; //which GO tags are allowed for spawning
+
         [Header("Levels")]
         public LevelData[] levels;
 

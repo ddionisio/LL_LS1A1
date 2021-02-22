@@ -15,6 +15,8 @@ namespace Renegadeware.LL_LS1A1 {
         public bool editSyncBoxCollider = true;
         public Color editBoundsColor = Color.cyan;
 
+        public bool isDragging { get; private set; }
+
         public bool isActive {
             get {
                 return gameObject.activeSelf;
@@ -52,21 +54,38 @@ namespace Renegadeware.LL_LS1A1 {
             camCtrl.SetBounds(bounds, camCtrl.zoomLevels.Length - 1, true);
         }
 
+        void OnApplicationFocus(bool focus) {
+            if(!focus) {
+                if(isDragging)
+                    ((IEndDragHandler)this).OnEndDrag(null);
+            }
+        }
+
+        void OnDisable() {
+            if(isDragging)
+                ((IEndDragHandler)this).OnEndDrag(null);
+        }
+
         void OnDrawGizmos() {
             Gizmos.color = editBoundsColor;
             Gizmos.DrawWireCube(bounds.center, bounds.size);
         }
 
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData) {
-
+            isDragging = true;
+            GameData.instance.signalEnvironmentDragBegin.Invoke();
         }
 
         void IDragHandler.OnDrag(PointerEventData eventData) {
-
+            if(isDragging)
+                GameData.instance.signalEnvironmentDrag.Invoke(eventData.delta);
         }
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData) {
-
+            if(isDragging) {
+                isDragging = false;
+                GameData.instance.signalEnvironmentDragEnd.Invoke();
+            }
         }
     }
 }

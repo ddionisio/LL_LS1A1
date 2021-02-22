@@ -55,14 +55,10 @@ namespace Renegadeware.LL_LS1A1 {
                         var gameDat = GameData.instance;
 
                         if(mGameInputEnabled) {
-                            gameDat.signalEnvironmentDragBegin.callback += OnEnvironmentDragBegin;
                             gameDat.signalEnvironmentDrag.callback += OnEnvironmentDrag;
-                            gameDat.signalEnvironmentDragEnd.callback += OnEnvironmentDragEnd;
                         }
                         else {
-                            gameDat.signalEnvironmentDragBegin.callback -= OnEnvironmentDragBegin;
                             gameDat.signalEnvironmentDrag.callback -= OnEnvironmentDrag;
-                            gameDat.signalEnvironmentDragEnd.callback -= OnEnvironmentDragEnd;
                         }
                     }
 
@@ -71,6 +67,8 @@ namespace Renegadeware.LL_LS1A1 {
                 }
             }
         }
+
+        public bool isEnvironmentDragging { get { return environments[environmentCurrentIndex].isDragging; } }
 
         /////////////////////////////
 
@@ -318,6 +316,7 @@ namespace Renegadeware.LL_LS1A1 {
             mModeSelectNext = ModeSelect.None;
             while(mModeSelectNext == ModeSelect.None) {
                 //some simulation update
+                //if(M8.Util.CheckTag(gameObject, GameData.instance.inputSpawnTagFilter))
                 yield return null;
             }
 
@@ -380,18 +379,16 @@ namespace Renegadeware.LL_LS1A1 {
             StartCoroutine(DoEnvironmentChange(envInd));
         }
 
-        void OnEnvironmentDragBegin() {
-
-        }
-
         void OnEnvironmentDrag(Vector2 delta) {
+            Vector2 pos;
+            if(environmentCamera.isMoving)
+                pos = environmentCamera.positionMoveTo;
+            else
+                pos = environmentCamera.position;
 
+            environmentCamera.position -= delta * GameData.instance.inputEnvironmentDragScale;
         }
 
-        void OnEnvironmentDragEnd() {
-
-        }
-        
         void OnOrganismBodyChanged() {
             HUD.instance.ModeSelectSetVisible(HUDGetModeSelectFlags());
         }

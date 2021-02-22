@@ -17,6 +17,7 @@ MonoBehaviour:
     path: 
   modalEnvironmentSelect: environmentSelect
   modalOrganismEdit: organismEdit
+  inputEnvironmentDragScale: 0.03
   levels: []
   organismComponents:
   - {fileID: 11400000, guid: 4049816e31a17704b93e9e8c2e7876f5, type: 2}
