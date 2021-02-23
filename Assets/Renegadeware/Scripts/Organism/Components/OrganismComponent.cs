@@ -3,6 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
+    public interface ISpawn {
+        void OnSpawn(OrganismEntity entity);
+    }
+
+    public interface IDespawn {
+        void OnDespawn(OrganismEntity entity);
+    }
+
+    public interface IUpdate {
+        void OnUpdate(OrganismEntity entity);
+    }
+
     public abstract class OrganismComponent : InfoData {
         [ID(group = "organismComponent", invalidID = GameData.invalidID)]
         public int ID;        
@@ -16,5 +28,10 @@ namespace Renegadeware.LL_LS1A1 {
 
         public virtual GameObject editPrefab { get { return null; } } //used during edit mode
         public virtual GameObject gamePrefab { get { return null; } } //used during simulation mode
+
+        /// <summary>
+        /// This is called during prefab generation for OrganismTemplate used during simulation mode.
+        /// </summary>
+        public virtual void SetupTemplate(OrganismEntity organismEntity) { }
     }
 }

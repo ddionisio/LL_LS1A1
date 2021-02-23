@@ -18,9 +18,11 @@ namespace Renegadeware.LL_LS1A1 {
         public string modalEnvironmentSelect = "environmentSelect";
         public string modalOrganismEdit = "organismEdit";
 
-        [Header("Organism Spawn Settings")]
+        [Header("Organism Settings")]
         [M8.TagSelector]
         public string organismSpawnTag;
+
+        public float organismUpdateDelay = 0.3f;
 
         [Header("Input Settings")]
         public float inputEnvironmentDragScale = 0.5f;
