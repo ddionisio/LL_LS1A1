@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 using LoLExt;
 
@@ -23,7 +24,7 @@ namespace Renegadeware.LL_LS1A1 {
         public GameObject editRootGO; //should include a camera and OrganismEditMode
         
         [Header("Game")]
-        public GameObject gameRootGO;
+        public GameObject gameRootGO; //should include OrganismTemplateSpawner
 
         [Header("Transition")]
         public AnimatorEnterExit transition; //this is also treated as the root GO of transition
@@ -37,8 +38,6 @@ namespace Renegadeware.LL_LS1A1 {
 
         public EnvironmentControl[] environments { get; private set; }
         public int environmentCurrentIndex { get; private set; }
-
-        public CameraControl environmentCamera { get; private set; }
 
         public ModeSelect modeSelect { get; private set; }
 
@@ -56,17 +55,21 @@ namespace Renegadeware.LL_LS1A1 {
 
                         if(mGameInputEnabled) {
                             gameDat.signalEnvironmentDrag.callback += OnEnvironmentDrag;
+                            gameDat.signalEnvironmentClick.callback += OnEnvironmentClick;
                         }
                         else {
                             gameDat.signalEnvironmentDrag.callback -= OnEnvironmentDrag;
+                            gameDat.signalEnvironmentClick.callback -= OnEnvironmentClick;
                         }
                     }
 
-                    if(environmentCamera)
-                        environmentCamera.inputEnabled = value;
+                    if(CameraControl.isInstantiated)
+                        CameraControl.instance.inputEnabled = value;
                 }
             }
         }
+
+        public EnvironmentControl environmentCurrent { get { return environments[environmentCurrentIndex]; } }
 
         public bool isEnvironmentDragging { get { return environments[environmentCurrentIndex].isDragging; } }
 
@@ -80,9 +83,11 @@ namespace Renegadeware.LL_LS1A1 {
         //edit stuff
         private OrganismDisplayEdit mOrganismEdit;
 
-        private TransitionState mTransitionState;
-
+        //game stuff
+        private OrganismTemplateSpawner mOrganismSpawner;
         private bool mGameInputEnabled;
+
+        private TransitionState mTransitionState;
 
         protected override void OnInstanceDeinit() {
             if(GameData.isInstantiated) {
@@ -125,9 +130,6 @@ namespace Renegadeware.LL_LS1A1 {
                     envCtrl.gameObject.SetActive(false);
                     envList.Add(envCtrl);
                 }
-                else if(!environmentCamera) {
-                    environmentCamera = child.GetComponent<CameraControl>();
-                }
             }
 
             environments = envList.ToArray();
@@ -148,6 +150,9 @@ namespace Renegadeware.LL_LS1A1 {
 
             /////////////////////////////
             //initialize simulation
+
+            //grab organism spawner
+            mOrganismSpawner = gameRootGO.GetComponent<OrganismTemplateSpawner>();
 
             gameRootGO.SetActive(false);
 
@@ -260,18 +265,20 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoOrganismEdit() {
+            var gameDat = GameData.instance;
+
             editRootGO.SetActive(true);
 
             //setup organism edit display
-            mOrganismEdit.Setup(GameData.instance.organismTemplateCurrent);
+            mOrganismEdit.Setup(gameDat.organismTemplateCurrent);
 
             yield return DoTransitionShow();
 
             //open organism edit modal
             mModalParms[ModalOrganismEditor.parmOrganismBodyGroup] = level.organismBodyGroup;
-            mModalParms[ModalOrganismEditor.parmOrganismTemplate] = GameData.instance.organismTemplateCurrent;
+            mModalParms[ModalOrganismEditor.parmOrganismTemplate] = gameDat.organismTemplateCurrent;
 
-            M8.ModalManager.main.Open(GameData.instance.modalOrganismEdit, mModalParms);
+            M8.ModalManager.main.Open(gameDat.modalOrganismEdit, mModalParms);
 
             HUD.instance.ElementShow(HUD.Element.ModeSelect);
 
@@ -287,7 +294,7 @@ namespace Renegadeware.LL_LS1A1 {
             HUD.instance.ElementHide(HUD.Element.ModeSelect);
 
             //close organism edit modal
-            M8.ModalManager.main.CloseUpTo(GameData.instance.modalOrganismEdit, true);
+            M8.ModalManager.main.CloseUpTo(gameDat.modalOrganismEdit, true);
 
             //wait for transitions
             while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || isTransitioning)
@@ -299,9 +306,10 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoSimulation() {
-            //start up entities
+            var gameDat = GameData.instance;
 
-            //
+            //start up entities
+            mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, level.criteriaCount);
 
             environmentRootGO.SetActive(true);
 
@@ -323,7 +331,7 @@ namespace Renegadeware.LL_LS1A1 {
             isGameInputEnabled = false;
 
             //clear out entities
-
+            mOrganismSpawner.Clear();
 
             //hide environment if we are editing
             if(mModeSelectNext == ModeSelect.Edit)
@@ -380,13 +388,20 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnEnvironmentDrag(Vector2 delta) {
-            Vector2 pos;
-            if(environmentCamera.isMoving)
-                pos = environmentCamera.positionMoveTo;
-            else
-                pos = environmentCamera.position;
+            var camCtrl = CameraControl.instance;
 
-            environmentCamera.position -= delta * GameData.instance.inputEnvironmentDragScale;
+            Vector2 pos;
+            if(camCtrl.isMoving)
+                pos = camCtrl.positionMoveTo;
+            else
+                pos = camCtrl.position;
+
+            camCtrl.position -= delta * GameData.instance.inputEnvironmentDragScale;
+        }
+
+        void OnEnvironmentClick(Vector2 pos) {
+            //check area for spawning
+            //Physics2D.OverlapCircle(Vector2 point, float radius, ContactFilter2D contactFilter, Collider2D[] results)
         }
 
         void OnOrganismBodyChanged() {
@@ -458,7 +473,7 @@ namespace Renegadeware.LL_LS1A1 {
                 return;
 
             //init stuff
-            env.ApplyBoundsToCamera(environmentCamera);
+            env.ApplyBoundsToCamera(CameraControl.instance);
             env.isActive = true;
         }
 

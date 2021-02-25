@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    public class CameraControl : MonoBehaviour {
+    public class CameraControl : M8.SingletonBehaviour<CameraControl> {
         [Header("Move Info")]
         public float moveToDelay = 0.01f;        
 
@@ -53,6 +53,8 @@ namespace Renegadeware.LL_LS1A1 {
 
                     RefreshCameraViewSize();
                     ApplyBounds();
+
+                    GameData.instance.signalCameraZoom.Invoke(mZoomIndex);
                 }
             }
         }
@@ -121,10 +123,15 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void ZoomTo(int zoomIndex) {
+            if(mZoomIndex == zoomIndex)
+                return;
+
             mZoomIndex = zoomIndex;
 
             mIsZoom = true;
             mZoomLastTime = Time.realtimeSinceStartup;
+
+            GameData.instance.signalCameraZoom.Invoke(mZoomIndex);
         }
 
         void OnEnable() {

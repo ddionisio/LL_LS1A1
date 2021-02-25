@@ -21,13 +21,13 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Organism Settings")]
         [M8.TagSelector]
         public string organismSpawnTag;
+        public float organismSpawnCheckRadius = 0.5f;
+        public M8.RangeFloat organismSpawnCheckDepth;
 
         public float organismUpdateDelay = 0.3f;
 
         [Header("Input Settings")]
         public float inputEnvironmentDragScale = 0.5f;
-        [M8.TagSelector]
-        public string[] inputSpawnTagFilter; //which GO tags are allowed for spawning
 
         [Header("Levels")]
         public LevelData[] levels;
@@ -41,6 +41,7 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.Signal signalEnvironmentDragBegin;
         public M8.SignalVector2 signalEnvironmentDrag; //receive delta
         public M8.Signal signalEnvironmentDragEnd;
+        public M8.SignalVector2 signalEnvironmentClick;
 
         public M8.SignalInteger signalEditBodyPreview; //body component id
         public M8.SignalInteger signalEditComponentEssentialPreview; //component essential index, component id
@@ -50,6 +51,8 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.Signal signalOrganismBodyChanged;
         public M8.SignalInteger signalOrganismComponentEssentialChanged; //component index
         public M8.SignalInteger signalOrganismComponentChanged; //component index
+
+        public M8.SignalInteger signalCameraZoom; //zoom index
 
         public bool isGameStarted { get; private set; } //true: we got through start normally, false: debug
 

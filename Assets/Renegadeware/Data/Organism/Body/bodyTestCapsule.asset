@@ -18,7 +18,8 @@ MonoBehaviour:
   ID: 5
   _editPrefab: {fileID: 8539131349923659438, guid: 633cafa9245c674429a60f18dd1f09ed,
     type: 3}
-  _gamePrefab: {fileID: 0}
+  _gamePrefab: {fileID: 7360663766811658103, guid: f42795f80bcff254b89815c53f3d7cdd,
+    type: 3}
   componentEssentials:
   - {fileID: 11400000, guid: f0744b1421eb0dd44806305c24b7d4e5, type: 2}
   - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}

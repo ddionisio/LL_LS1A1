@@ -6,9 +6,13 @@ using UnityEngine.EventSystems;
 using LoLExt;
 
 namespace Renegadeware.LL_LS1A1 {
-    public class EnvironmentControl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
+    public class EnvironmentControl : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler {
 
         public Rect bounds;
+
+        [Header("Physics")]
+        public float linearDrag = 0.01f;
+        public float angularDrag = 0.05f;
 
         [Header("Editor")]
         public float editBoundsSteps = 1.0f;
@@ -86,6 +90,10 @@ namespace Renegadeware.LL_LS1A1 {
                 isDragging = false;
                 GameData.instance.signalEnvironmentDragEnd.Invoke();
             }
+        }
+
+        void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
+            GameData.instance.signalEnvironmentClick.Invoke(eventData.pointerCurrentRaycast.worldPosition);
         }
     }
 }
