@@ -10,6 +10,7 @@ namespace Renegadeware.LL_LS1A1 {
         public Transform spawnRoot;
 
         public M8.CacheList<OrganismEntity> entities { get; private set; }
+        public int entityCount { get { return entities != null ? entities.Count : 0; } }
 
         private M8.PoolController mPool;
 

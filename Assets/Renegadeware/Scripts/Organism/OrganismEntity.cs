@@ -6,15 +6,49 @@ namespace Renegadeware.LL_LS1A1 {
     public class OrganismEntity : MonoBehaviour, M8.IPoolInit, M8.IPoolSpawn, M8.IPoolDespawn {
         [Header("Body")]
         [SerializeField]
-        OrganismBodyDisplay _bodyDisplay = null;
+        OrganismDisplayBody _bodyDisplay = null;
         [SerializeField]
-        Collider2D _bodyCollider = null;
+        OrganismSensor _bodySensor = null;
+        [SerializeField]
+        Collider2D _bodyCollider = null;        
 
         [Header("Components")]
         [SerializeField]
         OrganismComponent[] _comps = null;
 
         public M8.PoolDataController poolControl { get; private set; }
+
+        public OrganismDisplayBody bodyDisplay { get { return _bodyDisplay; } }
+        public OrganismSensor bodySensor { get { return _bodySensor; } }
+        public Collider2D bodyCollider { get { return _bodyCollider; } }        
+
+        public Vector2 position { get { return transform.localPosition; } set { transform.localPosition = value; } }
+
+        public Vector2 velocity { 
+            get { return mDir * mSpeed; }
+            set {
+                if(velocity != value) {
+                    mSpeed = value.magnitude;
+                    if(mSpeed != 0f)
+                        dir = value / mSpeed;
+                }
+            }
+        }
+
+        public Vector2 dir { 
+            get { return mDir; }
+            set {
+                if(mDir != value) {
+                    mDir = value;
+                    transform.up = mDir;
+                }
+            }
+        }
+
+        public float speed { get { return mSpeed; } set { mSpeed = value; } }
+
+        private Vector2 mDir;
+        private float mSpeed;
 
         private ISpawn[] mISpawns;
         private IDespawn[] mIDespawns;
@@ -37,11 +71,13 @@ namespace Renegadeware.LL_LS1A1 {
 
             OrganismEntity ent = bodyGO.AddComponent<OrganismEntity>();            
 
-            ent._bodyDisplay = bodyGO.GetComponent<OrganismBodyDisplay>();
+            ent._bodyDisplay = bodyGO.GetComponent<OrganismDisplayBody>();
             if(!ent._bodyDisplay) {
                 Debug.LogWarning("No Body Display found: "+ templateName);
                 return ent;
             }
+
+            ent._bodySensor = bodyGO.GetComponent<OrganismSensor>();
 
             ent._bodyCollider = bodyGO.GetComponent<Collider2D>();
 

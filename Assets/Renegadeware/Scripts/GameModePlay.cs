@@ -87,6 +87,11 @@ namespace Renegadeware.LL_LS1A1 {
         private OrganismTemplateSpawner mOrganismSpawner;
         private bool mGameInputEnabled;
 
+        private ContactFilter2D mGameSpawnCheckFilter;
+        private Collider2D[] mGameSpawnCheckOverlaps = new Collider2D[8];
+        private int mGameSpawnCheckOverlapCount;
+
+        //transition stuff
         private TransitionState mTransitionState;
 
         protected override void OnInstanceDeinit() {
@@ -155,6 +160,11 @@ namespace Renegadeware.LL_LS1A1 {
             mOrganismSpawner = gameRootGO.GetComponent<OrganismTemplateSpawner>();
 
             gameRootGO.SetActive(false);
+
+            //setup spawn contact filter
+            mGameSpawnCheckFilter = new ContactFilter2D();
+            mGameSpawnCheckFilter.SetDepth(gameDat.organismSpawnCheckDepth.min, gameDat.organismSpawnCheckDepth.max);
+            mGameSpawnCheckFilter.useTriggers = false;
 
             /////////////////////////////
             //initialize transition
@@ -400,8 +410,16 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnEnvironmentClick(Vector2 pos) {
-            //check area for spawning
-            //Physics2D.OverlapCircle(Vector2 point, float radius, ContactFilter2D contactFilter, Collider2D[] results)
+            //ensure we can spawn
+            if(mOrganismSpawner.entityCount < level.spawnableCount) {
+                var gameDat = GameData.instance;
+
+                //ensure there are no overlaps
+                mGameSpawnCheckOverlapCount = Physics2D.OverlapCircle(pos, gameDat.organismSpawnCheckRadius, mGameSpawnCheckFilter, mGameSpawnCheckOverlaps);
+                if(mGameSpawnCheckOverlapCount == 0) {
+                    mOrganismSpawner.SpawnAt(pos);
+                }
+            }
         }
 
         void OnOrganismBodyChanged() {

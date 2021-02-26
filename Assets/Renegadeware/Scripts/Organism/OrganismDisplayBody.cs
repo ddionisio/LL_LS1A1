@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    public class OrganismBodyDisplay : MonoBehaviour {
+    public class OrganismDisplayBody : MonoBehaviour {
         [Header("Display")]
         [SerializeField]
         SpriteRenderer _spriteRender = null;

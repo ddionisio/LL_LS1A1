@@ -80,9 +80,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         private OrganismTemplate mTemplate;
 
-        private OrganismBodyDisplay mBodyDisplay;
+        private OrganismDisplayBody mBodyDisplay;
 
-        private Dictionary<int, OrganismBodyDisplay> mBodyCache = new Dictionary<int, OrganismBodyDisplay>(); //component id, body display
+        private Dictionary<int, OrganismDisplayBody> mBodyCache = new Dictionary<int, OrganismDisplayBody>(); //component id, body display
         private Dictionary<int, ComponentAnchorData> mComponentAnchorInstances = new Dictionary<int, ComponentAnchorData>(); //component id, data
 
         private int[] mComponentEssentialIDs;
@@ -222,7 +222,7 @@ namespace Renegadeware.LL_LS1A1 {
                 bodyTrans.localPosition = Vector3.zero;
                 bodyTrans.localRotation = Quaternion.identity;
 
-                mBodyDisplay = bodyGOInst.GetComponent<OrganismBodyDisplay>();
+                mBodyDisplay = bodyGOInst.GetComponent<OrganismDisplayBody>();
 
                 mBodyCache.Add(body.ID, mBodyDisplay);
             }

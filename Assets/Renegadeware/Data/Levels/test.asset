@@ -16,6 +16,7 @@ MonoBehaviour:
     name: 
     path: 
   progressCount: 2
+  spawnableCount: 10
   criteriaCount: 100
   environments:
   - nameRef: test1
