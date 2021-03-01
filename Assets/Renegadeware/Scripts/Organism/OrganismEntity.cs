@@ -24,30 +24,67 @@ namespace Renegadeware.LL_LS1A1 {
 
         public Vector2 position { get { return transform.localPosition; } set { transform.localPosition = value; } }
 
-        public Vector2 velocity { 
-            get { return mDir * mSpeed; }
+        public Vector2 forward { 
+            get { return mForward; }
             set {
-                if(velocity != value) {
-                    mSpeed = value.magnitude;
-                    if(mSpeed != 0f)
-                        dir = value / mSpeed;
+                if(mForward != value) {
+                    mForward = value;
+                    transform.up = mForward;
                 }
             }
         }
 
-        public Vector2 dir { 
-            get { return mDir; }
+        public Vector2 velocity {
+            get { return mVelocity; }
             set {
-                if(mDir != value) {
-                    mDir = value;
-                    transform.up = mDir;
+                if(mVelocity != value) {
+                    mVelocity = value;
+                    mIsVelocityUpdated = true;
                 }
             }
         }
 
-        public float speed { get { return mSpeed; } set { mSpeed = value; } }
+        public Vector2 velocityDir { 
+            get {
+                if(mIsVelocityUpdated)
+                    UpdateVelocityData();
 
-        private Vector2 mDir;
+                return mVelocityDir;
+            }
+            set {
+                if(mIsVelocityUpdated)
+                    UpdateVelocityData();
+
+                if(mVelocityDir != value) {
+                    mVelocityDir = value;
+                    mVelocity = mVelocityDir * mSpeed;
+                }
+            }
+        }
+
+        public float speed { 
+            get {
+                if(mIsVelocityUpdated)
+                    UpdateVelocityData();
+
+                return mSpeed; 
+            }
+            set {
+                if(mIsVelocityUpdated)
+                    UpdateVelocityData();
+
+                if(mSpeed != value) {
+                    mSpeed = value;
+                    mVelocity = mVelocityDir * mSpeed;
+                }
+            }
+        }
+
+        private Vector2 mForward;
+
+        private Vector2 mVelocity;
+        private bool mIsVelocityUpdated;
+        private Vector2 mVelocityDir;
         private float mSpeed;
 
         private ISpawn[] mISpawns;
@@ -161,6 +198,14 @@ namespace Renegadeware.LL_LS1A1 {
 
         void FixedUpdate() {
             //physics update
+            float dt = Time.fixedDeltaTime;
+
+            //update orientation
+
+            //update velocity
+
+            //update position
+            position += velocity * dt;
         }
 
         IEnumerator DoUpdate() {
@@ -174,6 +219,16 @@ namespace Renegadeware.LL_LS1A1 {
                 for(int i = 0; i < mIUpdates.Length; i++)
                     mIUpdates[i].OnUpdate(this);
             }
+        }
+
+        private void UpdateVelocityData() {
+            mSpeed = mVelocity.magnitude;
+            if(mSpeed > 0f)
+                mVelocityDir = mVelocity / mSpeed;
+            else
+                mVelocityDir = Vector2.zero;
+
+            mIsVelocityUpdated = false;
         }
     }
 }
