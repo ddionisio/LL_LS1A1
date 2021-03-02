@@ -4,11 +4,17 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public class OrganismEntity : MonoBehaviour, M8.IPoolInit, M8.IPoolSpawn, M8.IPoolDespawn {
+        public const int solidHitCapacity = 4;
+        public const int contactCapacity = 8;
+
+        public struct UpdateData {
+            public float lastTime;
+            public IUpdate iUpdate;
+        }
+
         [Header("Body")]
         [SerializeField]
         OrganismDisplayBody _bodyDisplay = null;
-        [SerializeField]
-        OrganismSensor _bodySensor = null;
         [SerializeField]
         Collider2D _bodyCollider = null;        
 
@@ -19,7 +25,6 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.PoolDataController poolControl { get; private set; }
 
         public OrganismDisplayBody bodyDisplay { get { return _bodyDisplay; } }
-        public OrganismSensor bodySensor { get { return _bodySensor; } }
         public Collider2D bodyCollider { get { return _bodyCollider; } }        
 
         public Vector2 position { get { return transform.localPosition; } set { transform.localPosition = value; } }
@@ -33,6 +38,8 @@ namespace Renegadeware.LL_LS1A1 {
                 }
             }
         }
+
+        public float angularVelocity { get; set; }
 
         public Vector2 velocity {
             get { return mVelocity; }
@@ -75,10 +82,23 @@ namespace Renegadeware.LL_LS1A1 {
 
                 if(mSpeed != value) {
                     mSpeed = value;
+                    if(mSpeed < 0f)
+                        mSpeed = 0f;
+
                     mVelocity = mVelocityDir * mSpeed;
                 }
             }
         }
+
+        public bool moveLocked { get; set; }
+
+        public RaycastHit2D[] solidHits { get { return mSolidHits; } }
+        public int solidHitCount { get; private set; }
+
+        public Collider2D[] contacts { get { return mContacts; } }
+        public int contactCount { get; private set; }
+
+        public M8.CacheList<OrganismEntity> contactOrganisms { get { return mContactOrganisms; } }
 
         private Vector2 mForward;
 
@@ -87,9 +107,16 @@ namespace Renegadeware.LL_LS1A1 {
         private Vector2 mVelocityDir;
         private float mSpeed;
 
+        private RaycastHit2D[] mSolidHits = new RaycastHit2D[solidHitCapacity];
+
+        private float mContactsUpdateLastTime;
+        private Collider2D[] mContacts = new Collider2D[contactCapacity];
+        private M8.CacheList<OrganismEntity> mContactOrganisms = new M8.CacheList<OrganismEntity>(contactCapacity);
+
         private ISpawn[] mISpawns;
         private IDespawn[] mIDespawns;
-        private IUpdate[] mIUpdates;
+        private IVelocityAdd[] mIVelocityAdds;
+        private UpdateData[] mUpdates;
 
         /// <summary>
         /// Call this after creating the prefab, before generating the pool.
@@ -113,8 +140,6 @@ namespace Renegadeware.LL_LS1A1 {
                 Debug.LogWarning("No Body Display found: "+ templateName);
                 return ent;
             }
-
-            ent._bodySensor = bodyGO.GetComponent<OrganismSensor>();
 
             ent._bodyCollider = bodyGO.GetComponent<Collider2D>();
 
@@ -153,6 +178,7 @@ namespace Renegadeware.LL_LS1A1 {
             //grab interfaces for components
             var iSpawnList = new List<ISpawn>();
             var iDespawnList = new List<IDespawn>();
+            var iVelocityAddList = new List<IVelocityAdd>();
             var iUpdateList = new List<IUpdate>();
 
             for(int i = 0; i < _comps.Length; i++) {
@@ -166,6 +192,10 @@ namespace Renegadeware.LL_LS1A1 {
                 if(iDespawn != null)
                     iDespawnList.Add(iDespawn);
 
+                var iVelocityAdd = comp as IVelocityAdd;
+                if(iVelocityAdd != null)
+                    iVelocityAddList.Add(iVelocityAdd);
+
                 var iUpdate = comp as IUpdate;
                 if(iUpdate != null)
                     iUpdateList.Add(iUpdate);
@@ -173,7 +203,11 @@ namespace Renegadeware.LL_LS1A1 {
 
             mISpawns = iSpawnList.ToArray();
             mIDespawns = iDespawnList.ToArray();
-            mIUpdates = iUpdateList.ToArray();
+            mIVelocityAdds = iVelocityAddList.ToArray();
+
+            mUpdates = new UpdateData[iUpdateList.Count];
+            for(int i = 0; i < mUpdates.Length; i++)
+                mUpdates[i] = new UpdateData { iUpdate = iUpdateList[i] };
 
             poolControl = GetComponent<M8.PoolDataController>();
         }
@@ -181,43 +215,117 @@ namespace Renegadeware.LL_LS1A1 {
         void M8.IPoolSpawn.OnSpawned(M8.GenericParams parms) {
             //do spawn stuff here
 
+            //initialize data
+            mForward = transform.up;
+
+            angularVelocity = 0f;
+
+            mVelocity = Vector2.zero;
+            mVelocityDir = Vector2.zero;
+            mSpeed = 0f;
+            moveLocked = false;
+
+            solidHitCount = 0;
+            contactCount = 0;
+
             for(int i = 0; i < mISpawns.Length; i++)
                 mISpawns[i].OnSpawn(this);
 
-            StartCoroutine(DoUpdate());
+            var time = Time.time;
+
+            for(int i = 0; i < mUpdates.Length; i++)
+                mUpdates[i].lastTime = time;
+
+            mContactsUpdateLastTime = time;
         }
 
         void M8.IPoolDespawn.OnDespawned() {
-            StopAllCoroutines();
-
             for(int i = 0; i < mIDespawns.Length; i++)
                 mIDespawns[i].OnDespawn(this);
 
             //do despawn stuff here
         }
 
-        void FixedUpdate() {
-            //physics update
-            float dt = Time.fixedDeltaTime;
+        void Update() {
+            var gameDat = GameData.instance;
 
-            //update orientation
+            var time = Time.time;
 
-            //update velocity
+            //update contacts
+            if(time - mContactsUpdateLastTime >= gameDat.organismUpdateContactsDelay) {
+                mContactsUpdateLastTime = time;
 
-            //update position
-            position += velocity * dt;
+                contactCount = _bodyCollider.OverlapCollider(gameDat.organismContactFilter, mContacts);
+
+                mContactOrganisms.Clear();
+                for(int i = 0; i < contactCount; i++) {
+                    var organismEnt = mContacts[i].GetComponent<OrganismEntity>();
+                    if(organismEnt)
+                        mContactOrganisms.Add(organismEnt);
+                }
+            }
+
+            for(int i = 0; i < mUpdates.Length; i++) {
+                var iUpdate = mUpdates[i].iUpdate;
+
+                if(time - mUpdates[i].lastTime >= iUpdate.delay) {
+                    mUpdates[i].lastTime = time;
+                    iUpdate.OnUpdate(this);
+                }
+            }
         }
 
-        IEnumerator DoUpdate() {
-            var wait = new WaitForSeconds(GameData.instance.organismUpdateDelay);
+        void FixedUpdate() {
+            var env = GameModePlay.instance.environmentCurrent;
+            var gameDat = GameData.instance;
 
-            while(true) {
-                yield return wait;
+            //physics update
+            float dt = Time.fixedDeltaTime;
+            
+            if(!moveLocked) {
+                //update orientation
+                if(angularVelocity != 0f)
+                    forward = M8.MathUtil.RotateAngle(forward, angularVelocity * dt);
 
-                //general update
+                //update velocity
+                var addVel = Vector2.zero;
 
-                for(int i = 0; i < mIUpdates.Length; i++)
-                    mIUpdates[i].OnUpdate(this);
+                for(int i = 0; i < mIVelocityAdds.Length; i++)
+                    addVel += mIVelocityAdds[i].OnAddVelocity(this);
+
+                velocity += addVel;
+
+                //dampen speed
+                if(speed > 0f)
+                    speed -= env.linearDrag * dt;
+
+                //dampen angular speed
+                if(angularVelocity > 0f) {
+                    angularVelocity -= env.angularDrag * dt;
+                    if(angularVelocity < 0f)
+                        angularVelocity = 0f;
+                }
+                else if(angularVelocity < 0f) {
+                    angularVelocity += env.angularDrag * dt;
+                    if(angularVelocity > 0f)
+                        angularVelocity = 0f;
+                }
+            }
+
+            if(speed > 0f) {
+                var moveDist = speed * dt;
+
+                //update solid hits
+                solidHitCount = _bodyCollider.Cast(mVelocityDir, gameDat.organismSolidContactFilter, mSolidHits, moveDist, true);
+
+                //clip movement
+                for(int i = 0; i < solidHitCount; i++) {
+                    var hit = mSolidHits[i];
+                    if(hit.fraction < moveDist)
+                        moveDist = hit.fraction;
+                }
+
+                position += mVelocityDir * moveDist;
             }
         }
 

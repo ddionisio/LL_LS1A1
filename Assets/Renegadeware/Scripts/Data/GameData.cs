@@ -24,7 +24,11 @@ namespace Renegadeware.LL_LS1A1 {
         public float organismSpawnCheckRadius = 0.5f;
         public M8.RangeFloat organismSpawnCheckDepth;
 
-        public float organismUpdateDelay = 0.3f;
+        public float organismUpdateContactsDelay = 0.3f;
+
+        public float organismSolidCheckDepth = -0.1f;
+
+        public float organismCheckDepth = -0.2f;
 
         [Header("Input Settings")]
         public float inputEnvironmentDragScale = 0.5f;
@@ -87,6 +91,39 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        public ContactFilter2D organismSpawnContactFilter {
+            get {
+                if(!mOrganismSpawnContactFilter.isFiltering) {
+                    mOrganismSpawnContactFilter.SetDepth(organismSpawnCheckDepth.min, organismSpawnCheckDepth.max);
+                    mOrganismSpawnContactFilter.useTriggers = false;
+                }
+
+                return mOrganismSpawnContactFilter;
+            }
+        }
+
+        public ContactFilter2D organismSolidContactFilter {
+            get {
+                if(!mOrganismSolidContactFilter.isFiltering) {
+                    mOrganismSolidContactFilter.SetDepth(organismSolidCheckDepth, organismSolidCheckDepth);
+                    mOrganismSolidContactFilter.useTriggers = false;
+                }
+
+                return mOrganismSolidContactFilter;
+            }
+        }
+
+        public ContactFilter2D organismContactFilter {
+            get {
+                if(!mOrganismContactFilter.isFiltering) {
+                    mOrganismContactFilter.SetDepth(organismCheckDepth, organismCheckDepth);
+                    mOrganismContactFilter.useTriggers = false;
+                }
+
+                return mOrganismContactFilter;
+            }
+        }
+
         private const string userDataKeyOrganismTemplateCount = "organismCount";
         private const string userDataKeyOrganismTemplate = "organism";
         private const string userDataKeyOrganismTemplateCurrent = "organismCurrent";
@@ -98,6 +135,10 @@ namespace Renegadeware.LL_LS1A1 {
         private int mOrganismTemplateIDCounter = 1;
 
         private Dictionary<int, OrganismComponent> mOrganismLookup;
+
+        private ContactFilter2D mOrganismSpawnContactFilter = new ContactFilter2D();
+        private ContactFilter2D mOrganismSolidContactFilter = new ContactFilter2D();
+        private ContactFilter2D mOrganismContactFilter = new ContactFilter2D();
 
         /// <summary>
         /// Called in start scene

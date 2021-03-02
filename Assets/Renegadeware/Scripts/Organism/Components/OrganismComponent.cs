@@ -12,7 +12,13 @@ namespace Renegadeware.LL_LS1A1 {
     }
 
     public interface IUpdate {
+        float delay { get; }
+
         void OnUpdate(OrganismEntity entity);
+    }
+
+    public interface IVelocityAdd {
+        Vector2 OnAddVelocity(OrganismEntity entity);
     }
 
     public abstract class OrganismComponent : InfoData {
