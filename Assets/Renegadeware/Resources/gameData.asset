@@ -19,10 +19,12 @@ MonoBehaviour:
   modalOrganismEdit: organismEdit
   organismSpawnTag: OrganismPlayer
   organismSpawnCheckRadius: 0.5
-  organismSpawnCheckDepth:
+  organismContactsUpdateDelay: 0.3
+  organismDepthCheckSpawn:
     min: -0.2
     max: -0.1
-  organismUpdateDelay: 0.3
+  organismDepthCheckSolid: -0.1
+  organismDepthCheck: -0.2
   inputEnvironmentDragScale: 0.03
   levels: []
   organismComponents:

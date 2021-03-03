@@ -4,12 +4,16 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "body", menuName = "Game/Organism/Component/Body")]
-    public class OrganismBody : OrganismComponent {
+    public class OrganismBody : OrganismComponent, ISpawn, IVelocityAdd {
         [Header("Templates")]
         [SerializeField]
         GameObject _editPrefab = null;
         [SerializeField]
         GameObject _gamePrefab = null;
+
+        [Header("Stats")]
+        public float mass = 0.0f; //use for separation
+        public float speedLimit = 5f;
 
         [Header("Body Info")]
         public OrganismComponent[] componentEssentials; //essential organelles for this body (used after picking body the first time)
@@ -25,6 +29,41 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             return -1;
+        }
+
+        public virtual void OnSpawn(OrganismEntity entity) {
+            entity.speedLimit = speedLimit;
+        }
+
+        public virtual Vector2 OnAddVelocity(OrganismEntity entity) {
+            //do separation
+            var separateVel = Vector2.zero;
+
+            var pos = entity.position;
+            
+            for(int i = 0; i < entity.contactOrganisms.Count; i++) {
+                var otherEnt = entity.contactOrganisms[i];
+
+                if(otherEnt.bodyComponent == null || mass <= otherEnt.bodyComponent.mass) //exclude organisms with lesser mass
+                    separateVel += pos - otherEnt.position;
+            }
+
+            //bounce from solid?
+            //TODO: stick to solid? (e.g. philli hooks)
+            var solidVel = Vector2.zero;
+
+            if(entity.solidHitCount > 0) {
+                var moveDir = entity.velocityDir;
+
+                for(int i = 0; i < entity.solidHitCount; i++) {
+                    var solidHit = entity.solidHits[i];
+                    moveDir = Vector2.Reflect(moveDir, solidHit.normal);
+                }
+
+                solidVel = moveDir * entity.speed;
+            }
+
+            return separateVel + solidVel;
         }
     }
 }

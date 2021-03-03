@@ -18,6 +18,7 @@ MonoBehaviour:
   progressCount: 2
   spawnableCount: 10
   criteriaCount: 100
+  spawnIsRandomDir: 1
   environments:
   - nameRef: test1
     descRef: 

@@ -411,7 +411,7 @@ namespace Renegadeware.LL_LS1A1 {
                 //ensure there are no overlaps
                 mGameSpawnCheckOverlapCount = Physics2D.OverlapCircle(pos, gameDat.organismSpawnCheckRadius, gameDat.organismSpawnContactFilter, mGameSpawnCheckOverlaps);
                 if(mGameSpawnCheckOverlapCount == 0) {
-                    mOrganismSpawner.SpawnAt(pos);
+                    mOrganismSpawner.SpawnAt(pos, level.spawnIsRandomDir);
                 }
             }
         }

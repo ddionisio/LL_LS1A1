@@ -7,6 +7,9 @@ namespace Renegadeware.LL_LS1A1 {
         public const int solidHitCapacity = 4;
         public const int contactCapacity = 8;
 
+        public const string parmForwardRandom = "fwdRnd"; //bool
+        public const string parmForward = "fwd"; //Vector2 dir (normalized)
+
         public struct UpdateData {
             public float lastTime;
             public IUpdate iUpdate;
@@ -23,6 +26,8 @@ namespace Renegadeware.LL_LS1A1 {
         OrganismComponent[] _comps = null;
 
         public M8.PoolDataController poolControl { get; private set; }
+
+        public OrganismBody bodyComponent { get { return _comps != null && _comps.Length > 0 ? _comps[0] as OrganismBody : null; } }
 
         public OrganismDisplayBody bodyDisplay { get { return _bodyDisplay; } }
         public Collider2D bodyCollider { get { return _bodyCollider; } }        
@@ -89,6 +94,8 @@ namespace Renegadeware.LL_LS1A1 {
                 }
             }
         }
+
+        public float speedLimit { get; set; } //set to 0 for no limit
 
         public bool moveLocked { get; set; }
 
@@ -216,7 +223,8 @@ namespace Renegadeware.LL_LS1A1 {
             //do spawn stuff here
 
             //initialize data
-            mForward = transform.up;
+            transform.localRotation = Quaternion.identity;
+            mForward = Vector2.up;
 
             angularVelocity = 0f;
 
@@ -227,6 +235,14 @@ namespace Renegadeware.LL_LS1A1 {
 
             solidHitCount = 0;
             contactCount = 0;
+
+            if(parms != null) {
+                //forward setting
+                if(parms.ContainsKey(parmForwardRandom) && parms.GetValue<bool>(parmForwardRandom))
+                    forward = M8.MathUtil.RotateAngle(forward, Random.Range(0f, 360f));
+                else if(parms.ContainsKey(parmForward))
+                    forward = parms.GetValue<Vector2>(parmForward);
+            }
 
             for(int i = 0; i < mISpawns.Length; i++)
                 mISpawns[i].OnSpawn(this);
@@ -252,7 +268,7 @@ namespace Renegadeware.LL_LS1A1 {
             var time = Time.time;
 
             //update contacts
-            if(time - mContactsUpdateLastTime >= gameDat.organismUpdateContactsDelay) {
+            if(time - mContactsUpdateLastTime >= gameDat.organismContactsUpdateDelay) {
                 mContactsUpdateLastTime = time;
 
                 contactCount = _bodyCollider.OverlapCollider(gameDat.organismContactFilter, mContacts);
@@ -295,9 +311,13 @@ namespace Renegadeware.LL_LS1A1 {
 
                 velocity += addVel;
 
-                //dampen speed
-                if(speed > 0f)
+                //limit/dampen speed
+                if(speed > 0f) {
                     speed -= env.linearDrag * dt;
+
+                    if(speedLimit > 0f && speed > speedLimit)
+                        speed = speedLimit;
+                }
 
                 //dampen angular speed
                 if(angularVelocity > 0f) {

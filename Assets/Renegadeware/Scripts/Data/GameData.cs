@@ -22,13 +22,12 @@ namespace Renegadeware.LL_LS1A1 {
         [M8.TagSelector]
         public string organismSpawnTag;
         public float organismSpawnCheckRadius = 0.5f;
-        public M8.RangeFloat organismSpawnCheckDepth;
 
-        public float organismUpdateContactsDelay = 0.3f;
+        public float organismContactsUpdateDelay = 0.3f;
 
-        public float organismSolidCheckDepth = -0.1f;
-
-        public float organismCheckDepth = -0.2f;
+        public M8.RangeFloat organismDepthCheckSpawn;
+        public float organismDepthCheckSolid = -0.1f;
+        public float organismDepthCheck = -0.2f;
 
         [Header("Input Settings")]
         public float inputEnvironmentDragScale = 0.5f;
@@ -94,7 +93,7 @@ namespace Renegadeware.LL_LS1A1 {
         public ContactFilter2D organismSpawnContactFilter {
             get {
                 if(!mOrganismSpawnContactFilter.isFiltering) {
-                    mOrganismSpawnContactFilter.SetDepth(organismSpawnCheckDepth.min, organismSpawnCheckDepth.max);
+                    mOrganismSpawnContactFilter.SetDepth(organismDepthCheckSpawn.min, organismDepthCheckSpawn.max);
                     mOrganismSpawnContactFilter.useTriggers = false;
                 }
 
@@ -105,7 +104,7 @@ namespace Renegadeware.LL_LS1A1 {
         public ContactFilter2D organismSolidContactFilter {
             get {
                 if(!mOrganismSolidContactFilter.isFiltering) {
-                    mOrganismSolidContactFilter.SetDepth(organismSolidCheckDepth, organismSolidCheckDepth);
+                    mOrganismSolidContactFilter.SetDepth(organismDepthCheckSolid, organismDepthCheckSolid);
                     mOrganismSolidContactFilter.useTriggers = false;
                 }
 
@@ -116,7 +115,7 @@ namespace Renegadeware.LL_LS1A1 {
         public ContactFilter2D organismContactFilter {
             get {
                 if(!mOrganismContactFilter.isFiltering) {
-                    mOrganismContactFilter.SetDepth(organismCheckDepth, organismCheckDepth);
+                    mOrganismContactFilter.SetDepth(organismDepthCheck, organismDepthCheck);
                     mOrganismContactFilter.useTriggers = false;
                 }
 

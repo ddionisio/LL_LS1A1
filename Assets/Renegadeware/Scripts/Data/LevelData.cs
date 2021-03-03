@@ -47,6 +47,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public int spawnableCount; //threshold count to allow spawning (active count < spawnable count)
         public int criteriaCount; //number of organisms to grow to complete an environment
+
+        public bool spawnIsRandomDir;
         
         public EnvironmentInfo[] environments; //usually 4
 

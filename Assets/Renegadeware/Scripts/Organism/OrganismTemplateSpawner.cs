@@ -16,6 +16,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         private OrganismEntity mTemplate;
 
+        private M8.GenericParams mParms = new M8.GenericParams();
+
         public void Setup(OrganismTemplate organismTemplate, int capacity) {
             Destroy();
 
@@ -59,14 +61,15 @@ namespace Renegadeware.LL_LS1A1 {
                 mPool.ReleaseAll();
         }
 
-        public OrganismEntity SpawnAt(Vector2 pt) {
+        public OrganismEntity SpawnAt(Vector2 pt, bool isRandomDir) {
             if(entities.IsFull)
                 return null;
 
             var spawnPt = new Vector3(pt.x, pt.y, spawnRoot.position.z);
-            var spawnRot = Quaternion.identity;
 
-            var ent = mPool.Spawn<OrganismEntity>(poolSpawn, null, spawnPt, spawnRot, null);
+            mParms[OrganismEntity.parmForwardRandom] = isRandomDir;
+
+            var ent = mPool.Spawn<OrganismEntity>(poolSpawn, null, spawnPt, mParms);
 
             entities.Add(ent);
 
