@@ -271,7 +271,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(time - mContactsUpdateLastTime >= gameDat.organismContactsUpdateDelay) {
                 mContactsUpdateLastTime = time;
 
-                contactCount = _bodyCollider.OverlapCollider(gameDat.organismContactFilter, mContacts);
+                contactCount = _bodyCollider.GetContacts(gameDat.organismContactFilter, mContacts);
 
                 mContactOrganisms.Clear();
                 for(int i = 0; i < contactCount; i++) {

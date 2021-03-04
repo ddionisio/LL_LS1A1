@@ -44,7 +44,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                 mContactsLocked = true;
 
-                int contactCount = mColl.OverlapCollider(GameData.instance.organismContactFilter, mContacts);
+                int contactCount = mColl.GetContacts(GameData.instance.organismContactFilter, mContacts);
                 for(int i = 0; i < contactCount; i++) {
                     var coll = mContacts[i];
 
