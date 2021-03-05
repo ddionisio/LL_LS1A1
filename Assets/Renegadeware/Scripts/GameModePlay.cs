@@ -69,9 +69,13 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        //environment stuff
         public EnvironmentControl environmentCurrent { get { return environments[environmentCurrentIndex]; } }
 
         public bool isEnvironmentDragging { get { return environments[environmentCurrentIndex].isDragging; } }
+
+        //game stuff
+        public OrganismTemplateSpawner gameSpawner { get { return mOrganismSpawner; } }
 
         /////////////////////////////
 
@@ -411,7 +415,10 @@ namespace Renegadeware.LL_LS1A1 {
                 //ensure there are no overlaps
                 mGameSpawnCheckOverlapCount = Physics2D.OverlapCircle(pos, gameDat.organismSpawnCheckRadius, gameDat.organismSpawnContactFilter, mGameSpawnCheckOverlaps);
                 if(mGameSpawnCheckOverlapCount == 0) {
-                    mOrganismSpawner.SpawnAt(pos, level.spawnIsRandomDir);
+                    if(level.spawnIsRandomDir)
+                        mOrganismSpawner.SpawnAtRandomDir(pos);
+                    else
+                        mOrganismSpawner.SpawnAt(pos);
                 }
             }
         }

@@ -16,6 +16,15 @@ MonoBehaviour:
   nameRef: testBodySphere
   descRef: 
   ID: 2
+  stats:
+    mass: 0
+    speedLimit: 5
+    velocityReceiveScale: 1
+    energyInitial: 5
+    energyCapacity: 10
+    energyDeathDelay: 1
+    energyCloneDelay: 0.3
+    lifespan: 10
   _editPrefab: {fileID: 6916567353997338270, guid: efe790b5328bb3644b554348bd9e0e73,
     type: 3}
   _gamePrefab: {fileID: 1973664900086628841, guid: b39b4f6f8c59e4445877a98bae23206c,

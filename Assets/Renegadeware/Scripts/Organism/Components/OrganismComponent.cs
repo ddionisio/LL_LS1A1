@@ -23,12 +23,9 @@ namespace Renegadeware.LL_LS1A1 {
 
     public abstract class OrganismComponent : InfoData {
         [ID(group = "organismComponent", invalidID = GameData.invalidID)]
-        public int ID;        
+        public int ID;
 
-        //[Header("General")]
-        //public float energy; //initial energy value upon spawn
-        //public float energyRate; //determines amount of energy consumption/regeneration
-        //public float energyCapacity; //determines energy cap, when reached, allow division
+        public OrganismStats stats;
 
         public virtual string anchorName { get { return ""; } } //used for attaching component to body
 

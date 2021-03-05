@@ -61,13 +61,33 @@ namespace Renegadeware.LL_LS1A1 {
                 mPool.ReleaseAll();
         }
 
-        public OrganismEntity SpawnAt(Vector2 pt, bool isRandomDir) {
+        public OrganismEntity SpawnAtRandomDir(Vector2 pt) {
             if(entities.IsFull)
                 return null;
 
             var spawnPt = new Vector3(pt.x, pt.y, spawnRoot.position.z);
 
-            mParms[OrganismEntity.parmForwardRandom] = isRandomDir;
+            mParms[OrganismEntity.parmForwardRandom] = true;
+
+            var ent = mPool.Spawn<OrganismEntity>(poolSpawn, null, spawnPt, mParms);
+
+            entities.Add(ent);
+
+            return ent;
+        }
+
+        public OrganismEntity SpawnAt(Vector2 pt) {
+            return SpawnAt(pt, Vector2.up);
+        }
+
+        public OrganismEntity SpawnAt(Vector2 pt, Vector2 forward) {
+            if(entities.IsFull)
+                return null;
+
+            var spawnPt = new Vector3(pt.x, pt.y, spawnRoot.position.z);
+
+            mParms[OrganismEntity.parmForwardRandom] = false;
+            mParms[OrganismEntity.parmForward] = forward;
 
             var ent = mPool.Spawn<OrganismEntity>(poolSpawn, null, spawnPt, mParms);
 

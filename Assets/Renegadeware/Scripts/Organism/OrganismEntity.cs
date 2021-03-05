@@ -10,16 +10,32 @@ namespace Renegadeware.LL_LS1A1 {
         public const string parmForwardRandom = "fwdRnd"; //bool
         public const string parmForward = "fwd"; //Vector2 dir (normalized)
 
+        public enum State {
+            Normal,
+            Reproducing,
+            Death
+        }
+
         public struct UpdateData {
             public float lastTime;
             public IUpdate iUpdate;
         }
 
+        [Header("Stats")]
+        [SerializeField]
+        OrganismStats _stats;
+
         [Header("Body")]
         [SerializeField]
         OrganismDisplayBody _bodyDisplay = null;
         [SerializeField]
-        Collider2D _bodyCollider = null;        
+        Collider2D _bodyCollider = null;
+
+        [Header("Displays")]
+        [SerializeField]
+        OrganismDisplaySpawn _spawn;
+        [SerializeField]
+        OrganismDisplayDeath _death;
 
         [Header("Components")]
         [SerializeField]
@@ -27,10 +43,21 @@ namespace Renegadeware.LL_LS1A1 {
 
         public M8.PoolDataController poolControl { get; private set; }
 
+        public OrganismStats stats {
+            get {
+                if(_stats == null)
+                    _stats = new OrganismStats();
+                return _stats;
+            } 
+        }
+
         public OrganismBody bodyComponent { get { return _comps != null && _comps.Length > 0 ? _comps[0] as OrganismBody : null; } }
 
         public OrganismDisplayBody bodyDisplay { get { return _bodyDisplay; } }
-        public Collider2D bodyCollider { get { return _bodyCollider; } }        
+        public Collider2D bodyCollider { get { return _bodyCollider; } }
+
+        public OrganismDisplaySpawn spawn { get { return _spawn; } }
+        public OrganismDisplayDeath death { get { return _death; } }
 
         public Vector2 position { get { return transform.localPosition; } set { transform.localPosition = value; } }
 
@@ -95,8 +122,6 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
-        public float speedLimit { get; set; } //set to 0 for no limit
-
         public bool moveLocked { get; set; }
 
         public RaycastHit2D[] solidHits { get { return mSolidHits; } }
@@ -158,6 +183,9 @@ namespace Renegadeware.LL_LS1A1 {
             for(int i = 1; i < ent._comps.Length; i++) {
                 var comp = GameData.instance.GetOrganismComponent<OrganismComponent>(template.componentIDs[i]);
 
+                //append stats
+                ent.stats.Append(comp.stats);
+
                 //instantiate prefab for component
                 var compPrefab = comp.gamePrefab;
                 if(compPrefab) {
@@ -175,8 +203,6 @@ namespace Renegadeware.LL_LS1A1 {
 
             for(int i = 0; i < ent._comps.Length; i++)
                 ent._comps[i].SetupTemplate(ent);
-
-            //setup stats
 
             return ent;
         }
@@ -222,8 +248,9 @@ namespace Renegadeware.LL_LS1A1 {
         void M8.IPoolSpawn.OnSpawned(M8.GenericParams parms) {
             //do spawn stuff here
 
+            stats.Reset();
+
             //initialize data
-            transform.localRotation = Quaternion.identity;
             mForward = Vector2.up;
 
             angularVelocity = 0f;
@@ -239,10 +266,12 @@ namespace Renegadeware.LL_LS1A1 {
             if(parms != null) {
                 //forward setting
                 if(parms.ContainsKey(parmForwardRandom) && parms.GetValue<bool>(parmForwardRandom))
-                    forward = M8.MathUtil.RotateAngle(forward, Random.Range(0f, 360f));
+                    mForward = M8.MathUtil.RotateAngle(forward, Random.Range(0f, 360f));
                 else if(parms.ContainsKey(parmForward))
-                    forward = parms.GetValue<Vector2>(parmForward);
+                    mForward = parms.GetValue<Vector2>(parmForward);
             }
+
+            transform.up = mForward;
 
             for(int i = 0; i < mISpawns.Length; i++)
                 mISpawns[i].OnSpawn(this);
@@ -315,6 +344,7 @@ namespace Renegadeware.LL_LS1A1 {
                 if(speed > 0f) {
                     speed -= env.linearDrag * dt;
 
+                    var speedLimit = stats.speedLimit;
                     if(speedLimit > 0f && speed > speedLimit)
                         speed = speedLimit;
                 }

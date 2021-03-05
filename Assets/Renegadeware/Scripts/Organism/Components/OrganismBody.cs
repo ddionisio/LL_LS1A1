@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "body", menuName = "Game/Organism/Component/Body")]
-    public class OrganismBody : OrganismComponent, ISpawn, IVelocityAdd {
+    public class OrganismBody : OrganismComponent, IVelocityAdd {
         [Header("Templates")]
         [SerializeField]
         GameObject _editPrefab = null;
         [SerializeField]
         GameObject _gamePrefab = null;
-
-        [Header("Stats")]
-        public float mass = 0.0f; //use for separation
-        public float speedLimit = 5f;
 
         [Header("Body Info")]
         public OrganismComponent[] componentEssentials; //essential organelles for this body (used after picking body the first time)
@@ -31,10 +27,6 @@ namespace Renegadeware.LL_LS1A1 {
             return -1;
         }
 
-        public virtual void OnSpawn(OrganismEntity entity) {
-            entity.speedLimit = speedLimit;
-        }
-
         public virtual Vector2 OnAddVelocity(OrganismEntity entity) {
             //do separation
             var separateVel = Vector2.zero;
@@ -44,7 +36,7 @@ namespace Renegadeware.LL_LS1A1 {
             for(int i = 0; i < entity.contactOrganisms.Count; i++) {
                 var otherEnt = entity.contactOrganisms[i];
 
-                if(otherEnt.bodyComponent == null || mass <= otherEnt.bodyComponent.mass) //exclude organisms with lesser mass
+                if(otherEnt.bodyComponent == null || entity.stats.mass <= otherEnt.stats.mass) //exclude organisms with lesser mass
                     separateVel += pos - otherEnt.position;
             }
 
