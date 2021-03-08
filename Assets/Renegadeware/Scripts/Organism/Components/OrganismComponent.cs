@@ -3,24 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    public interface ISpawn {
-        void OnSpawn(OrganismEntity entity);
-    }
-
-    public interface IDespawn {
-        void OnDespawn(OrganismEntity entity);
-    }
-
-    public interface IUpdate {
-        float delay { get; }
-
-        void OnUpdate(OrganismEntity entity);
-    }
-
-    public interface IVelocityAdd {
-        Vector2 OnAddVelocity(OrganismEntity entity);
-    }
-
     public abstract class OrganismComponent : InfoData {
         [ID(group = "organismComponent", invalidID = GameData.invalidID)]
         public int ID;
@@ -31,6 +13,11 @@ namespace Renegadeware.LL_LS1A1 {
 
         public virtual GameObject editPrefab { get { return null; } } //used during edit mode
         public virtual GameObject gamePrefab { get { return null; } } //used during simulation mode
+
+        /// <summary>
+        /// This is for components that need a controller during runtime. E.g. body components (manage spawning/death), motility components
+        /// </summary>
+        public virtual OrganismComponentControl GenerateControl(OrganismEntity organismEntity) { return null; }
 
         /// <summary>
         /// This is called during prefab generation for OrganismTemplate used during simulation mode.

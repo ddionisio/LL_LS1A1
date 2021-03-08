@@ -268,6 +268,21 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        /// <summary>
+        /// Used in editor to check if components need to be refreshed. Returns true if everything checks out.
+        /// </summary>
+        public bool VerifyOrganismComponents() {
+            if(organismComponents == null)
+                return false;
+
+            for(int i = 0; i < organismComponents.Length; i++) {
+                if(organismComponents[i] == null)
+                    return false;
+            }
+
+            return true;
+        }
+
         protected override void OnInstanceInit() {
             //generate organism component look-up
             mOrganismLookup = new Dictionary<int, OrganismComponent>(organismComponents.Length);

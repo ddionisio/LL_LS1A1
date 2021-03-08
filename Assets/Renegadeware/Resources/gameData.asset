@@ -28,8 +28,8 @@ MonoBehaviour:
   inputEnvironmentDragScale: 0.03
   levels: []
   organismComponents:
-  - {fileID: 11400000, guid: 4049816e31a17704b93e9e8c2e7876f5, type: 2}
-  - {fileID: 11400000, guid: cbd6eb6404e248945ba36779697e098a, type: 2}
+  - {fileID: 11400000, guid: f4289bc98e1bc4c40b0e3dbaf57186b3, type: 2}
+  - {fileID: 11400000, guid: d784cf704cbeddf48896fe376aed751a, type: 2}
   - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}
   - {fileID: 11400000, guid: f0744b1421eb0dd44806305c24b7d4e5, type: 2}
   - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}

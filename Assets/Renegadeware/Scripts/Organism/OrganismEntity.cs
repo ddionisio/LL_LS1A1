@@ -16,11 +16,6 @@ namespace Renegadeware.LL_LS1A1 {
             Death
         }
 
-        public struct UpdateData {
-            public float lastTime;
-            public IUpdate iUpdate;
-        }
-
         [Header("Stats")]
         [SerializeField]
         OrganismStats _stats;
@@ -145,10 +140,7 @@ namespace Renegadeware.LL_LS1A1 {
         private Collider2D[] mContacts = new Collider2D[contactCapacity];
         private M8.CacheList<OrganismEntity> mContactOrganisms = new M8.CacheList<OrganismEntity>(contactCapacity);
 
-        private ISpawn[] mISpawns;
-        private IDespawn[] mIDespawns;
-        private IVelocityAdd[] mIVelocityAdds;
-        private UpdateData[] mUpdates;
+        private OrganismComponentControl[] mControls;
 
         /// <summary>
         /// Call this after creating the prefab, before generating the pool.
@@ -208,39 +200,21 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void M8.IPoolInit.OnInit() {
-            //grab interfaces for components
-            var iSpawnList = new List<ISpawn>();
-            var iDespawnList = new List<IDespawn>();
-            var iVelocityAddList = new List<IVelocityAdd>();
-            var iUpdateList = new List<IUpdate>();
+            //grab controls for components
+            var controlList = new List<OrganismComponentControl>();
 
-            for(int i = 0; i < _comps.Length; i++) {
+            for(int i = 0; i < _comps.Length; i++) {                
                 var comp = _comps[i];
 
-                var iSpawn = comp as ISpawn;
-                if(iSpawn != null)
-                    iSpawnList.Add(iSpawn);
+                var ctrl = comp.GenerateControl(this);
+                if(ctrl != null) {
+                    ctrl.Init(this, comp);
 
-                var iDespawn = comp as IDespawn;
-                if(iDespawn != null)
-                    iDespawnList.Add(iDespawn);
-
-                var iVelocityAdd = comp as IVelocityAdd;
-                if(iVelocityAdd != null)
-                    iVelocityAddList.Add(iVelocityAdd);
-
-                var iUpdate = comp as IUpdate;
-                if(iUpdate != null)
-                    iUpdateList.Add(iUpdate);
+                    controlList.Add(ctrl);
+                }
             }
 
-            mISpawns = iSpawnList.ToArray();
-            mIDespawns = iDespawnList.ToArray();
-            mIVelocityAdds = iVelocityAddList.ToArray();
-
-            mUpdates = new UpdateData[iUpdateList.Count];
-            for(int i = 0; i < mUpdates.Length; i++)
-                mUpdates[i] = new UpdateData { iUpdate = iUpdateList[i] };
+            mControls = controlList.ToArray();
 
             poolControl = GetComponent<M8.PoolDataController>();
         }
@@ -273,20 +247,15 @@ namespace Renegadeware.LL_LS1A1 {
 
             transform.up = mForward;
 
-            for(int i = 0; i < mISpawns.Length; i++)
-                mISpawns[i].OnSpawn(this);
+            mContactsUpdateLastTime = Time.time;
 
-            var time = Time.time;
-
-            for(int i = 0; i < mUpdates.Length; i++)
-                mUpdates[i].lastTime = time;
-
-            mContactsUpdateLastTime = time;
+            for(int i = 0; i < mControls.Length; i++)
+                mControls[i].Spawn(this, parms);
         }
 
         void M8.IPoolDespawn.OnDespawned() {
-            for(int i = 0; i < mIDespawns.Length; i++)
-                mIDespawns[i].OnDespawn(this);
+            for(int i = 0; i < mControls.Length; i++)
+                mControls[i].Despawn(this);
 
             //do despawn stuff here
         }
@@ -310,14 +279,8 @@ namespace Renegadeware.LL_LS1A1 {
                 }
             }
 
-            for(int i = 0; i < mUpdates.Length; i++) {
-                var iUpdate = mUpdates[i].iUpdate;
-
-                if(time - mUpdates[i].lastTime >= iUpdate.delay) {
-                    mUpdates[i].lastTime = time;
-                    iUpdate.OnUpdate(this);
-                }
-            }
+            for(int i = 0; i < mControls.Length; i++)
+                mControls[i].Update(this);
         }
 
         void FixedUpdate() {
@@ -328,18 +291,6 @@ namespace Renegadeware.LL_LS1A1 {
             float dt = Time.fixedDeltaTime;
             
             if(!moveLocked) {
-                //update orientation
-                if(angularVelocity != 0f)
-                    forward = M8.MathUtil.RotateAngle(forward, angularVelocity * dt);
-
-                //update velocity
-                var addVel = Vector2.zero;
-
-                for(int i = 0; i < mIVelocityAdds.Length; i++)
-                    addVel += mIVelocityAdds[i].OnAddVelocity(this);
-
-                velocity += addVel;
-
                 //limit/dampen speed
                 if(speed > 0f) {
                     speed -= env.linearDrag * dt;
@@ -348,6 +299,10 @@ namespace Renegadeware.LL_LS1A1 {
                     if(speedLimit > 0f && speed > speedLimit)
                         speed = speedLimit;
                 }
+
+                //update orientation
+                if(angularVelocity != 0f)
+                    forward = M8.MathUtil.RotateAngle(forward, angularVelocity * dt);
 
                 //dampen angular speed
                 if(angularVelocity > 0f) {

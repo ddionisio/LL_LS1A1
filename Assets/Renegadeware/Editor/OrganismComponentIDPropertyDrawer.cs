@@ -19,11 +19,13 @@ namespace Renegadeware.LL_LS1A1 {
                 GUI.Label(position, "GameData not found.");
             }
             else {
-                var comps = gameDat.organismComponents;
-                if(comps == null)
+                if(!gameDat.VerifyOrganismComponents())
                     Refresh();
-                else if(mKeyIDs == null || mKeyIDs.Length != comps.Length + 1)
-                    GenerateKeys();
+                else {
+                    var comps = gameDat.organismComponents;
+                    if(mKeyIDs == null || mKeyIDs.Length != comps.Length + 1)
+                        GenerateKeys();
+                }
 
                 const float editSize = 20f;
                 const float editSpace = 4f;
