@@ -11,40 +11,32 @@ namespace Renegadeware.LL_LS1A1 {
         public float velocityReceiveScale; //influence amount of velocity received (environment velocity, fields)
 
         [Header("Energy")]
-        public float energyInitial;
         public float energyCapacity;
-        public float energyDeathDelay; //how long before dying when energy is 0
-        public float energyCloneDelay; //how long to wait for cloning when energy is full
 
         [Header("Life")]
-        public float lifespan; //how long does this cell live, set to 0 for immortality
+        public float lifespan; //how long does this cell live, set to 0 for immortality. Once expired, energy will drain and not regenerate.
 
         public float energy { 
             get { return mEnergy; }
-            set {
-                var _val = Mathf.Clamp(value, 0f, energyCapacity);
-                if(mEnergy != _val) {
-                    mEnergy = _val;
-
-                    if(mEnergy == 0f || mEnergy == energyCapacity)
-                        mLastEnergyCheckTime = Time.time;
-                }
-            }
+            set { mEnergy = Mathf.Clamp(value, 0f, energyCapacity); }
         }
 
         /// <summary>
-        /// Time since energy was either empty or full
+        /// Initial energy when spawned, this is half of energy capacity.
         /// </summary>
-        public float energyCheckTimeElapsed { get { return Time.time - mLastEnergyCheckTime; } }
+        public float energyInitial { get { return energyCapacity * 0.5f; } }
 
         /// <summary>
         /// Time since organism spawned
         /// </summary>
         public float spawnTimeElapsed { get { return Time.time - mLastResetTime; } }
 
+        public bool isLifeExpired { get { return lifespan > 0f && spawnTimeElapsed >= lifespan; } }
+
+        public bool isEnergyFull { get { return mEnergy == energyCapacity; } }
+
         private float mEnergy;
 
-        private float mLastEnergyCheckTime; //last time energy was either empty or full
         private float mLastResetTime;
 
         public void Reset() {
@@ -56,9 +48,11 @@ namespace Renegadeware.LL_LS1A1 {
         public void Append(OrganismStats otherStats) {
             mass += otherStats.mass;
             speedLimit += otherStats.speedLimit;
+            velocityReceiveScale += otherStats.velocityReceiveScale;
 
-            energyInitial += otherStats.energyInitial;
             energyCapacity += otherStats.energyCapacity;
+
+            lifespan += otherStats.lifespan;
         }
     }
 }

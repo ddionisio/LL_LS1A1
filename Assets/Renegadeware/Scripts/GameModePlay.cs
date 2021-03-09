@@ -41,10 +41,21 @@ namespace Renegadeware.LL_LS1A1 {
 
         public ModeSelect modeSelect { get; private set; }
 
+        /////////////////
         //Transition
-        public bool isTransitioning { get { return mTransitionState == TransitionState.Enter || mTransitionState == TransitionState.Exit; } }
+        public bool transitionIsBusy { get { return mTransitionState == TransitionState.Enter || mTransitionState == TransitionState.Exit; } }
 
-        public bool isGameInputEnabled {
+        /////////////////
+        //Environment
+        public EnvironmentControl environmentCurrentControl { get { return environments[environmentCurrentIndex]; } }
+
+        public LevelData.EnvironmentInfo environmentCurrentInfo { get { return level.environments[environmentCurrentIndex]; } }
+
+        public bool environmentIsDragging { get { return environments[environmentCurrentIndex].isDragging; } }
+
+        /////////////////
+        //Game
+        public bool gameIsInputEnabled {
             get { return mGameInputEnabled; }
             set {
                 if(mGameInputEnabled != value) {
@@ -69,13 +80,9 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
-        //environment stuff
-        public EnvironmentControl environmentCurrent { get { return environments[environmentCurrentIndex]; } }
-
-        public bool isEnvironmentDragging { get { return environments[environmentCurrentIndex].isDragging; } }
-
-        //game stuff
         public OrganismTemplateSpawner gameSpawner { get { return mOrganismSpawner; } }
+
+        public bool gameIsCriteriaMet { get { return gameSpawner.entityCount >= environmentCurrentInfo.criteriaCount; } }
 
         /////////////////////////////
 
@@ -116,7 +123,7 @@ namespace Renegadeware.LL_LS1A1 {
                 hud.HideAll();
             }
 
-            isGameInputEnabled = false;
+            gameIsInputEnabled = false;
 
             base.OnInstanceDeinit();
         }
@@ -233,7 +240,7 @@ namespace Renegadeware.LL_LS1A1 {
             M8.ModalManager.main.CloseUpTo(GameData.instance.modalEnvironmentSelect, true);
 
             //wait for transitions
-            while(M8.ModalManager.main.isBusy || hud.isBusy || isTransitioning)
+            while(M8.ModalManager.main.isBusy || hud.isBusy || transitionIsBusy)
                 yield return null;
 
             if(mModeSelectNext == ModeSelect.Edit)
@@ -305,7 +312,7 @@ namespace Renegadeware.LL_LS1A1 {
             M8.ModalManager.main.CloseUpTo(gameDat.modalOrganismEdit, true);
 
             //wait for transitions
-            while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || isTransitioning)
+            while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || transitionIsBusy)
                 yield return null;
 
             editRootGO.SetActive(false);
@@ -317,7 +324,7 @@ namespace Renegadeware.LL_LS1A1 {
             var gameDat = GameData.instance;
 
             //start up entities
-            mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, level.criteriaCount);
+            mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, environmentCurrentInfo.capacity);
 
             environmentRootGO.SetActive(true);
 
@@ -327,7 +334,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             //setup hud
 
-            isGameInputEnabled = true;
+            gameIsInputEnabled = true;
 
             mModeSelectNext = ModeSelect.None;
             while(mModeSelectNext == ModeSelect.None) {
@@ -336,7 +343,7 @@ namespace Renegadeware.LL_LS1A1 {
                 yield return null;
             }
 
-            isGameInputEnabled = false;
+            gameIsInputEnabled = false;
 
             //clear out entities
             mOrganismSpawner.Clear();
@@ -346,7 +353,7 @@ namespace Renegadeware.LL_LS1A1 {
                 StartCoroutine(DoTransitionHide());
 
             //wait for transitions
-            while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || isTransitioning)
+            while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || transitionIsBusy)
                 yield return null;
 
             if(mModeSelectNext == ModeSelect.Edit)
@@ -409,7 +416,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         void OnEnvironmentClick(Vector2 pos) {
             //ensure we can spawn
-            if(mOrganismSpawner.entityCount < level.spawnableCount) {
+            if(mOrganismSpawner.entityCount < environmentCurrentInfo.spawnableCount) {
                 var gameDat = GameData.instance;
 
                 //ensure there are no overlaps

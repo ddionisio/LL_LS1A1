@@ -8,8 +8,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public abstract void Spawn(OrganismEntity ent, M8.GenericParams parms);
 
-        public abstract void Update(OrganismEntity ent);
-
         public abstract void Despawn(OrganismEntity ent);
+
+        public abstract void Update(OrganismEntity ent);
     }
 }

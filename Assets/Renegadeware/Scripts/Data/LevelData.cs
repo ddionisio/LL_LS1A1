@@ -7,10 +7,16 @@ namespace Renegadeware.LL_LS1A1 {
     public class LevelData : ScriptableObject {
         [System.Serializable]
         public struct EnvironmentInfo {
+            [Header("Info")]
             [M8.Localize]
             public string nameRef;
             [M8.Localize]
             public string descRef;
+
+            [Header("Settings")]
+            public int spawnableCount; //threshold count to allow spawning (active count < spawnable count)
+            public int criteriaCount; //number of organisms to grow to complete an environment
+            public int capacity; //max spawn in the world
         }
 
         public class EnvironmentStat {
@@ -44,9 +50,7 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.SceneAssetPath scene;
         
         public int progressCount = 2; //number of progress for this particular level before going to next (use LoL cur. progress)
-
-        public int spawnableCount; //threshold count to allow spawning (active count < spawnable count)
-        public int criteriaCount; //number of organisms to grow to complete an environment
+        public float duration = 60f; //play duration
 
         public bool spawnIsRandomDir;
         
@@ -66,7 +70,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(mStats == null || envInd >= mStats.Length)
                 return false;
 
-            return mStats[envInd].count >= criteriaCount;
+            return mStats[envInd].count >= environments[envInd].criteriaCount;
         }
 
         public int GetProgressCount() {
@@ -76,7 +80,7 @@ namespace Renegadeware.LL_LS1A1 {
             int progressCount = 0;
 
             for(int i = 0; i < mStats.Length; i++) {
-                if(mStats[i].count >= criteriaCount)
+                if(mStats[i].count >= environments[i].criteriaCount)
                     progressCount++;
             }
 

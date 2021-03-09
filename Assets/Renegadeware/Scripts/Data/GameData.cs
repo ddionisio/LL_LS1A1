@@ -25,9 +25,15 @@ namespace Renegadeware.LL_LS1A1 {
 
         public float organismContactsUpdateDelay = 0.3f;
 
+        public float organismDeathDelay = 2f; //how long to stay dead once an organism's life expired.
+
         public M8.RangeFloat organismDepthCheckSpawn;
         public float organismDepthCheckSolid = -0.1f;
         public float organismDepthCheck = -0.2f;
+
+        [Header("Organism General Animation")]
+        public string organismTakeReproduce = "reproduce";
+        public string organismTakeDeath = "death";
 
         [Header("Input Settings")]
         public float inputEnvironmentDragScale = 0.5f;

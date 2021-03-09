@@ -26,11 +26,9 @@ namespace Renegadeware.LL_LS1A1 {
         [SerializeField]
         Collider2D _bodyCollider = null;
 
-        [Header("Displays")]
+        [Header("Animation")]
         [SerializeField]
-        OrganismDisplaySpawn _spawn;
-        [SerializeField]
-        OrganismDisplayDeath _death;
+        M8.Animator.Animate _animator; //NOTE: if default is set, this is played on spawn
 
         [Header("Components")]
         [SerializeField]
@@ -51,8 +49,7 @@ namespace Renegadeware.LL_LS1A1 {
         public OrganismDisplayBody bodyDisplay { get { return _bodyDisplay; } }
         public Collider2D bodyCollider { get { return _bodyCollider; } }
 
-        public OrganismDisplaySpawn spawn { get { return _spawn; } }
-        public OrganismDisplayDeath death { get { return _death; } }
+        public M8.Animator.Animate animator { get { return _animator; } }
 
         public Vector2 position { get { return transform.localPosition; } set { transform.localPosition = value; } }
 
@@ -65,6 +62,9 @@ namespace Renegadeware.LL_LS1A1 {
                 }
             }
         }
+
+        public Vector2 left { get { return new Vector2(-mForward.y, mForward.x); } }
+        public Vector2 right { get { return new Vector2(mForward.y, -mForward.x); } }
 
         public float angularVelocity { get; set; }
 
@@ -117,6 +117,11 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        /// <summary>
+        /// this is in local space (including scale)
+        /// </summary>
+        public Vector2 size { get; private set; }
+
         public bool moveLocked { get; set; }
 
         public RaycastHit2D[] solidHits { get { return mSolidHits; } }
@@ -167,6 +172,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             ent._bodyCollider = bodyGO.GetComponent<Collider2D>();
 
+            ent._animator = bodyGO.GetComponent<M8.Animator.Animate>();
+
             //initialize components
             ent._comps = new OrganismComponent[template.componentIDs.Length];
 
@@ -199,6 +206,13 @@ namespace Renegadeware.LL_LS1A1 {
             return ent;
         }
 
+        public void Release() {
+            if(poolControl)
+                poolControl.Release();
+            else
+                gameObject.SetActive(false);
+        }
+
         void M8.IPoolInit.OnInit() {
             //grab controls for components
             var controlList = new List<OrganismComponentControl>();
@@ -217,11 +231,45 @@ namespace Renegadeware.LL_LS1A1 {
             mControls = controlList.ToArray();
 
             poolControl = GetComponent<M8.PoolDataController>();
+
+            //compute general size of collider (NOTE: assumes shape is centered)
+            if(bodyCollider) {
+                var scale = transform.localScale;
+
+                if(bodyCollider is BoxCollider2D)
+                    size = (bodyCollider as BoxCollider2D).size * scale;
+                else if(bodyCollider is CircleCollider2D) {
+                    var diameter = (bodyCollider as CircleCollider2D).radius * 2f;
+                    size = new Vector2(diameter, diameter);
+                }
+                else if(bodyCollider is CapsuleCollider2D)
+                    size = (bodyCollider as CapsuleCollider2D).size * scale;
+                else if(bodyCollider is PolygonCollider2D) {
+                    var polyColl = bodyCollider as PolygonCollider2D;
+
+                    Vector2 sMin = new Vector2(float.MaxValue, float.MaxValue), sMax = new Vector2(float.MinValue, float.MinValue);
+
+                    for(int i = 0; i < polyColl.points.Length; i++) {
+                        var pt = polyColl.points[i];
+                        if(pt.x < sMin.x)
+                            sMin.x = pt.x;
+                        if(pt.y < sMin.y)
+                            sMin.y = pt.y;
+
+                        if(pt.x > sMax.x)
+                            sMax.x = pt.x;
+                        if(pt.y > sMax.y)
+                            sMax.y = pt.y;
+                    }
+
+                    size = new Vector2(Mathf.Abs(sMax.x - sMin.x) * scale.x, Mathf.Abs(sMax.y - sMin.y) * scale.y);
+                }
+            }
+            else
+                size = Vector2.zero;
         }
 
         void M8.IPoolSpawn.OnSpawned(M8.GenericParams parms) {
-            //do spawn stuff here
-
             stats.Reset();
 
             //initialize data
@@ -249,6 +297,14 @@ namespace Renegadeware.LL_LS1A1 {
 
             mContactsUpdateLastTime = Time.time;
 
+            //general spawn
+            if(bodyDisplay.colorGroup)
+                bodyDisplay.colorGroup.Revert();
+
+            if(animator)
+                animator.PlayDefault();
+
+            //component control spawns
             for(int i = 0; i < mControls.Length; i++)
                 mControls[i].Spawn(this, parms);
         }
@@ -284,7 +340,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void FixedUpdate() {
-            var env = GameModePlay.instance.environmentCurrent;
+            var env = GameModePlay.instance.environmentCurrentControl;
             var gameDat = GameData.instance;
 
             //physics update

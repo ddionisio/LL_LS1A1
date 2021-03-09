@@ -12,6 +12,8 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.CacheList<OrganismEntity> entities { get; private set; }
         public int entityCount { get { return entities != null ? entities.Count : 0; } }
 
+        public int capacity { get { return entities.Capacity; } }
+
         private M8.PoolController mPool;
 
         private OrganismEntity mTemplate;
@@ -21,8 +23,6 @@ namespace Renegadeware.LL_LS1A1 {
         public void Setup(OrganismTemplate organismTemplate, int capacity) {
             Destroy();
 
-            int cacheCapacity = capacity * 2;
-
             //generate pool
             if(!mPool) {
                 mPool = M8.PoolController.CreatePool(name, transform);
@@ -31,16 +31,16 @@ namespace Renegadeware.LL_LS1A1 {
 
             //setup entity active list
             if(entities == null)
-                entities = new M8.CacheList<OrganismEntity>(cacheCapacity);
-            else if(entities.Capacity != cacheCapacity)
-                entities.Resize(cacheCapacity);
+                entities = new M8.CacheList<OrganismEntity>(capacity);
+            else if(entities.Capacity != capacity)
+                entities.Resize(capacity);
 
             //create a GameObject template
             mTemplate = OrganismEntity.CreateTemplate(poolSpawn, organismTemplate, transform);
             mTemplate.gameObject.SetActive(false);
 
             //setup pool type
-            mPool.AddType(poolType, mTemplate.gameObject, capacity, cacheCapacity, spawnRoot);
+            mPool.AddType(poolType, mTemplate.gameObject, capacity, capacity, spawnRoot);
         }
 
         public void Destroy() {
