@@ -352,13 +352,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6916567353997338270}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93e4498fed5b792408c50eb229706622, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e5c5b4cb79875e4fa4a52298f6f5c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spriteRender: {fileID: 0}
+  _spriteRender: {fileID: 6916567352297810065}
   _colorGroup: {fileID: 0}
-  zoomLevelEnabled: 0
-  zoomLevelActiveGOs: []
   anchorRoot: {fileID: 6916567353877267126}
 --- !u!1 &6916567354014528988
 GameObject:

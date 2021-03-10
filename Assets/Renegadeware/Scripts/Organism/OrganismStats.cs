@@ -16,6 +16,12 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Life")]
         public float lifespan; //how long does this cell live, set to 0 for immortality. Once expired, energy will drain and not regenerate.
 
+        [Header("Environment")]
+        [SerializeField]
+        List<HazardData> _hazardResistances;
+        [SerializeField]
+        List<EnergyData> _energySources;
+
         public float energy { 
             get { return mEnergy; }
             set { mEnergy = Mathf.Clamp(value, 0f, energyCapacity); }
@@ -45,6 +51,20 @@ namespace Renegadeware.LL_LS1A1 {
             mLastResetTime = Time.time;
         }
 
+        public bool HazardMatch(HazardData hazardData) {
+            if(_hazardResistances == null)
+                return false;
+
+            return _hazardResistances.Contains(hazardData);
+        }
+
+        public bool EnergyMatch(EnergyData energyData) {
+            if(_energySources == null)
+                return false;
+
+            return _energySources.Contains(energyData);
+        }
+
         public void Append(OrganismStats otherStats) {
             mass += otherStats.mass;
             speedLimit += otherStats.speedLimit;
@@ -53,6 +73,20 @@ namespace Renegadeware.LL_LS1A1 {
             energyCapacity += otherStats.energyCapacity;
 
             lifespan += otherStats.lifespan;
+
+            if(otherStats._hazardResistances != null) {
+                if(_hazardResistances == null)
+                    _hazardResistances = new List<HazardData>(otherStats._hazardResistances);
+                else
+                    _hazardResistances.AddRange(otherStats._hazardResistances);
+            }
+
+            if(otherStats._energySources != null) {
+                if(_energySources == null)
+                    _energySources = new List<EnergyData>(otherStats._energySources);
+                else
+                    _energySources.AddRange(otherStats._energySources);
+            }
         }
     }
 }

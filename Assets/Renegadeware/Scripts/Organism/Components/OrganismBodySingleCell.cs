@@ -103,32 +103,33 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             //update velocity
+            if(!ent.physicsLocked) {
+                //do separation
+                var separateVel = Vector2.zero;
 
-            //do separation
-            var separateVel = Vector2.zero;
+                var pos = ent.position;
 
-            var pos = ent.position;
+                for(int i = 0; i < ent.contactOrganisms.Count; i++) {
+                    var otherEnt = ent.contactOrganisms[i];
 
-            for(int i = 0; i < ent.contactOrganisms.Count; i++) {
-                var otherEnt = ent.contactOrganisms[i];
-
-                if(otherEnt.bodyComponent == null || ent.stats.mass <= otherEnt.stats.mass) //exclude organisms with lesser mass
-                    separateVel += pos - otherEnt.position;
-            }
-
-            ent.velocity += separateVel;
-
-            //bounce from solid?
-            //TODO: stick to solid? (e.g. philli hooks)
-            if(ent.solidHitCount > 0) {
-                var moveDir = ent.velocityDir;
-
-                for(int i = 0; i < ent.solidHitCount; i++) {
-                    var solidHit = ent.solidHits[i];
-                    moveDir = Vector2.Reflect(moveDir, solidHit.normal);
+                    if(otherEnt.bodyComponent == null || ent.stats.mass <= otherEnt.stats.mass) //exclude organisms with lesser mass
+                        separateVel += pos - otherEnt.position;
                 }
 
-                ent.velocity += moveDir * ent.speed;
+                ent.velocity += separateVel;
+
+                //bounce from solid?
+                //TODO: stick to solid? (e.g. philli hooks)
+                if(ent.solidHitCount > 0) {
+                    var moveDir = ent.velocityDir;
+
+                    for(int i = 0; i < ent.solidHitCount; i++) {
+                        var solidHit = ent.solidHits[i];
+                        moveDir = Vector2.Reflect(moveDir, solidHit.normal);
+                    }
+
+                    ent.velocity += moveDir * ent.speed;
+                }
             }
         }
     }

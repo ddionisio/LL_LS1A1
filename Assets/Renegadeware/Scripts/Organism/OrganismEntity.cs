@@ -10,12 +10,6 @@ namespace Renegadeware.LL_LS1A1 {
         public const string parmForwardRandom = "fwdRnd"; //bool
         public const string parmForward = "fwd"; //Vector2 dir (normalized)
 
-        public enum State {
-            Normal,
-            Reproducing,
-            Death
-        }
-
         [Header("Stats")]
         [SerializeField]
         OrganismStats _stats;
@@ -35,6 +29,8 @@ namespace Renegadeware.LL_LS1A1 {
         OrganismComponent[] _comps = null;
 
         public M8.PoolDataController poolControl { get; private set; }
+
+        public bool isReleased { get { return poolControl ? !poolControl.isSpawned : gameObject.activeSelf; } }
 
         public OrganismStats stats {
             get {
@@ -122,7 +118,18 @@ namespace Renegadeware.LL_LS1A1 {
         /// </summary>
         public Vector2 size { get; private set; }
 
-        public bool moveLocked { get; set; }
+        /// <summary>
+        /// Lock movement and disable collision.
+        /// </summary>
+        public bool physicsLocked { 
+            get { return mPhysicsLocked; }
+            set {
+                if(mPhysicsLocked != value) {
+                    mPhysicsLocked = value;
+                    ApplyPhysicsLocked();
+                }
+            }
+        }
 
         public RaycastHit2D[] solidHits { get { return mSolidHits; } }
         public int solidHitCount { get; private set; }
@@ -131,6 +138,8 @@ namespace Renegadeware.LL_LS1A1 {
         public int contactCount { get; private set; }
 
         public M8.CacheList<OrganismEntity> contactOrganisms { get { return mContactOrganisms; } }
+
+        private bool mPhysicsLocked;
 
         private Vector2 mForward;
 
@@ -275,15 +284,9 @@ namespace Renegadeware.LL_LS1A1 {
             //initialize data
             mForward = Vector2.up;
 
-            angularVelocity = 0f;
+            mPhysicsLocked = false;
 
-            mVelocity = Vector2.zero;
-            mVelocityDir = Vector2.zero;
-            mSpeed = 0f;
-            moveLocked = false;
-
-            solidHitCount = 0;
-            contactCount = 0;
+            ResetPhysics();
 
             if(parms != null) {
                 //forward setting
@@ -319,34 +322,48 @@ namespace Renegadeware.LL_LS1A1 {
         void Update() {
             var gameDat = GameData.instance;
 
-            var time = Time.time;
+            var env = GameModePlay.instance.environmentCurrentControl;
+
+            //environment hazard
+            for(int i = 0; i < env.hazards.Length; i++) {
+                var hazard = env.hazards[i];
+                if(hazard)
+                    hazard.Apply(stats);
+            }
+
+            //environment energy
+            for(int i = 0; i < env.energySources.Length; i++) {
+                var energySrc = env.energySources[i];
+                if(energySrc)
+                    energySrc.Apply(stats);
+            }
 
             //update contacts
-            if(time - mContactsUpdateLastTime >= gameDat.organismContactsUpdateDelay) {
-                mContactsUpdateLastTime = time;
+            if(!physicsLocked) {
+                var time = Time.time;
 
-                contactCount = _bodyCollider.GetContacts(gameDat.organismContactFilter, mContacts);
+                if(time - mContactsUpdateLastTime >= gameDat.organismContactsUpdateDelay) {
+                    mContactsUpdateLastTime = time;
 
-                mContactOrganisms.Clear();
-                for(int i = 0; i < contactCount; i++) {
-                    var organismEnt = mContacts[i].GetComponent<OrganismEntity>();
-                    if(organismEnt)
-                        mContactOrganisms.Add(organismEnt);
+                    contactCount = _bodyCollider.GetContacts(gameDat.organismContactFilter, mContacts);
+
+                    mContactOrganisms.Clear();
+                    for(int i = 0; i < contactCount; i++) {
+                        var organismEnt = mContacts[i].GetComponent<OrganismEntity>();
+                        if(organismEnt)
+                            mContactOrganisms.Add(organismEnt);
+                    }
                 }
             }
 
-            for(int i = 0; i < mControls.Length; i++)
-                mControls[i].Update(this);
-        }
+            //physics stuff here
+            if(!physicsLocked) {
+                var dt = Time.deltaTime;
 
-        void FixedUpdate() {
-            var env = GameModePlay.instance.environmentCurrentControl;
-            var gameDat = GameData.instance;
+                //environmental velocity
+                if(env.velocityControl)
+                    velocity += env.velocityControl.GetVelocity(position, forward, dt);
 
-            //physics update
-            float dt = Time.fixedDeltaTime;
-            
-            if(!moveLocked) {
                 //limit/dampen speed
                 if(speed > 0f) {
                     speed -= env.linearDrag * dt;
@@ -355,10 +372,6 @@ namespace Renegadeware.LL_LS1A1 {
                     if(speedLimit > 0f && speed > speedLimit)
                         speed = speedLimit;
                 }
-
-                //update orientation
-                if(angularVelocity != 0f)
-                    forward = M8.MathUtil.RotateAngle(forward, angularVelocity * dt);
 
                 //dampen angular speed
                 if(angularVelocity > 0f) {
@@ -373,20 +386,32 @@ namespace Renegadeware.LL_LS1A1 {
                 }
             }
 
-            if(speed > 0f) {
-                var moveDist = speed * dt;
+            for(int i = 0; i < mControls.Length; i++)
+                mControls[i].Update(this);
+        }
 
-                //update solid hits
-                solidHitCount = _bodyCollider.Cast(mVelocityDir, gameDat.organismSolidContactFilter, mSolidHits, moveDist, true);
+        void FixedUpdate() {
+            if(!physicsLocked) {
+                //update orientation
+                if(angularVelocity != 0f)
+                    forward = M8.MathUtil.RotateAngle(forward, angularVelocity * Time.fixedDeltaTime);
 
-                //clip movement
-                for(int i = 0; i < solidHitCount; i++) {
-                    var hit = mSolidHits[i];
-                    if(hit.fraction < moveDist)
-                        moveDist = hit.fraction;
+                //update position
+                if(speed > 0f) {
+                    var moveDist = speed * Time.fixedDeltaTime;
+
+                    //update solid hits
+                    solidHitCount = _bodyCollider.Cast(mVelocityDir, GameData.instance.organismSolidContactFilter, mSolidHits, moveDist, true);
+
+                    //clip movement
+                    for(int i = 0; i < solidHitCount; i++) {
+                        var hit = mSolidHits[i];
+                        if(hit.fraction < moveDist)
+                            moveDist = hit.fraction;
+                    }
+
+                    position += mVelocityDir * moveDist;
                 }
-
-                position += mVelocityDir * moveDist;
             }
         }
 
@@ -398,6 +423,34 @@ namespace Renegadeware.LL_LS1A1 {
                 mVelocityDir = Vector2.zero;
 
             mIsVelocityUpdated = false;
+        }
+
+        private void ResetPhysics() {
+            angularVelocity = 0f;
+
+            mVelocity = Vector2.zero;
+            mVelocityDir = Vector2.zero;
+            mSpeed = 0f;
+
+            mIsVelocityUpdated = false;
+
+            solidHitCount = 0;
+            contactCount = 0;
+
+            mContactOrganisms.Clear();
+        }
+
+        private void ApplyPhysicsLocked() {
+            if(physicsLocked) {
+                ResetPhysics();
+
+                if(bodyCollider)
+                    bodyCollider.enabled = false;
+            }
+            else {
+                if(bodyCollider)
+                    bodyCollider.enabled = true;
+            }
         }
     }
 }

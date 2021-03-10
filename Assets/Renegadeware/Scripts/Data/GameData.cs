@@ -19,19 +19,23 @@ namespace Renegadeware.LL_LS1A1 {
         public string modalOrganismEdit = "organismEdit";
 
         [Header("Organism Settings")]
+        public float organismContactsUpdateDelay = 0.3f;
+
+        /// <summary>
+        /// how long to stay dead once an organism's life expired.
+        /// </summary>
+        public float organismDeathDelay = 2f;
+
+        [Header("Organism Filter Settings")]
         [M8.TagSelector]
         public string organismSpawnTag;
         public float organismSpawnCheckRadius = 0.5f;
-
-        public float organismContactsUpdateDelay = 0.3f;
-
-        public float organismDeathDelay = 2f; //how long to stay dead once an organism's life expired.
 
         public M8.RangeFloat organismDepthCheckSpawn;
         public float organismDepthCheckSolid = -0.1f;
         public float organismDepthCheck = -0.2f;
 
-        [Header("Organism General Animation")]
+        [Header("Organism Animation Settings")]
         public string organismTakeReproduce = "reproduce";
         public string organismTakeDeath = "death";
 

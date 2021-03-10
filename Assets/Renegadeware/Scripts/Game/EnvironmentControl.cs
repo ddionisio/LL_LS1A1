@@ -14,10 +14,16 @@ namespace Renegadeware.LL_LS1A1 {
         public float linearDrag = 0.01f;
         public float angularDrag = 0.05f;
 
+        [Header("Attributes")]
+        public EnvironmentHazard[] hazards;
+        public EnvironmentEnergy[] energySources;
+
         [Header("Editor")]
         public float editBoundsSteps = 1.0f;
         public bool editSyncBoxCollider = true;
         public Color editBoundsColor = Color.cyan;
+
+        public EnvironmentVelocity velocityControl { get; private set; }
 
         public bool isDragging { get; private set; }
 
@@ -68,6 +74,10 @@ namespace Renegadeware.LL_LS1A1 {
         void OnDisable() {
             if(isDragging)
                 ((IEndDragHandler)this).OnEndDrag(null);
+        }
+
+        void Awake() {
+            velocityControl = GetComponent<EnvironmentVelocity>();
         }
 
         void OnDrawGizmos() {
