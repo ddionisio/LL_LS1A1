@@ -139,6 +139,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public M8.CacheList<OrganismEntity> contactOrganisms { get { return mContactOrganisms; } }
 
+        private static RaycastHit2D[] mSolidHit = new RaycastHit2D[4];
+
         private bool mPhysicsLocked;
 
         private Vector2 mForward;
@@ -220,6 +222,35 @@ namespace Renegadeware.LL_LS1A1 {
                 poolControl.Release();
             else
                 gameObject.SetActive(false);
+        }
+
+        public bool SolidCast(Vector2 dir, float dist, out RaycastHit2D hit) {
+            int count = _bodyCollider.Cast(dir, GameData.instance.organismSolidContactFilter, mSolidHit, dist, true);
+            if(count > 0) {
+                var ind = 0;
+                var frac = mSolidHits[0].fraction;
+
+                for(int i = 1; i < count; i++) {
+                    if(mSolidHit[i].fraction < frac) {
+                        ind = i;
+                        frac = mSolidHit[i].fraction;
+                    }
+                }
+
+                hit = mSolidHit[ind];
+                return true;
+            }
+
+            hit = new RaycastHit2D();
+            return false;
+        }
+
+        public Vector2 SolidClip(Vector2 dir, float dist) {
+            RaycastHit2D hit;
+            if(SolidCast(dir, dist, out hit))
+                dist = hit.fraction;
+
+            return position + (dir * dist);
         }
 
         void M8.IPoolInit.OnInit() {
@@ -324,18 +355,20 @@ namespace Renegadeware.LL_LS1A1 {
 
             var env = GameModePlay.instance.environmentCurrentControl;
 
-            //environment hazard
-            for(int i = 0; i < env.hazards.Length; i++) {
-                var hazard = env.hazards[i];
-                if(hazard)
-                    hazard.Apply(stats);
-            }
+            if(!stats.energyLocked) {
+                //environment hazard
+                for(int i = 0; i < env.hazards.Length; i++) {
+                    var hazard = env.hazards[i];
+                    if(hazard)
+                        hazard.Apply(stats);
+                }
 
-            //environment energy
-            for(int i = 0; i < env.energySources.Length; i++) {
-                var energySrc = env.energySources[i];
-                if(energySrc)
-                    energySrc.Apply(stats);
+                //environment energy
+                for(int i = 0; i < env.energySources.Length; i++) {
+                    var energySrc = env.energySources[i];
+                    if(energySrc)
+                        energySrc.Apply(stats);
+                }
             }
 
             //update contacts
@@ -362,7 +395,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                 //environmental velocity
                 if(env.velocityControl)
-                    velocity += env.velocityControl.GetVelocity(position, forward, dt);
+                    velocity += env.velocityControl.GetVelocity(position, forward, dt) * stats.velocityReceiveScale;
 
                 //limit/dampen speed
                 if(speed > 0f) {

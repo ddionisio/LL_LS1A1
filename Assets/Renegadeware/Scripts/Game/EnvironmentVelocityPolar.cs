@@ -13,11 +13,16 @@ namespace Renegadeware.LL_LS1A1 {
         public bool isAccelerate;
 
         public override Vector2 GetVelocity(Vector2 pos, Vector2 forward, float deltaTime) {
-            Vector2 polarPos = polarRoot ? polarRoot.position : transform.position;
+            Vector2 polarPos = polarRoot.position;
 
             var moveDir = (polarPos - pos).normalized;
 
             return isAccelerate ? moveDir * (speed * deltaTime) : moveDir * speed;
+        }
+
+        void Awake() {
+            if(!polarRoot)
+                polarRoot = transform;
         }
     }
 }

@@ -51,6 +51,8 @@ namespace Renegadeware.LL_LS1A1 {
                         if(ent.bodyDisplay.colorGroup)
                             ent.bodyDisplay.colorGroup.color *= mComp.deathTint;
 
+                        ent.stats.energyLocked = true;
+
                         mState = State.DeathWait;
                     }
                     //ran out of energy?
@@ -58,15 +60,17 @@ namespace Renegadeware.LL_LS1A1 {
                         if(ent.animator && !string.IsNullOrEmpty(gameDat.organismTakeDeath))
                             ent.animator.Play(gameDat.organismTakeDeath);
 
+                        ent.stats.energyLocked = true;
+
                         mState = State.Death;
                     }
                     //ready to divide?
                     else if(ent.stats.isEnergyFull) {
-                        var spawner = GameModePlay.instance.gameSpawner;
-
-                        if(!spawner.entities.IsFull) {//don't allow divide if capacity is full
+                        if(!GameModePlay.instance.gameSpawner.entities.IsFull) {//don't allow divide if capacity is full
                             if(ent.animator && !string.IsNullOrEmpty(gameDat.organismTakeReproduce))
                                 ent.animator.Play(gameDat.organismTakeReproduce);
+
+                            ent.stats.energyLocked = true;
 
                             mState = State.Divide;
                         }
@@ -93,9 +97,21 @@ namespace Renegadeware.LL_LS1A1 {
                     if(!ent.animator || !ent.animator.isPlaying) {
                         var spawner = GameModePlay.instance.gameSpawner;
 
+                        var forward = ent.forward;
+
+                        //split horizontally
+                        var dist = ent.size.x * 0.3f;
+
                         //get two spawn point
+                        var pt1 = ent.SolidClip(ent.left, dist);
+                        var pt2 = ent.SolidClip(ent.right, dist);
+
                         //release this
+                        ent.Release();
+
                         //spawn two
+                        spawner.SpawnAt(pt1, forward);
+                        spawner.SpawnAt(pt2, forward);
 
                         return;
                     }
@@ -121,14 +137,19 @@ namespace Renegadeware.LL_LS1A1 {
                 //bounce from solid?
                 //TODO: stick to solid? (e.g. philli hooks)
                 if(ent.solidHitCount > 0) {
-                    var moveDir = ent.velocityDir;
+                    /*var moveDir = ent.velocityDir;
 
                     for(int i = 0; i < ent.solidHitCount; i++) {
                         var solidHit = ent.solidHits[i];
                         moveDir = Vector2.Reflect(moveDir, solidHit.normal);
                     }
 
-                    ent.velocity += moveDir * ent.speed;
+                    ent.velocity += moveDir * ent.speed;*/
+                    var spd = ent.speed;
+                    if(spd > 0f) {
+                        for(int i = 0; i < ent.solidHitCount; i++)
+                            ent.velocity += ent.solidHits[i].normal * spd;
+                    }
                 }
             }
         }

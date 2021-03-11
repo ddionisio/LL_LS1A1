@@ -24,13 +24,23 @@ namespace Renegadeware.LL_LS1A1 {
 
         public float energy { 
             get { return mEnergy; }
-            set { mEnergy = Mathf.Clamp(value, 0f, energyCapacity); }
+            set {
+                if(energyLocked)
+                    return;
+
+                mEnergy = Mathf.Clamp(value, 0f, energyCapacity); 
+            }
         }
 
         /// <summary>
         /// Initial energy when spawned, this is half of energy capacity.
         /// </summary>
         public float energyInitial { get { return energyCapacity * 0.5f; } }
+
+        /// <summary>
+        /// Set to true to lock the energy value. Used when dying/reproducing
+        /// </summary>
+        public bool energyLocked { get; set; }
 
         /// <summary>
         /// Time since organism spawned
@@ -47,6 +57,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public void Reset() {
             mEnergy = energyInitial;
+
+            energyLocked = false;
 
             mLastResetTime = Time.time;
         }
