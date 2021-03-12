@@ -4,6 +4,6 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "hazard", menuName = "Game/Environment/Hazard")]
-    public class HazardData : InfoData {
+    public class HazardData : ScriptableObject {
     }
 }
