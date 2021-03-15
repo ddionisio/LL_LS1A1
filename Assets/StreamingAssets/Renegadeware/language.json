@@ -9,12 +9,21 @@
     "title": "TBD",
     "none": "None",
     "categoryBody": "Body",
+    "categoryCellStructure": "Cell Structure",
     "categoryMotility": "Motility",
     "nucleoid": "Nucleoid",
     "ribosome": "Ribosome",
     "test1": "Test 1",
     "test2": "Test 2",
     "testBodyCapsule": "Capsule",
-    "testBodySphere": "Sphere"
+    "testBodySphere": "Sphere",
+    "cellStructureThermophile": "Thermophile",
+    "cellStructurePsychrophile": "Psychrophile",
+    "cellStructureMethanogen": "Methanogen",
+    "cellStructureHalophile": "Halophile",
+    "motilityFlagellaMonotrichous": "Monotrichous Flagella",
+    "motilityFlagellaLophotrichous": "Lophotrichous Flagella",
+    "motilityFlagellaPeritrichous": "Peritrichous Flagella",
+    "motilityFlagellaAmphitrichous": "Amphitrichous Flagella"
   }
 }

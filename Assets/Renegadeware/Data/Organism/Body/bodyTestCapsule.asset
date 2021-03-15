@@ -16,15 +16,15 @@ MonoBehaviour:
   nameRef: testBodyCapsule
   descRef: 
   ID: 6
+  attributeInfos: []
   stats:
     mass: 0
     speedLimit: 5
     velocityReceiveScale: 1
-    energyInitial: 5
-    energyCapacity: 10
-    energyDeathDelay: 1
-    energyCloneDelay: 0.3
-    lifespan: 10
+    energyCapacity: 5
+    lifespan: 5
+    _hazardResistances: []
+    _energySources: []
   _editPrefab: {fileID: 8539131349923659438, guid: 633cafa9245c674429a60f18dd1f09ed,
     type: 3}
   _gamePrefab: {fileID: 7360663766811658103, guid: f42795f80bcff254b89815c53f3d7cdd,
@@ -34,3 +34,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}
   componentGroups:
   - {fileID: 11400000, guid: 2f71ea6a339451844a860383a0e9b713, type: 2}
+  deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

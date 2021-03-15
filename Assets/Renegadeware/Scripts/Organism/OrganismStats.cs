@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
+    [System.Flags]
+    public enum OrganismFlag {
+        Sticky = 0x1,
+        Parasitic = 0x2 //eat cell from within after being eaten
+    }
+
     [System.Serializable]
     public class OrganismStats {
         [Header("Physics")]
@@ -21,6 +27,9 @@ namespace Renegadeware.LL_LS1A1 {
         List<HazardData> _hazardResistances;
         [SerializeField]
         List<EnergyData> _energySources;
+
+        [Header("Specifics")]
+        public OrganismFlag flags;
 
         public float energy { 
             get { return mEnergy; }
@@ -99,6 +108,8 @@ namespace Renegadeware.LL_LS1A1 {
                 else
                     _energySources.AddRange(otherStats._energySources);
             }
+
+            flags |= otherStats.flags;
         }
     }
 }
