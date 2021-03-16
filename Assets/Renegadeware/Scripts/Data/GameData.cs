@@ -19,6 +19,13 @@ namespace Renegadeware.LL_LS1A1 {
         public string modalOrganismEdit = "organismEdit";
 
         [Header("Organism Settings")]
+        [M8.TagSelector]
+        public string organismPlayerTag;
+
+        public string organismPlayerSpawnName = "player";
+
+        public float organismSpawnCheckRadius = 0.5f;
+
         public float organismContactsUpdateDelay = 0.3f;
 
         /// <summary>
@@ -28,8 +35,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Organism Filter Settings")]
         [M8.TagSelector]
-        public string organismSpawnTag;
-        public float organismSpawnCheckRadius = 0.5f;
+        public string[] organismEntityTags;
 
         public M8.RangeFloat organismDepthCheckSpawn;
         public float organismDepthCheckSolid = -0.1f;
@@ -38,6 +44,11 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Organism Animation Settings")]
         public string organismTakeReproduce = "reproduce";
         public string organismTakeDeath = "death";
+
+        [Header("Energy Settings")]
+        [M8.TagSelector]
+        public string energyTag;
+        public float energyDepth = -0.15f;
 
         [Header("Input Settings")]
         public float inputEnvironmentDragScale = 0.5f;
@@ -133,6 +144,17 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        public ContactFilter2D organismEnergyFilter {
+            get {
+                if(!mOrganismEnergyFilter.isFiltering) {
+                    mOrganismEnergyFilter.SetDepth(energyDepth, energyDepth);
+                    mOrganismEnergyFilter.useTriggers = false;
+                }
+
+                return mOrganismEnergyFilter;
+            }
+        }
+
         private const string userDataKeyOrganismTemplateCount = "organismCount";
         private const string userDataKeyOrganismTemplate = "organism";
         private const string userDataKeyOrganismTemplateCurrent = "organismCurrent";
@@ -148,6 +170,7 @@ namespace Renegadeware.LL_LS1A1 {
         private ContactFilter2D mOrganismSpawnContactFilter = new ContactFilter2D();
         private ContactFilter2D mOrganismSolidContactFilter = new ContactFilter2D();
         private ContactFilter2D mOrganismContactFilter = new ContactFilter2D();
+        private ContactFilter2D mOrganismEnergyFilter = new ContactFilter2D();
 
         /// <summary>
         /// Called in start scene

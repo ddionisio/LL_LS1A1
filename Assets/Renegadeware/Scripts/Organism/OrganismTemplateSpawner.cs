@@ -4,9 +4,6 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public class OrganismTemplateSpawner : MonoBehaviour {
-        public const string poolType = "organismTemplate";
-        public const string poolSpawn = "organismSpawn";
-
         public Transform spawnRoot;
 
         public M8.CacheList<OrganismEntity> entities { get; private set; }
@@ -20,7 +17,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         private M8.GenericParams mParms = new M8.GenericParams();
 
-        public void Setup(OrganismTemplate organismTemplate, int capacity) {
+        public void Setup(OrganismTemplate organismTemplate, string templateName, string tag, int capacity) {
             Destroy();
 
             //generate pool
@@ -36,11 +33,11 @@ namespace Renegadeware.LL_LS1A1 {
                 entities.Resize(capacity);
 
             //create a GameObject template
-            mTemplate = OrganismEntity.CreateTemplate(poolSpawn, organismTemplate, transform);
+            mTemplate = OrganismEntity.CreateTemplate(organismTemplate, templateName, tag, transform);
             mTemplate.gameObject.SetActive(false);
 
             //setup pool type
-            mPool.AddType(poolType, mTemplate.gameObject, capacity, capacity, spawnRoot);
+            mPool.AddType(mTemplate.gameObject, capacity, capacity, spawnRoot);
         }
 
         public void Destroy() {
@@ -48,7 +45,7 @@ namespace Renegadeware.LL_LS1A1 {
                 entities.Clear();
 
             if(mPool)
-                mPool.RemoveType(poolType);
+                mPool.RemoveType(mTemplate.name);
 
             if(mTemplate) {
                 DestroyImmediate(mTemplate.gameObject);
@@ -69,7 +66,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             mParms[OrganismEntity.parmForwardRandom] = true;
 
-            var ent = mPool.Spawn<OrganismEntity>(poolSpawn, null, spawnPt, mParms);
+            var ent = mPool.Spawn<OrganismEntity>(mTemplate.name, mTemplate.name, null, spawnPt, mParms);
 
             entities.Add(ent);
 
@@ -89,7 +86,7 @@ namespace Renegadeware.LL_LS1A1 {
             mParms[OrganismEntity.parmForwardRandom] = false;
             mParms[OrganismEntity.parmForward] = forward;
 
-            var ent = mPool.Spawn<OrganismEntity>(poolSpawn, null, spawnPt, mParms);
+            var ent = mPool.Spawn<OrganismEntity>(mTemplate.name, mTemplate.name, null, spawnPt, mParms);
 
             entities.Add(ent);
 
@@ -97,10 +94,12 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnDespawn(M8.PoolDataController pdc) {
-            for(int i = 0; i < entities.Count; i++) {
-                if(entities[i].poolControl == pdc) {
-                    entities.RemoveAt(i);
-                    break;
+            if(pdc.factoryKey == mTemplate.name) {
+                for(int i = 0; i < entities.Count; i++) {
+                    if(entities[i].poolControl == pdc) {
+                        entities.RemoveAt(i);
+                        break;
+                    }
                 }
             }
         }

@@ -324,7 +324,7 @@ namespace Renegadeware.LL_LS1A1 {
             var gameDat = GameData.instance;
 
             //start up entities
-            mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, environmentCurrentInfo.capacity);
+            mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, gameDat.organismPlayerSpawnName, gameDat.organismPlayerTag, environmentCurrentInfo.capacity);
 
             environmentRootGO.SetActive(true);
 

@@ -30,6 +30,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Specifics")]
         public OrganismFlag flags;
+        public float danger; //used for avoidance (danger < other.danger)
 
         public float energy { 
             get { return mEnergy; }
@@ -42,6 +43,16 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         /// <summary>
+        /// Energy value normalized relative to energyCapacity.
+        /// </summary>
+        public float energyScale { get { return mEnergy / energyCapacity; } }
+
+        /// <summary>
+        /// Energy change since last update.
+        /// </summary>
+        public float energyDelta { get { return mEnergy - mEnergyLastUpdate; } }
+
+        /// <summary>
         /// Initial energy when spawned, this is half of energy capacity.
         /// </summary>
         public float energyInitial { get { return energyCapacity * 0.5f; } }
@@ -50,6 +61,10 @@ namespace Renegadeware.LL_LS1A1 {
         /// Set to true to lock the energy value. Used when dying/reproducing
         /// </summary>
         public bool energyLocked { get; set; }
+
+        public List<EnergyData> energySources { get { return _energySources; } }
+
+        public List<HazardData> hazardResistances { get { return _hazardResistances; } }
 
         /// <summary>
         /// Time since organism spawned
@@ -61,11 +76,13 @@ namespace Renegadeware.LL_LS1A1 {
         public bool isEnergyFull { get { return mEnergy == energyCapacity; } }
 
         private float mEnergy;
+        private float mEnergyLastUpdate;
 
         private float mLastResetTime;
 
         public void Reset() {
             mEnergy = energyInitial;
+            mEnergyLastUpdate = mEnergy;
 
             energyLocked = false;
 
@@ -84,6 +101,10 @@ namespace Renegadeware.LL_LS1A1 {
                 return false;
 
             return _energySources.Contains(energyData);
+        }
+
+        public void EnergyUpdateLast() {
+            mEnergyLastUpdate = mEnergy;
         }
 
         public void Append(OrganismStats otherStats) {
@@ -110,6 +131,8 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             flags |= otherStats.flags;
+
+            danger += otherStats.danger;
         }
     }
 }

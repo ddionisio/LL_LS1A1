@@ -17,10 +17,14 @@ MonoBehaviour:
     path: 
   modalEnvironmentSelect: environmentSelect
   modalOrganismEdit: organismEdit
+  organismPlayerTag: OrganismPlayer
+  organismPlayerSpawnName: player
+  organismSpawnCheckRadius: 0.5
   organismContactsUpdateDelay: 0.3
   organismDeathDelay: 2
-  organismSpawnTag: OrganismPlayer
-  organismSpawnCheckRadius: 0.5
+  organismEntityTags:
+  - Organism
+  - OrganismPlayer
   organismDepthCheckSpawn:
     min: -0.2
     max: -0.1
@@ -28,6 +32,8 @@ MonoBehaviour:
   organismDepthCheck: -0.2
   organismTakeReproduce: reproduce
   organismTakeDeath: death
+  energyTag: 
+  energyDepth: -0.15
   inputEnvironmentDragScale: 0.03
   levels: []
   organismComponents:

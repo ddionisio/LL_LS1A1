@@ -18,6 +18,8 @@ namespace Renegadeware.LL_LS1A1 {
         [SerializeField]
         OrganismDisplayBody _bodyDisplay = null;
         [SerializeField]
+        OrganismSensor _sensor = null;
+        [SerializeField]
         Collider2D _bodyCollider = null;
 
         [Header("Animation")]
@@ -42,8 +44,10 @@ namespace Renegadeware.LL_LS1A1 {
 
         public OrganismBody bodyComponent { get { return _comps != null && _comps.Length > 0 ? _comps[0] as OrganismBody : null; } }
 
-        public OrganismDisplayBody bodyDisplay { get { return _bodyDisplay; } }
+        public OrganismDisplayBody bodyDisplay { get { return _bodyDisplay; } }        
         public Collider2D bodyCollider { get { return _bodyCollider; } }
+
+        public OrganismSensor sensor { get { return _sensor; } }
 
         public M8.Animator.Animate animator { get { return _animator; } }
 
@@ -161,7 +165,7 @@ namespace Renegadeware.LL_LS1A1 {
         /// <summary>
         /// Call this after creating the prefab, before generating the pool.
         /// </summary>
-        public static OrganismEntity CreateTemplate(string templateName, OrganismTemplate template, Transform root) {
+        public static OrganismEntity CreateTemplate(OrganismTemplate template, string templateName, string tag, Transform root) {
             //initialize body
             var bodyComp = template.body;
             if(!bodyComp) {
@@ -171,7 +175,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             var bodyGO = Instantiate(bodyComp.gamePrefab, Vector3.zero, Quaternion.identity, root);
             bodyGO.name = templateName;
-            bodyGO.tag = GameData.instance.organismSpawnTag;
+            bodyGO.tag = tag;
 
             OrganismEntity ent = bodyGO.AddComponent<OrganismEntity>();            
 
@@ -182,6 +186,8 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             ent._bodyCollider = bodyGO.GetComponent<Collider2D>();
+
+            ent._sensor = bodyGO.GetComponent<OrganismSensor>();
 
             ent._animator = bodyGO.GetComponent<M8.Animator.Animate>();
 
@@ -307,6 +313,9 @@ namespace Renegadeware.LL_LS1A1 {
             }
             else
                 size = Vector2.zero;
+
+            if(sensor)
+                sensor.Setup(stats);
         }
 
         void M8.IPoolSpawn.OnSpawned(M8.GenericParams parms) {
@@ -382,7 +391,11 @@ namespace Renegadeware.LL_LS1A1 {
 
                     mContactOrganisms.Clear();
                     for(int i = 0; i < contactCount; i++) {
-                        var organismEnt = mContacts[i].GetComponent<OrganismEntity>();
+                        var contact = mContacts[i];
+                        if(!M8.Util.CheckTag(contact, gameDat.organismEntityTags))
+                            continue;
+
+                        var organismEnt = contact.GetComponent<OrganismEntity>();
                         if(organismEnt)
                             mContactOrganisms.Add(organismEnt);
                     }
