@@ -33,6 +33,16 @@ namespace Renegadeware.LL_LS1A1 {
         /// </summary>
         public float organismDeathDelay = 2f;
 
+        /// <summary>
+        /// To what angle do we need to keep turning when going towards/against a target
+        /// </summary>
+        public float organismSeekTurnAngleThreshold = 2f;
+
+        /// <summary>
+        /// To what angle do we need to turn towards/against a target before moving
+        /// </summary>
+        public float organismSeekAngleThreshold = 30f;
+
         [Header("Organism Filter Settings")]
         [M8.TagSelector]
         public string[] organismEntityTags;
@@ -133,25 +143,28 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        /// <summary>
+        /// Filter for organisms and energy sources
+        /// </summary>
         public ContactFilter2D organismContactFilter {
             get {
                 if(!mOrganismContactFilter.isFiltering) {
-                    mOrganismContactFilter.SetDepth(organismDepthCheck, organismDepthCheck);
+                    float depthMin, depthMax;
+
+                    if(organismDepthCheck < energyDepth) {
+                        depthMin = organismDepthCheck;
+                        depthMax = energyDepth;
+                    }
+                    else {
+                        depthMin = energyDepth;
+                        depthMax = organismDepthCheck;
+                    }
+
+                    mOrganismContactFilter.SetDepth(depthMin, depthMax);
                     mOrganismContactFilter.useTriggers = false;
                 }
 
                 return mOrganismContactFilter;
-            }
-        }
-
-        public ContactFilter2D organismEnergyFilter {
-            get {
-                if(!mOrganismEnergyFilter.isFiltering) {
-                    mOrganismEnergyFilter.SetDepth(energyDepth, energyDepth);
-                    mOrganismEnergyFilter.useTriggers = false;
-                }
-
-                return mOrganismEnergyFilter;
             }
         }
 
@@ -170,7 +183,6 @@ namespace Renegadeware.LL_LS1A1 {
         private ContactFilter2D mOrganismSpawnContactFilter = new ContactFilter2D();
         private ContactFilter2D mOrganismSolidContactFilter = new ContactFilter2D();
         private ContactFilter2D mOrganismContactFilter = new ContactFilter2D();
-        private ContactFilter2D mOrganismEnergyFilter = new ContactFilter2D();
 
         /// <summary>
         /// Called in start scene

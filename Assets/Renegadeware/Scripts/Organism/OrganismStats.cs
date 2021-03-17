@@ -30,7 +30,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Specifics")]
         public OrganismFlag flags;
-        public float danger; //used for avoidance (danger < other.danger)
+        public float danger; //used for avoidance (danger < other.danger), also determines if this organism is a hunter (danger > 0)
 
         public float energy { 
             get { return mEnergy; }

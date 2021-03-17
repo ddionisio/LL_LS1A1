@@ -5,6 +5,9 @@ using UnityEngine;
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "body", menuName = "Game/Organism/Component/Body SingleCell")]
     public class OrganismBodySingleCell : OrganismBody {
+        [Header("Single Cell Settings")]
+        public float energyConsumeRate = 1f; //energy consumed from sources per second
+
         [Header("Death Settings")]
         public Color deathTint = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 
@@ -73,6 +76,26 @@ namespace Renegadeware.LL_LS1A1 {
                             ent.stats.energyLocked = true;
 
                             mState = State.Divide;
+                        }
+                    }
+                    else {
+                        var energyConsume = mComp.energyConsumeRate * Time.deltaTime;
+
+                        //check for energy source contacts and absorb its energy
+                        for(int i = 0; i < ent.contactEnergies.Count; i++) {
+                            var energySrc = ent.contactEnergies[i];
+
+                            float energyAmt;
+                            if(ent.stats.energy + energyConsume < ent.stats.energyCapacity)
+                                energyAmt = energyConsume;
+                            else //cap
+                                energyAmt = ent.stats.energyCapacity - (ent.stats.energy + energyConsume);
+
+                            energySrc.energy -= energyAmt;
+                            ent.stats.energy += energyAmt;
+
+                            if(ent.stats.isEnergyFull)
+                                break;
                         }
                     }
                     break;
@@ -147,8 +170,11 @@ namespace Renegadeware.LL_LS1A1 {
                     ent.velocity += moveDir * ent.speed;*/
                     var spd = ent.speed;
                     if(spd > 0f) {
+                        Vector2 normalSum = Vector2.zero;
                         for(int i = 0; i < ent.solidHitCount; i++)
-                            ent.velocity += ent.solidHits[i].normal * spd;
+                            normalSum += ent.solidHits[i].normal;
+
+                        ent.velocity += normalSum * spd * ent.stats.velocityReceiveScale;
                     }
                 }
             }

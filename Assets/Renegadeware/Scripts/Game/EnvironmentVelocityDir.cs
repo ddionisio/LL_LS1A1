@@ -7,8 +7,7 @@ namespace Renegadeware.LL_LS1A1 {
         [SerializeField]
         float _angle;
 
-        public float speed;
-        public bool isAccelerate;
+        public float accel;
 
         public float angle {
             get { return _angle; }
@@ -23,7 +22,7 @@ namespace Renegadeware.LL_LS1A1 {
         private Vector2 mDir;
 
         public override Vector2 GetVelocity(Vector2 pos, Vector2 forward, float deltaTime) {
-            return isAccelerate ? mDir * (speed * deltaTime) : mDir * speed;
+            return mDir * accel * deltaTime;
         }
 
         void Awake() {

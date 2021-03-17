@@ -1868,8 +1868,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _angle: -42.5
-  speed: 0
-  isAccelerate: 0
+  accel: 0
 --- !u!1001 &1732355162
 PrefabInstance:
   m_ObjectHideFlags: 0

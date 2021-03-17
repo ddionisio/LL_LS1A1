@@ -14,6 +14,7 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Data")]
         public EnergyData data;
         public float energyCapacity;
+        public bool energyIsUnlimited; //energy is not drained when consumed
         public float lifespan;
 
         [Header("Animation")]
@@ -23,8 +24,17 @@ namespace Renegadeware.LL_LS1A1 {
         [M8.Animator.TakeSelector(animatorField = "animator")]
         public string takeDespawn;
 
-        public float energy { get; private set; }
+        public float energy {
+            get { return mEnergy; }
+            set {
+                if(!energyIsUnlimited)
+                    mEnergy = value;
+            }
+        }
+
         public bool isActive { get { return mState == State.Active; } }
+
+        private float mEnergy;
 
         private M8.PoolDataController mPoolDataCtrl;
         private State mState;
@@ -52,7 +62,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                 case State.Active:
                     var time = Time.time;
-                    if(energy == 0f || (lifespan > 0f && time - mLastActiveTime >= lifespan))
+                    if(mEnergy == 0f || (lifespan > 0f && time - mLastActiveTime >= lifespan))
                         Despawn();
                     break;
 
@@ -64,7 +74,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void Spawn() {
-            energy = energyCapacity;
+            mEnergy = energyCapacity;
 
             if(animator && !string.IsNullOrEmpty(takeSpawn)) {
                 animator.Play(takeSpawn);

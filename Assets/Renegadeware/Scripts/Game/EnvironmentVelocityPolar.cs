@@ -9,15 +9,14 @@ namespace Renegadeware.LL_LS1A1 {
     public class EnvironmentVelocityPolar : EnvironmentVelocity {
         public Transform polarRoot;
 
-        public float speed;
-        public bool isAccelerate;
+        public float accel;
 
         public override Vector2 GetVelocity(Vector2 pos, Vector2 forward, float deltaTime) {
             Vector2 polarPos = polarRoot.position;
 
             var moveDir = (polarPos - pos).normalized;
 
-            return isAccelerate ? moveDir * (speed * deltaTime) : moveDir * speed;
+            return moveDir * accel * deltaTime;
         }
 
         void Awake() {
