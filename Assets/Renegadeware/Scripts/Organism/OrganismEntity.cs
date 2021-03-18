@@ -230,6 +230,14 @@ namespace Renegadeware.LL_LS1A1 {
                 gameObject.SetActive(false);
         }
 
+        public bool IsOrganismContact(OrganismEntity ent) {
+            return mContactOrganisms.Exists(ent);
+        }
+
+        public bool IsEnergyContact(EnergySource energy) {
+            return mContactEnergies.Exists(energy);
+        }
+
         public bool SolidCast(Vector2 dir, float dist, out RaycastHit2D hit) {
             int count = _bodyCollider.Cast(dir, GameData.instance.organismSolidContactFilter, mSolidHit, dist, true);
             if(count > 0) {

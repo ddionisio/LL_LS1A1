@@ -103,6 +103,13 @@ namespace Renegadeware.LL_LS1A1 {
             return _energySources.Contains(energyData);
         }
 
+        /// <summary>
+        /// Check if another entity's attributes allows us to eat it.
+        /// </summary>
+        public bool CanEat(OrganismStats otherStats) {
+            return danger > otherStats.danger && mass > otherStats.mass; //if edible, make sure it can be swallowed
+        }
+
         public void EnergyUpdateLast() {
             mEnergyLastUpdate = mEnergy;
         }
