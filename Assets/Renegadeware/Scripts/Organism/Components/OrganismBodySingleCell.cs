@@ -34,46 +34,46 @@ namespace Renegadeware.LL_LS1A1 {
             mComp = owner as OrganismBodySingleCell;
         }
 
-        public override void Spawn(OrganismEntity ent, M8.GenericParams parms) {
+        public override void Spawn(M8.GenericParams parms) {
             mState = State.Normal;
         }
 
-        public override void Despawn(OrganismEntity ent) {
+        public override void Despawn() {
         }
 
-        public override void Update(OrganismEntity ent) {
+        public override void Update() {
             var gameDat = GameData.instance;
 
             switch(mState) {
                 case State.Normal:
                     //check for death
-                    if(ent.stats.isLifeExpired) {
-                        if(ent.animator)
-                            ent.animator.Stop();
+                    if(entity.stats.isLifeExpired) {
+                        if(entity.animator)
+                            entity.animator.Stop();
 
-                        if(ent.bodyDisplay.colorGroup)
-                            ent.bodyDisplay.colorGroup.color *= mComp.deathTint;
+                        if(entity.bodyDisplay.colorGroup)
+                            entity.bodyDisplay.colorGroup.color *= mComp.deathTint;
 
-                        ent.stats.energyLocked = true;
+                        entity.stats.energyLocked = true;
 
                         mState = State.DeathWait;
                     }
                     //ran out of energy?
-                    else if(ent.stats.energy == 0f) {
-                        if(ent.animator && !string.IsNullOrEmpty(gameDat.organismTakeDeath))
-                            ent.animator.Play(gameDat.organismTakeDeath);
+                    else if(entity.stats.energy == 0f) {
+                        if(entity.animator && !string.IsNullOrEmpty(gameDat.organismTakeDeath))
+                            entity.animator.Play(gameDat.organismTakeDeath);
 
-                        ent.stats.energyLocked = true;
+                        entity.stats.energyLocked = true;
 
                         mState = State.Death;
                     }
                     //ready to divide?
-                    else if(ent.stats.isEnergyFull) {
+                    else if(entity.stats.isEnergyFull) {
                         if(!GameModePlay.instance.gameSpawner.entities.IsFull) {//don't allow divide if capacity is full
-                            if(ent.animator && !string.IsNullOrEmpty(gameDat.organismTakeReproduce))
-                                ent.animator.Play(gameDat.organismTakeReproduce);
+                            if(entity.animator && !string.IsNullOrEmpty(gameDat.organismTakeReproduce))
+                                entity.animator.Play(gameDat.organismTakeReproduce);
 
-                            ent.stats.energyLocked = true;
+                            entity.stats.energyLocked = true;
 
                             mState = State.Divide;
                         }
@@ -82,55 +82,55 @@ namespace Renegadeware.LL_LS1A1 {
                         var energyConsume = mComp.energyConsumeRate * Time.deltaTime;
 
                         //check for energy source contacts and absorb its energy
-                        for(int i = 0; i < ent.contactEnergies.Count; i++) {
-                            var energySrc = ent.contactEnergies[i];
+                        for(int i = 0; i < entity.contactEnergies.Count; i++) {
+                            var energySrc = entity.contactEnergies[i];
 
                             float energyAmt;
-                            if(ent.stats.energy + energyConsume < ent.stats.energyCapacity)
+                            if(entity.stats.energy + energyConsume < entity.stats.energyCapacity)
                                 energyAmt = energyConsume;
                             else //cap
-                                energyAmt = ent.stats.energyCapacity - (ent.stats.energy + energyConsume);
+                                energyAmt = entity.stats.energyCapacity - (entity.stats.energy + energyConsume);
 
                             energySrc.energy -= energyAmt;
-                            ent.stats.energy += energyAmt;
+                            entity.stats.energy += energyAmt;
 
-                            if(ent.stats.isEnergyFull)
+                            if(entity.stats.isEnergyFull)
                                 break;
                         }
                     }
                     break;
 
                 case State.DeathWait:
-                    if(Time.time - ent.stats.spawnTimeElapsed >= ent.stats.lifespan + gameDat.organismDeathDelay) {
-                        if(ent.animator && !string.IsNullOrEmpty(gameDat.organismTakeDeath))
-                            ent.animator.Play(gameDat.organismTakeDeath);
+                    if(Time.time - entity.stats.spawnTimeElapsed >= entity.stats.lifespan + gameDat.organismDeathDelay) {
+                        if(entity.animator && !string.IsNullOrEmpty(gameDat.organismTakeDeath))
+                            entity.animator.Play(gameDat.organismTakeDeath);
 
                         mState = State.Death;
                     }
                     break;
 
                 case State.Death:
-                    if(!ent.animator || !ent.animator.isPlaying) {
-                        ent.Release();
+                    if(!entity.animator || !entity.animator.isPlaying) {
+                        entity.Release();
                         return;
                     }
                     break;
 
                 case State.Divide:
-                    if(!ent.animator || !ent.animator.isPlaying) {
+                    if(!entity.animator || !entity.animator.isPlaying) {
                         var spawner = GameModePlay.instance.gameSpawner;
 
-                        var forward = ent.forward;
+                        var forward = entity.forward;
 
                         //split horizontally
-                        var dist = ent.size.x * 0.3f;
+                        var dist = entity.size.x * 0.3f;
 
                         //get two spawn point
-                        var pt1 = ent.SolidClip(ent.left, dist);
-                        var pt2 = ent.SolidClip(ent.right, dist);
+                        var pt1 = entity.SolidClip(entity.left, dist);
+                        var pt2 = entity.SolidClip(entity.right, dist);
 
                         //release this
-                        ent.Release();
+                        entity.Release();
 
                         //spawn two
                         spawner.SpawnAt(pt1, forward);
@@ -142,24 +142,24 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             //update velocity
-            if(!ent.physicsLocked) {
+            if(!entity.physicsLocked) {
                 //do separation
                 var separateVel = Vector2.zero;
 
-                var pos = ent.position;
+                var pos = entity.position;
 
-                for(int i = 0; i < ent.contactOrganisms.Count; i++) {
-                    var otherEnt = ent.contactOrganisms[i];
+                for(int i = 0; i < entity.contactOrganisms.Count; i++) {
+                    var otherEnt = entity.contactOrganisms[i];
 
-                    if(otherEnt.bodyComponent == null || ent.stats.mass <= otherEnt.stats.mass) //exclude organisms with lesser mass
+                    if(otherEnt.bodyComponent == null || entity.stats.mass <= otherEnt.stats.mass) //exclude organisms with lesser mass
                         separateVel += pos - otherEnt.position;
                 }
 
-                ent.velocity += separateVel;
+                entity.velocity += separateVel;
 
                 //bounce from solid?
                 //TODO: stick to solid? (e.g. philli hooks)
-                if(ent.solidHitCount > 0) {
+                if(entity.solidHitCount > 0) {
                     /*var moveDir = ent.velocityDir;
 
                     for(int i = 0; i < ent.solidHitCount; i++) {
@@ -168,13 +168,13 @@ namespace Renegadeware.LL_LS1A1 {
                     }
 
                     ent.velocity += moveDir * ent.speed;*/
-                    var spd = ent.speed;
+                    var spd = entity.speed;
                     if(spd > 0f) {
                         Vector2 normalSum = Vector2.zero;
-                        for(int i = 0; i < ent.solidHitCount; i++)
-                            normalSum += ent.solidHits[i].normal;
+                        for(int i = 0; i < entity.solidHitCount; i++)
+                            normalSum += entity.solidHits[i].normal;
 
-                        ent.velocity += normalSum * spd * ent.stats.velocityReceiveScale;
+                        entity.velocity += normalSum * spd * entity.stats.velocityReceiveScale;
                     }
                 }
             }

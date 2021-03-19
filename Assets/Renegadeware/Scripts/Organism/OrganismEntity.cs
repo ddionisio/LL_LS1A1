@@ -357,12 +357,12 @@ namespace Renegadeware.LL_LS1A1 {
 
             //component control spawns
             for(int i = 0; i < mControls.Length; i++)
-                mControls[i].Spawn(this, parms);
+                mControls[i].Spawn(parms);
         }
 
         void M8.IPoolDespawn.OnDespawned() {
             for(int i = 0; i < mControls.Length; i++)
-                mControls[i].Despawn(this);
+                mControls[i].Despawn();
 
             //do despawn stuff here
         }
@@ -450,7 +450,7 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             for(int i = 0; i < mControls.Length; i++)
-                mControls[i].Update(this);
+                mControls[i].Update();
         }
 
         void FixedUpdate() {

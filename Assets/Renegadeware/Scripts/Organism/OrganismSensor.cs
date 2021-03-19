@@ -13,6 +13,8 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.CacheList<OrganismEntity> organisms { get { return mOrganisms; } }
         public M8.CacheList<EnergySource> energies { get { return mEnergies; } }
 
+        public event System.Action<OrganismSensor> refreshCallback;
+
         private OrganismStats mStats;
         private float mLastTime;
 
@@ -66,6 +68,9 @@ namespace Renegadeware.LL_LS1A1 {
                         mOrganisms.Add(ent);
                 }
             }
+
+            if(refreshCallback != null)
+                refreshCallback.Invoke(this);
 
             mLastTime = time;
         }
