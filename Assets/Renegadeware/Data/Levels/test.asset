@@ -16,12 +16,17 @@ MonoBehaviour:
     name: 
     path: 
   progressCount: 2
-  spawnableCount: 10
-  criteriaCount: 100
+  duration: 60
   spawnIsRandomDir: 1
   environments:
   - nameRef: test1
     descRef: 
+    spawnableCount: 50
+    criteriaCount: 25
+    capacity: 100
   - nameRef: test2
     descRef: 
+    spawnableCount: 0
+    criteriaCount: 0
+    capacity: 0
   organismBodyGroup: {fileID: 11400000, guid: 7152d0674f474a74bb4abcbb2a4c2046, type: 2}

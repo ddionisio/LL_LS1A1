@@ -62,7 +62,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(entities.IsFull)
                 return null;
 
-            var spawnPt = new Vector3(pt.x, pt.y, spawnRoot.position.z);
+            var spawnPt = new Vector3(pt.x, pt.y, GameData.instance.organismDepth);
 
             mParms[OrganismEntity.parmForwardRandom] = true;
 

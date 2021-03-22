@@ -34,6 +34,10 @@ namespace Renegadeware.LL_LS1A1 {
 
         public bool isActive { get { return mState == State.Active; } }
 
+        public bool isSolid { get { return bodyCollider ? !bodyCollider.isTrigger : false; } }
+
+        public Collider2D bodyCollider { get; private set; }
+
         private float mEnergy;
 
         private M8.PoolDataController mPoolDataCtrl;
@@ -51,6 +55,10 @@ namespace Renegadeware.LL_LS1A1 {
         void OnEnable() {
             if(!mPoolDataCtrl) //if placed on scene
                 Spawn();
+        }
+
+        void Awake() {
+            bodyCollider = GetComponent<Collider2D>();
         }
 
         void Update() {

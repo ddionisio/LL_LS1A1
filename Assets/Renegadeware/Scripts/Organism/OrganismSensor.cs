@@ -50,7 +50,7 @@ namespace Renegadeware.LL_LS1A1 {
             mEnergies.Clear();
             mOrganisms.Clear();
 
-            mCollCount = Physics2D.OverlapCircle(pos, radius, gameDat.organismContactFilter, mCollCache);
+            mCollCount = Physics2D.OverlapCircle(pos, radius, gameDat.organismSensorContactFilter, mCollCache);
             for(int i = 0; i < mCollCount; i++) {
                 var coll = mCollCache[i];
 

@@ -9,6 +9,7 @@ TagManager:
   - Organism
   - OrganismPlayer
   - Field
+  - Energy
   layers:
   - Default
   - TransparentFX

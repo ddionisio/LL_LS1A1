@@ -18,15 +18,27 @@ namespace Renegadeware.LL_LS1A1 {
         public string modalEnvironmentSelect = "environmentSelect";
         public string modalOrganismEdit = "organismEdit";
 
+        [Header("Environment Settings")]
+        [M8.TagSelector]
+        public string environmentSolidTag;
+        public float environmentDepth = 0f;
+        public float environmentInputDragScale = 0.03f;
+
         [Header("Organism Settings")]
         [M8.TagSelector]
         public string organismPlayerTag;
 
         public string organismPlayerSpawnName = "player";
 
+        public float organismDepth = -0.2f;
+
         public float organismSpawnCheckRadius = 0.5f;
 
-        public float organismContactsUpdateDelay = 0.3f;
+        //public float organismContactsUpdateDelay = 0.3f;
+
+        public float organismSeparateSpeed = 1f;
+
+        public float organismTurnAwayAngle = 60f;
 
         /// <summary>
         /// how long to stay dead once an organism's life expired.
@@ -43,13 +55,14 @@ namespace Renegadeware.LL_LS1A1 {
         /// </summary>
         public float organismSeekAngleThreshold = 30f;
 
+        /// <summary>
+        /// How far apart can an organism be considered 'sticky' to another organism/solid. If distance between reaches above this threshold, detach.
+        /// </summary>
+        public float organismStickyDistanceThreshold = 0.25f;
+
         [Header("Organism Filter Settings")]
         [M8.TagSelector]
         public string[] organismEntityTags;
-
-        public M8.RangeFloat organismDepthCheckSpawn;
-        public float organismDepthCheckSolid = -0.1f;
-        public float organismDepthCheck = -0.2f;
 
         [Header("Organism Animation Settings")]
         public string organismTakeReproduce = "reproduce";
@@ -60,8 +73,7 @@ namespace Renegadeware.LL_LS1A1 {
         public string energyTag;
         public float energyDepth = -0.15f;
 
-        [Header("Input Settings")]
-        public float inputEnvironmentDragScale = 0.5f;
+        //[Header("Input Settings")]        
 
         [Header("Levels")]
         public LevelData[] levels;
@@ -123,48 +135,52 @@ namespace Renegadeware.LL_LS1A1 {
 
         public ContactFilter2D organismSpawnContactFilter {
             get {
-                if(!mOrganismSpawnContactFilter.isFiltering) {
-                    mOrganismSpawnContactFilter.SetDepth(organismDepthCheckSpawn.min, organismDepthCheckSpawn.max);
+                if(!mOrganismSpawnContactFilterInit) {
+                    var min = Mathf.Min(environmentDepth, organismDepth);
+                    var max = Mathf.Max(environmentDepth, organismDepth);
+
+                    mOrganismSpawnContactFilter.SetDepth(min, max);
                     mOrganismSpawnContactFilter.useTriggers = false;
+
+                    mOrganismSpawnContactFilterInit = true;
                 }
 
                 return mOrganismSpawnContactFilter;
             }
         }
 
-        public ContactFilter2D organismSolidContactFilter {
+        public ContactFilter2D organismContactFilter {
             get {
-                if(!mOrganismSolidContactFilter.isFiltering) {
-                    mOrganismSolidContactFilter.SetDepth(organismDepthCheckSolid, organismDepthCheckSolid);
-                    mOrganismSolidContactFilter.useTriggers = false;
+                if(!mOrganismContactFilterInit) {
+                    var min = Mathf.Min(organismDepth, energyDepth, environmentDepth);
+                    var max = Mathf.Max(organismDepth, energyDepth, environmentDepth);
+
+                    mOrganismContactFilter.SetDepth(min, max);
+                    mOrganismContactFilter.useTriggers = true;
+
+                    mOrganismContactFilterInit = true;
                 }
 
-                return mOrganismSolidContactFilter;
+                return mOrganismContactFilter;
             }
         }
 
         /// <summary>
         /// Filter for organisms and energy sources
         /// </summary>
-        public ContactFilter2D organismContactFilter {
+        public ContactFilter2D organismSensorContactFilter {
             get {
-                if(!mOrganismContactFilter.isFiltering) {
-                    float depthMin, depthMax;
+                if(!mOrganismSensorContactInit) {
+                    var min = Mathf.Min(organismDepth, energyDepth);
+                    var max = Mathf.Max(organismDepth, energyDepth);
 
-                    if(organismDepthCheck < energyDepth) {
-                        depthMin = organismDepthCheck;
-                        depthMax = energyDepth;
-                    }
-                    else {
-                        depthMin = energyDepth;
-                        depthMax = organismDepthCheck;
-                    }
+                    mOrganismSensorContact.SetDepth(min, max);
+                    mOrganismSensorContact.useTriggers = true;
 
-                    mOrganismContactFilter.SetDepth(depthMin, depthMax);
-                    mOrganismContactFilter.useTriggers = false;
+                    mOrganismSensorContactInit = true;
                 }
 
-                return mOrganismContactFilter;
+                return mOrganismSensorContact;
             }
         }
 
@@ -181,8 +197,13 @@ namespace Renegadeware.LL_LS1A1 {
         private Dictionary<int, OrganismComponent> mOrganismLookup;
 
         private ContactFilter2D mOrganismSpawnContactFilter = new ContactFilter2D();
-        private ContactFilter2D mOrganismSolidContactFilter = new ContactFilter2D();
+        private bool mOrganismSpawnContactFilterInit = false;
+
         private ContactFilter2D mOrganismContactFilter = new ContactFilter2D();
+        private bool mOrganismContactFilterInit = false;
+
+        private ContactFilter2D mOrganismSensorContact = new ContactFilter2D();
+        private bool mOrganismSensorContactInit = false;
 
         /// <summary>
         /// Called in start scene
@@ -329,10 +350,27 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         protected override void OnInstanceInit() {
+            //editor clear
+            organismTemplateCurrent = null;
+            ClearOrganismTemplates();
+
+            mOrganismTemplateIDCounter = 1;
+
+            mOrganismSpawnContactFilterInit = false;
+            mOrganismContactFilterInit = false;
+            mOrganismSensorContactInit = false;
+            //
+
             //generate organism component look-up
             mOrganismLookup = new Dictionary<int, OrganismComponent>(organismComponents.Length);
             for(int i = 0; i < organismComponents.Length; i++) {
                 var comp = organismComponents[i];
+
+                if(mOrganismLookup.ContainsKey(comp.ID)) {
+                    Debug.LogWarning("ID: " + comp.ID + " already exists: " + mOrganismLookup[comp.ID].name);
+                    continue;
+                }
+
                 mOrganismLookup.Add(comp.ID, comp);
             }
 

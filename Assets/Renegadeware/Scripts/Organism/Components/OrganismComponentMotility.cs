@@ -40,7 +40,7 @@ namespace Renegadeware.LL_LS1A1 {
             Turn,
             TurnWait,
 
-            TurnTo //used for turning away from solid
+            TurnAway //used for turning away from solid
         }
 
         private OrganismComponentMotility mComp;
@@ -51,7 +51,7 @@ namespace Renegadeware.LL_LS1A1 {
         private Transform mTarget; //position to seek/retreat
 
         private M8.MathUtil.Side mTurnSide;
-        private Vector2 mTurnToDir;
+        private Vector2 mTurnAway;
 
         private float mLastTime;
 
@@ -94,25 +94,27 @@ namespace Renegadeware.LL_LS1A1 {
 
                 case State.Explore:
                     //check if we need to turn/move away from solid collision
-                    if(entity.solidHitCount > 0) {
+                    if(mExploreState != ExploreState.TurnAway && entity.contactCount > 0) {
                         if(mComp.isBidirectional) { //just turn randomly again
                             if(mExploreState != ExploreState.Turn)
                                 ExploreChangeToState(ExploreState.Turn);
                         }
-                        else if(mExploreState != ExploreState.TurnTo) { //turn away
-                            var forward = entity.forward;
-                            mTurnToDir = forward;
+                        else { //turn away
+                            mTurnAway = Vector2.zero;
+                            int validCount = 0;
 
-                            for(int i = 0; i < entity.solidHitCount; i++) {
-                                var hit = entity.solidHits[i];
-                                mTurnToDir = Vector2.Reflect(mTurnToDir, hit.normal);
+                            for(int i = 0; i < entity.contactCount; i++) {
+                                var distInfo = entity.contactDistances[i];
+                                if(distInfo.isValid && distInfo.isOverlapped) {
+                                    mTurnAway += distInfo.normal;
+                                    validCount++;
+                                }
                             }
 
-                            if(mTurnToDir == forward)
-                                mTurnToDir = Random.Range(0, 2) == 0 ? entity.left : entity.right;
-
-                            mTurnSide = M8.MathUtil.CheckSide(forward, mTurnToDir);
-                            mExploreState = ExploreState.TurnTo;
+                            if(validCount > 0) {
+                                mTurnAway.Normalize();
+                                mExploreState = ExploreState.TurnAway;
+                            }
                         }
                     }
 
@@ -155,30 +157,15 @@ namespace Renegadeware.LL_LS1A1 {
                                 ExploreChangeToState(ExploreState.Forward); //just have to keep moving forward
                             break;
 
-                        case ExploreState.TurnTo:
-                            switch(mTurnSide) {
-                                case M8.MathUtil.Side.Left:
-                                    if(M8.MathUtil.CheckSide(entity.forward, mTurnToDir) == M8.MathUtil.Side.Left) { //keep turning if we are still on the same side
-                                        entity.angularVelocity -= mComp.turnAccel * dt;
+                        case ExploreState.TurnAway:
+                            var angle = Vector2.SignedAngle(mTurnAway, entity.forward);
+                            if(Mathf.Abs(angle) < GameData.instance.organismTurnAwayAngle) {
+                                entity.angularVelocity -= Mathf.Sign(angle) * mComp.turnAccel * dt;
 
-                                        stats.energy -= mComp.energyRate * dt;
-                                    }
-                                    else
-                                        ExploreChangeToState(ExploreState.Forward);
-                                    break;
-                                case M8.MathUtil.Side.Right:
-                                    if(M8.MathUtil.CheckSide(entity.forward, mTurnToDir) == M8.MathUtil.Side.Right) { //keep turning if we are still on the same side
-                                        entity.angularVelocity += mComp.turnAccel * dt;
-
-                                        stats.energy -= mComp.energyRate * dt;
-                                    }
-                                    else
-                                        ExploreChangeToState(ExploreState.Forward);
-                                    break;
-                                default:
-                                    ExploreChangeToState(ExploreState.Forward);
-                                    break;
+                                stats.energy -= mComp.energyRate * dt;
                             }
+                            else
+                                ExploreChangeToState(ExploreState.TurnWait);
                             break;
                     }
                     break;
@@ -264,6 +251,13 @@ namespace Renegadeware.LL_LS1A1 {
 
         private void ExploreChangeToState(ExploreState toState) {
             mExploreState = toState;
+
+            switch(mExploreState) {
+                case ExploreState.Turn:
+                    mTurnSide = Random.Range(0, 2) == 0 ? M8.MathUtil.Side.Left : M8.MathUtil.Side.Right;
+                    break;
+            }
+
             mLastTime = Time.time;
         }
 

@@ -411,7 +411,7 @@ namespace Renegadeware.LL_LS1A1 {
             else
                 pos = camCtrl.position;
 
-            camCtrl.position -= delta * GameData.instance.inputEnvironmentDragScale;
+            camCtrl.position -= delta * GameData.instance.environmentInputDragScale;
         }
 
         void OnEnvironmentClick(Vector2 pos) {

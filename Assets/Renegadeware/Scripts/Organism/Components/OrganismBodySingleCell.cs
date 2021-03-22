@@ -17,6 +17,8 @@ namespace Renegadeware.LL_LS1A1 {
     }
 
     public class OrganismBodySingleCellControl : OrganismComponentControl {
+        public const int stickyCapacity = 4;
+
         public enum State {
             Normal,
 
@@ -28,10 +30,17 @@ namespace Renegadeware.LL_LS1A1 {
 
         private OrganismBodySingleCell mComp;
 
+        private M8.CacheList<Collider2D> mStickies;
+
         private State mState;
 
         public override void Init(OrganismEntity ent, OrganismComponent owner) {
+            base.Init(ent, owner);
+
             mComp = owner as OrganismBodySingleCell;
+
+            if((ent.stats.flags & OrganismFlag.Sticky) == OrganismFlag.Sticky)
+                mStickies = new M8.CacheList<Collider2D>(stickyCapacity);
         }
 
         public override void Spawn(M8.GenericParams parms) {
@@ -39,6 +48,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public override void Despawn() {
+            if(mStickies != null)
+                mStickies.Clear();
         }
 
         public override void Update() {
@@ -54,6 +65,8 @@ namespace Renegadeware.LL_LS1A1 {
                         if(entity.bodyDisplay.colorGroup)
                             entity.bodyDisplay.colorGroup.color *= mComp.deathTint;
 
+                        entity.velocity = Vector2.zero;
+                        entity.angularVelocity = 0f;
                         entity.stats.energyLocked = true;
 
                         mState = State.DeathWait;
@@ -73,6 +86,8 @@ namespace Renegadeware.LL_LS1A1 {
                             if(entity.animator && !string.IsNullOrEmpty(gameDat.organismTakeReproduce))
                                 entity.animator.Play(gameDat.organismTakeReproduce);
 
+                            entity.velocity = Vector2.zero;
+                            entity.angularVelocity = 0f;
                             entity.stats.energyLocked = true;
 
                             mState = State.Divide;
@@ -97,11 +112,53 @@ namespace Renegadeware.LL_LS1A1 {
                             if(entity.stats.isEnergyFull)
                                 break;
                         }
+
+                        if(mStickies != null) {
+                            if(!entity.physicsLocked) {
+                                //update stickies
+                                for(int i = mStickies.Count - 1; i >= 0; i--) {
+                                    var sticky = mStickies[i];
+
+                                    //check if invalid
+                                    if(!sticky) {
+                                        mStickies.RemoveLast();
+                                        continue;
+                                    }
+
+                                    var distInfo = entity.bodyCollider.Distance(sticky);
+                                    if(!distInfo.isValid) {
+                                        mStickies.RemoveLast();
+                                        continue;
+                                    }
+
+                                    if(distInfo.distance <= 0f)
+                                        continue;
+
+                                    //disconnect if distance is too far
+                                    if(distInfo.distance >= gameDat.organismStickyDistanceThreshold) {
+                                        mStickies.RemoveLast();
+                                        continue;
+                                    }
+
+                                    //move towards
+                                    entity.velocity += distInfo.normal * gameDat.organismSeparateSpeed;//distInfo.distance;
+                                }
+
+                                //check for new stickies
+                                for(int i = 0; !mStickies.IsFull && i < entity.contactCount; i++) {
+                                    var coll = entity.contactColliders[i];
+                                    if(coll && coll.enabled && !coll.isTrigger && !mStickies.Exists(coll))
+                                        mStickies.Add(coll);
+                                }
+                            }
+                            else
+                                mStickies.Clear();
+                        }
                     }
                     break;
 
                 case State.DeathWait:
-                    if(Time.time - entity.stats.spawnTimeElapsed >= entity.stats.lifespan + gameDat.organismDeathDelay) {
+                    if(entity.stats.spawnTimeElapsed >= entity.stats.lifespan + gameDat.organismDeathDelay) {
                         if(entity.animator && !string.IsNullOrEmpty(gameDat.organismTakeDeath))
                             entity.animator.Play(gameDat.organismTakeDeath);
 
@@ -126,8 +183,8 @@ namespace Renegadeware.LL_LS1A1 {
                         var dist = entity.size.x * 0.3f;
 
                         //get two spawn point
-                        var pt1 = entity.SolidClip(entity.left, dist);
-                        var pt2 = entity.SolidClip(entity.right, dist);
+                        var pt1 = entity.left * dist;
+                        var pt2 = entity.right * dist;
 
                         //release this
                         entity.Release();
@@ -142,41 +199,17 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             //update velocity
-            if(!entity.physicsLocked) {
+            if(!entity.physicsLocked && entity.contactCount > 0) {
                 //do separation
                 var separateVel = Vector2.zero;
 
-                var pos = entity.position;
-
-                for(int i = 0; i < entity.contactOrganisms.Count; i++) {
-                    var otherEnt = entity.contactOrganisms[i];
-
-                    if(otherEnt.bodyComponent == null || entity.stats.mass <= otherEnt.stats.mass) //exclude organisms with lesser mass
-                        separateVel += pos - otherEnt.position;
+                for(int i = 0; i < entity.contactCount; i++) {
+                    var distInfo = entity.contactDistances[i];
+                    if(distInfo.isValid && distInfo.distance < 0f)
+                        separateVel -= distInfo.normal * gameDat.organismSeparateSpeed;//distInfo.distance;
                 }
 
                 entity.velocity += separateVel;
-
-                //bounce from solid?
-                //TODO: stick to solid? (e.g. philli hooks)
-                if(entity.solidHitCount > 0) {
-                    /*var moveDir = ent.velocityDir;
-
-                    for(int i = 0; i < ent.solidHitCount; i++) {
-                        var solidHit = ent.solidHits[i];
-                        moveDir = Vector2.Reflect(moveDir, solidHit.normal);
-                    }
-
-                    ent.velocity += moveDir * ent.speed;*/
-                    var spd = entity.speed;
-                    if(spd > 0f) {
-                        Vector2 normalSum = Vector2.zero;
-                        for(int i = 0; i < entity.solidHitCount; i++)
-                            normalSum += entity.solidHits[i].normal;
-
-                        entity.velocity += normalSum * spd * entity.stats.velocityReceiveScale;
-                    }
-                }
             }
         }
     }

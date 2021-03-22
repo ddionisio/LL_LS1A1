@@ -114,6 +114,30 @@ namespace Renegadeware.LL_LS1A1 {
             mEnergyLastUpdate = mEnergy;
         }
 
+        public void Copy(OrganismStats otherStats) {
+            mass = otherStats.mass;
+            speedLimit = otherStats.speedLimit;
+            velocityReceiveScale = otherStats.velocityReceiveScale;
+
+            energyCapacity = otherStats.energyCapacity;
+
+            lifespan = otherStats.lifespan;
+
+            if(otherStats._hazardResistances != null)
+                _hazardResistances = new List<HazardData>(otherStats._hazardResistances);
+            else
+                _hazardResistances = new List<HazardData>();
+
+            if(otherStats._energySources != null)
+                _energySources = new List<EnergyData>(otherStats._energySources);
+            else
+                _energySources = new List<EnergyData>();
+
+            flags = otherStats.flags;
+
+            danger = otherStats.danger;
+        }
+
         public void Append(OrganismStats otherStats) {
             mass += otherStats.mass;
             speedLimit += otherStats.speedLimit;
