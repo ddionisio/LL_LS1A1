@@ -4,27 +4,37 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public class OrganismTemplateSpawner : MonoBehaviour {
-        public Transform spawnRoot;
+        public M8.PoolController pool;
+        public Transform spawnTo;
 
         public M8.CacheList<OrganismEntity> entities { get; private set; }
         public int entityCount { get { return entities != null ? entities.Count : 0; } }
 
         public int capacity { get { return entities.Capacity; } }
 
-        private M8.PoolController mPool;
+        public OrganismEntity template { get { return mTemplate; } }
 
         private OrganismEntity mTemplate;
 
         private M8.GenericParams mParms = new M8.GenericParams();
 
-        public void Setup(OrganismTemplate organismTemplate, string templateName, string tag, int capacity) {
-            Destroy();
+        private bool mIsPoolInit;
 
-            //generate pool
-            if(!mPool) {
-                mPool = M8.PoolController.CreatePool(name, transform);
-                mPool.despawnCallback += OnDespawn;
+        public void Setup(OrganismTemplate organismTemplate, string templateName, string tag, int capacity) {
+            if(!mIsPoolInit) {
+                //generate pool
+                if(!pool) {
+                    pool = GetComponent<M8.PoolController>();
+                    if(!pool)
+                        pool = M8.PoolController.CreatePool(name, transform);
+                }
+
+                pool.despawnCallback += OnDespawn;
+
+                mIsPoolInit = true;
             }
+            else
+                Destroy();
 
             //setup entity active list
             if(entities == null)
@@ -37,15 +47,15 @@ namespace Renegadeware.LL_LS1A1 {
             mTemplate.gameObject.SetActive(false);
 
             //setup pool type
-            mPool.AddType(mTemplate.gameObject, capacity, capacity, spawnRoot);
+            pool.AddType(mTemplate.gameObject, capacity, capacity, spawnTo);
         }
 
         public void Destroy() {
             if(entities != null)
                 entities.Clear();
 
-            if(mPool)
-                mPool.RemoveType(mTemplate.name);
+            if(pool)
+                pool.RemoveType(mTemplate.name);
 
             if(mTemplate) {
                 DestroyImmediate(mTemplate.gameObject);
@@ -54,8 +64,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void Clear() {
-            if(mPool)
-                mPool.ReleaseAll();
+            if(pool)
+                pool.ReleaseAllByType(mTemplate.name);
         }
 
         public OrganismEntity SpawnAtRandomDir(Vector2 pt) {
@@ -66,7 +76,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             mParms[OrganismEntity.parmForwardRandom] = true;
 
-            var ent = mPool.Spawn<OrganismEntity>(mTemplate.name, mTemplate.name, null, spawnPt, mParms);
+            var ent = pool.Spawn<OrganismEntity>(mTemplate.name, mTemplate.name, null, spawnPt, mParms);
 
             entities.Add(ent);
 
@@ -81,12 +91,12 @@ namespace Renegadeware.LL_LS1A1 {
             if(entities.IsFull)
                 return null;
 
-            var spawnPt = new Vector3(pt.x, pt.y, spawnRoot.position.z);
+            var spawnPt = new Vector3(pt.x, pt.y, GameData.instance.organismDepth);
 
             mParms[OrganismEntity.parmForwardRandom] = false;
             mParms[OrganismEntity.parmForward] = forward;
 
-            var ent = mPool.Spawn<OrganismEntity>(mTemplate.name, mTemplate.name, null, spawnPt, mParms);
+            var ent = pool.Spawn<OrganismEntity>(mTemplate.name, mTemplate.name, null, spawnPt, mParms);
 
             entities.Add(ent);
 

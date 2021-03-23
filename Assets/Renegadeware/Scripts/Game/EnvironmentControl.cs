@@ -11,8 +11,8 @@ namespace Renegadeware.LL_LS1A1 {
         public Rect bounds;
 
         [Header("Physics")]
-        public float linearDrag = 0.01f;
-        public float angularDrag = 0.05f;
+        public float linearDrag = 1f;
+        public float angularDrag = 0.5f;
 
         public EnvironmentVelocity velocityControl;
 

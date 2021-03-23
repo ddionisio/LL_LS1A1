@@ -28,7 +28,7 @@ namespace Renegadeware.LL_LS1A1 {
             get { return mEnergy; }
             set {
                 if(!energyIsUnlimited)
-                    mEnergy = value;
+                    mEnergy = Mathf.Clamp(value, 0f, energyCapacity);
             }
         }
 
@@ -55,6 +55,11 @@ namespace Renegadeware.LL_LS1A1 {
         void OnEnable() {
             if(!mPoolDataCtrl) //if placed on scene
                 Spawn();
+
+            //ensure we are in the proper depth
+            var pos = transform.position;
+            pos.z = GameData.instance.energyDepth;
+            transform.position = pos;
         }
 
         void Awake() {

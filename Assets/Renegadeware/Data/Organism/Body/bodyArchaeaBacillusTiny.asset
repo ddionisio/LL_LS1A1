@@ -22,7 +22,8 @@ MonoBehaviour:
     speedLimit: 3
     velocityReceiveScale: 1
     energyCapacity: 5
-    lifespan: 20
+    energyConsumeRate: 0
+    lifespan: 10
     _hazardResistances: []
     _energySources: []
     flags: 0
@@ -37,5 +38,4 @@ MonoBehaviour:
   componentGroups:
   - {fileID: 11400000, guid: bff3dbc696111544996c7142f4cb9cbb, type: 2}
   - {fileID: 11400000, guid: b7c49f38b0c82664e9e30e4fad99108f, type: 2}
-  energyConsumeRate: 1
   deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

@@ -45,6 +45,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         private OrganismComponentMotility mComp;
 
+        private OrganismBodySingleCellControl mBodyCtrl;
+
         private State mState;
         private ExploreState mExploreState;
 
@@ -60,6 +62,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             mComp = (OrganismComponentMotility)owner;
 
+            mBodyCtrl = ent.GetComponentControl<OrganismBodySingleCellControl>();
+
             if(ent.sensor)
                 ent.sensor.refreshCallback += OnSensorUpdate;
         }
@@ -69,7 +73,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public override void Spawn(M8.GenericParams parms) {
-            ChangeToState(State.Rest, null);
+            ChangeToState(State.Explore, null);
         }
 
         public override void Update() {
@@ -88,13 +92,20 @@ namespace Renegadeware.LL_LS1A1 {
             switch(mState) {
                 case State.Rest:
                     //explore if our energy rate is stagnant
-                    if(stats.energyDelta <= 0f)
+                    if(stats.energyDelta <= 0f && !mBodyCtrl.isStickied)
                         ChangeToState(State.Explore, null);
+                    else {
+                        //try to dampen our movement
+                        //if(entity.speed > 0f)
+                            //entity.speed -= mComp.forwardAccel * dt;
+
+                        entity.AngularVelocityDampen(mComp.turnAccel * dt);
+                    }
                     break;
 
                 case State.Explore:
                     //check if we need to turn/move away from solid collision
-                    if(mExploreState != ExploreState.TurnAway && entity.contactCount > 0) {
+                    if(mExploreState != ExploreState.TurnAway && entity.contactSolids.Count > 0) {
                         if(mComp.isBidirectional) { //just turn randomly again
                             if(mExploreState != ExploreState.Turn)
                                 ExploreChangeToState(ExploreState.Turn);
@@ -103,8 +114,8 @@ namespace Renegadeware.LL_LS1A1 {
                             mTurnAway = Vector2.zero;
                             int validCount = 0;
 
-                            for(int i = 0; i < entity.contactCount; i++) {
-                                var distInfo = entity.contactDistances[i];
+                            for(int i = 0; i < entity.contactSolids.Count; i++) {
+                                var distInfo = entity.GetContactDistanceInfo(entity.contactSolids[i]);
                                 if(distInfo.isValid && distInfo.isOverlapped) {
                                     mTurnAway += distInfo.normal;
                                     validCount++;
@@ -126,6 +137,8 @@ namespace Renegadeware.LL_LS1A1 {
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
+                            else if(ShouldRest())
+                                ChangeToState(State.Rest, null);
                             else
                                 ExploreChangeToState(ExploreState.ForwardWait);
                             break;
@@ -148,6 +161,8 @@ namespace Renegadeware.LL_LS1A1 {
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
+                            else if(ShouldRest())
+                                ChangeToState(State.Rest, null);
                             else
                                 ExploreChangeToState(ExploreState.TurnWait);
                             break;
@@ -164,6 +179,8 @@ namespace Renegadeware.LL_LS1A1 {
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
+                            else if(ShouldRest())
+                                ChangeToState(State.Rest, null);
                             else
                                 ExploreChangeToState(ExploreState.TurnWait);
                             break;
@@ -221,7 +238,7 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             //check for energy source
-            if(stats.energySources.Count > 0 && entity.contactEnergies.Count == 0) {
+            if(entity.contactEnergies.Count == 0) {
                 for(int i = 0; i < sensor.energies.Count; i++) {
                     var energy = sensor.energies[i];
                     if(energy && energy.isActive) {
@@ -231,8 +248,7 @@ namespace Renegadeware.LL_LS1A1 {
                 }
             }
 
-            if(mState == State.Seek || mState == State.Retreat)
-                ChangeToState(State.Rest, null);
+            mTarget = null;
         }
 
         private void ChangeToState(State toState, Transform target) {
@@ -259,6 +275,10 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             mLastTime = Time.time;
+        }
+
+        private bool ShouldRest() {
+            return mBodyCtrl.isStickied || entity.stats.energyDelta > 0f;
         }
 
         private void Steer(Vector2 targetPos, bool isAway, float timeDelta) {
@@ -294,9 +314,11 @@ namespace Renegadeware.LL_LS1A1 {
                 diffAngle = Vector2.SignedAngle(entity.forward, targetDir);
                 diffAngleAbs = Mathf.Abs(diffAngle);
             }
-            
+
             if(diffAngleAbs > gameDat.organismSeekTurnAngleThreshold)
                 entity.angularVelocity -= Mathf.Sign(diffAngle) * mComp.turnAccel * timeDelta;
+            else
+                entity.AngularVelocityDampen(mComp.turnAccel * timeDelta);
 
             if(diffAngleAbs <= gameDat.organismSeekAngleThreshold)
                 entity.velocity += targetDir * mComp.forwardAccel * timeDelta;

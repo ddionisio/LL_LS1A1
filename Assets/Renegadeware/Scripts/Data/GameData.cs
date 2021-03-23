@@ -32,11 +32,10 @@ namespace Renegadeware.LL_LS1A1 {
 
         public float organismDepth = -0.2f;
 
-        public float organismSpawnCheckRadius = 0.5f;
-
-        //public float organismContactsUpdateDelay = 0.3f;
+        public float organismContactsUpdateDelay = 0.1f;
 
         public float organismSeparateSpeed = 1f;
+        public float organismStickySpeed = 1f;
 
         public float organismTurnAwayAngle = 60f;
 

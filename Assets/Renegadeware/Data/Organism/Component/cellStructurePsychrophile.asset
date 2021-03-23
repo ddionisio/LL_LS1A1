@@ -22,10 +22,13 @@ MonoBehaviour:
     speedLimit: 0
     velocityReceiveScale: 0
     energyCapacity: 0
-    lifespan: 0
+    energyConsumeRate: 0.5
+    lifespan: 20
     _hazardResistances:
     - {fileID: 11400000, guid: 7d15249bcb225c14a9a96e059c7b0a30, type: 2}
     _energySources:
     - {fileID: 11400000, guid: 55f7967882e192f4eaa634fff276aa17, type: 2}
+    flags: 0
+    danger: 0
   _editPrefab: {fileID: 0}
   _gamePrefab: {fileID: 0}

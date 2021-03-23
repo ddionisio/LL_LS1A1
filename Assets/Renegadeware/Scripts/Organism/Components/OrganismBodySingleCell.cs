@@ -5,9 +5,6 @@ using UnityEngine;
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "body", menuName = "Game/Organism/Component/Body SingleCell")]
     public class OrganismBodySingleCell : OrganismBody {
-        [Header("Single Cell Settings")]
-        public float energyConsumeRate = 1f; //energy consumed from sources per second
-
         [Header("Death Settings")]
         public Color deathTint = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 
@@ -27,6 +24,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             Divide
         }
+
+        public bool isStickied { get { return mStickies != null && mStickies.Count > 0; } }
 
         private OrganismBodySingleCell mComp;
 
@@ -93,67 +92,60 @@ namespace Renegadeware.LL_LS1A1 {
                             mState = State.Divide;
                         }
                     }
-                    else {
-                        var energyConsume = mComp.energyConsumeRate * Time.deltaTime;
+                    else if(mStickies != null) {
+                        if(!entity.physicsLocked) {
+                            //update stickies
+                            for(int i = mStickies.Count - 1; i >= 0; i--) {
+                                var sticky = mStickies[i];
 
-                        //check for energy source contacts and absorb its energy
-                        for(int i = 0; i < entity.contactEnergies.Count; i++) {
-                            var energySrc = entity.contactEnergies[i];
-
-                            float energyAmt;
-                            if(entity.stats.energy + energyConsume < entity.stats.energyCapacity)
-                                energyAmt = energyConsume;
-                            else //cap
-                                energyAmt = entity.stats.energyCapacity - (entity.stats.energy + energyConsume);
-
-                            energySrc.energy -= energyAmt;
-                            entity.stats.energy += energyAmt;
-
-                            if(entity.stats.isEnergyFull)
-                                break;
-                        }
-
-                        if(mStickies != null) {
-                            if(!entity.physicsLocked) {
-                                //update stickies
-                                for(int i = mStickies.Count - 1; i >= 0; i--) {
-                                    var sticky = mStickies[i];
-
-                                    //check if invalid
-                                    if(!sticky) {
-                                        mStickies.RemoveLast();
-                                        continue;
-                                    }
-
-                                    var distInfo = entity.bodyCollider.Distance(sticky);
-                                    if(!distInfo.isValid) {
-                                        mStickies.RemoveLast();
-                                        continue;
-                                    }
-
-                                    if(distInfo.distance <= 0f)
-                                        continue;
-
-                                    //disconnect if distance is too far
-                                    if(distInfo.distance >= gameDat.organismStickyDistanceThreshold) {
-                                        mStickies.RemoveLast();
-                                        continue;
-                                    }
-
-                                    //move towards
-                                    entity.velocity += distInfo.normal * gameDat.organismSeparateSpeed;//distInfo.distance;
+                                //check if invalid
+                                if(!(sticky && sticky.enabled)) {
+                                    mStickies.RemoveLast();
+                                    continue;
                                 }
 
-                                //check for new stickies
-                                for(int i = 0; !mStickies.IsFull && i < entity.contactCount; i++) {
-                                    var coll = entity.contactColliders[i];
-                                    if(coll && coll.enabled && !coll.isTrigger && !mStickies.Exists(coll))
-                                        mStickies.Add(coll);
+                                var distInfo = entity.bodyCollider.Distance(sticky);
+                                if(!distInfo.isValid) {
+                                    mStickies.RemoveLast();
+                                    continue;
+                                }
+
+                                if(distInfo.distance <= 0f)
+                                    continue;
+
+                                //disconnect if distance is too far
+                                if(distInfo.distance >= gameDat.organismStickyDistanceThreshold) {
+                                    mStickies.RemoveLast();
+                                    continue;
+                                }
+
+                                //move towards
+                                entity.velocity += distInfo.normal * gameDat.organismStickySpeed;//distInfo.distance;
+                            }
+
+                            //check for new stickies
+
+                            //only stick to solid energy compatibles
+                            for(int i = 0; !mStickies.IsFull && i < entity.contactEnergies.Count; i++) {
+                                var energySrc = entity.contactEnergies[i];
+
+                                if(energySrc.isActive && energySrc.isSolid && !mStickies.Exists(energySrc.bodyCollider))
+                                    mStickies.Add(energySrc.bodyCollider);
+                            }
+
+                            //only stick to same organisms
+                            for(int i = 0; !mStickies.IsFull && i < entity.contactOrganisms.Count; i++) {
+                                var contactEntity = entity.contactOrganisms[i];
+                                if(!contactEntity.isReleased && !contactEntity.physicsLocked && entity.IsMatchTemplate(contactEntity)) {
+                                    //ensure contacted is not already stuck to us
+                                    var bodySingleCellCtrl = contactEntity.GetComponentControl<OrganismBodySingleCellControl>();
+                                    if(bodySingleCellCtrl != null && !bodySingleCellCtrl.mStickies.Exists(entity.bodyCollider))
+                                        mStickies.Add(contactEntity.bodyCollider);
                                 }
                             }
-                            else
-                                mStickies.Clear();
                         }
+                        else
+                            mStickies.Clear();
                     }
                     break;
 
@@ -183,8 +175,9 @@ namespace Renegadeware.LL_LS1A1 {
                         var dist = entity.size.x * 0.3f;
 
                         //get two spawn point
-                        var pt1 = entity.left * dist;
-                        var pt2 = entity.right * dist;
+                        var entPt = entity.position;
+                        var pt1 = entPt + entity.left * dist;
+                        var pt2 = entPt + entity.right * dist;
 
                         //release this
                         entity.Release();

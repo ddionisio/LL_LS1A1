@@ -20,6 +20,8 @@ namespace Renegadeware.LL_LS1A1 {
         OrganismSensor _sensor = null;
         [SerializeField]
         Collider2D _bodyCollider = null;
+        [SerializeField]
+        Vector2 _size = Vector2.zero; //used for approximates
 
         [Header("Animation")]
         [SerializeField]
@@ -125,7 +127,7 @@ namespace Renegadeware.LL_LS1A1 {
         /// <summary>
         /// this is in local space (including scale)
         /// </summary>
-        public Vector2 size { get; private set; }
+        public Vector2 size { get { return _size; } }
 
         /// <summary>
         /// Lock movement and disable collision.
@@ -144,8 +146,14 @@ namespace Renegadeware.LL_LS1A1 {
         public ColliderDistance2D[] contactDistances { get { return mContactDistances; } }
         public int contactCount { get; private set; }
 
+        public M8.CacheList<Collider2D> contactSolids { get { return mContactSolids; } }
         public M8.CacheList<OrganismEntity> contactOrganisms { get { return mContactOrganisms; } }
         public M8.CacheList<EnergySource> contactEnergies { get { return mContactEnergies; } }
+
+        private struct ComponentControlInfo {
+            public OrganismComponent component;
+            public OrganismComponentControl control;
+        }
 
         private bool mPhysicsLocked;
 
@@ -159,8 +167,9 @@ namespace Renegadeware.LL_LS1A1 {
         private Collider2D[] mContactCache = new Collider2D[contactCapacity];
         private ColliderDistance2D[] mContactDistances = new ColliderDistance2D[contactCapacity];
 
-        //private float mContactsUpdateLastTime;
+        private float mContactsUpdateLastTime;
 
+        private M8.CacheList<Collider2D> mContactSolids = new M8.CacheList<Collider2D>(contactCapacity);
         private M8.CacheList<OrganismEntity> mContactOrganisms = new M8.CacheList<OrganismEntity>(contactCapacity);
         private M8.CacheList<EnergySource> mContactEnergies = new M8.CacheList<EnergySource>(contactCapacity);
 
@@ -226,69 +235,20 @@ namespace Renegadeware.LL_LS1A1 {
             for(int i = 0; i < ent._comps.Length; i++)
                 ent._comps[i].SetupTemplate(ent);
 
-            return ent;
-        }
-
-        public void Release() {
-            if(poolControl)
-                poolControl.Release();
-            else
-                gameObject.SetActive(false);
-        }
-
-        public bool IsOrganismContact(OrganismEntity ent) {
-            return mContactOrganisms.Exists(ent);
-        }
-
-        public bool IsEnergyContact(EnergySource energy) {
-            return mContactEnergies.Exists(energy);
-        }
-
-        public ColliderDistance2D GetContactDistanceInfo(int index) {
-            return mContactDistances[index];
-        }
-
-        public bool GetContactDistanceInfo(OrganismEntity ent, out ColliderDistance2D info) {
-            return GetContactDistanceInfo(ent.bodyCollider, out info);
-        }
-
-        public bool GetContactDistanceInfo(EnergySource energy, out ColliderDistance2D info) {
-            return GetContactDistanceInfo(energy.bodyCollider, out info);
-        }
-
-        void M8.IPoolInit.OnInit() {
-            //grab controls for components
-            var controlList = new List<OrganismComponentControl>();
-
-            for(int i = 0; i < _comps.Length; i++) {                
-                var comp = _comps[i];
-
-                var ctrl = comp.GenerateControl(this);
-                if(ctrl != null) {
-                    ctrl.Init(this, comp);
-
-                    controlList.Add(ctrl);
-                }
-            }
-
-            mControls = controlList.ToArray();
-
-            poolControl = GetComponent<M8.PoolDataController>();
-
             //compute general size of collider (NOTE: assumes shape is centered)
-            if(bodyCollider) {
-                var scale = transform.localScale;
+            if(ent._bodyCollider) {
+                var scale = ent.transform.localScale;
 
-                if(bodyCollider is BoxCollider2D)
-                    size = (bodyCollider as BoxCollider2D).size * scale;
-                else if(bodyCollider is CircleCollider2D) {
-                    var diameter = (bodyCollider as CircleCollider2D).radius * 2f;
-                    size = new Vector2(diameter, diameter);
+                if(ent._bodyCollider is BoxCollider2D)
+                    ent._size = (ent._bodyCollider as BoxCollider2D).size * scale;
+                else if(ent._bodyCollider is CircleCollider2D) {
+                    var diameter = (ent._bodyCollider as CircleCollider2D).radius * 2f;
+                    ent._size = new Vector2(diameter, diameter);
                 }
-                else if(bodyCollider is CapsuleCollider2D)
-                    size = (bodyCollider as CapsuleCollider2D).size * scale;
-                else if(bodyCollider is PolygonCollider2D) {
-                    var polyColl = bodyCollider as PolygonCollider2D;
+                else if(ent._bodyCollider is CapsuleCollider2D)
+                    ent._size = (ent._bodyCollider as CapsuleCollider2D).size * scale;
+                else if(ent._bodyCollider is PolygonCollider2D) {
+                    var polyColl = ent._bodyCollider as PolygonCollider2D;
 
                     Vector2 sMin = new Vector2(float.MaxValue, float.MaxValue), sMax = new Vector2(float.MinValue, float.MinValue);
 
@@ -305,14 +265,104 @@ namespace Renegadeware.LL_LS1A1 {
                             sMax.y = pt.y;
                     }
 
-                    size = new Vector2(Mathf.Abs(sMax.x - sMin.x) * scale.x, Mathf.Abs(sMax.y - sMin.y) * scale.y);
+                    ent._size = new Vector2(Mathf.Abs(sMax.x - sMin.x) * scale.x, Mathf.Abs(sMax.y - sMin.y) * scale.y);
                 }
             }
             else
-                size = Vector2.zero;
+                ent._size = Vector2.zero;
+
+            return ent;
+        }
+
+        public void Release() {
+            if(poolControl)
+                poolControl.Release();
+            else
+                gameObject.SetActive(false);
+        }
+
+        public bool IsMatchTemplate(OrganismEntity ent) {
+            return poolControl && ent.poolControl && poolControl.factoryKey == ent.poolControl.factoryKey;
+        }
+
+        public bool IsOrganismContact(OrganismEntity ent) {
+            return mContactOrganisms.Exists(ent);
+        }
+
+        public bool IsEnergyContact(EnergySource energy) {
+            return mContactEnergies.Exists(energy);
+        }
+
+        public ColliderDistance2D GetContactDistanceInfo(int index) {
+            return mContactDistances[index];
+        }
+
+        public ColliderDistance2D GetContactDistanceInfo(Collider2D coll) {
+            int ind = System.Array.IndexOf(mContactCache, coll);
+
+            if(ind != -1)
+                return mContactDistances[ind];
+            else
+                return new ColliderDistance2D() { isValid = false };
+        }
+
+        public ColliderDistance2D GetContactDistanceInfo(OrganismEntity ent) {
+            return GetContactDistanceInfo(ent.bodyCollider);
+        }
+
+        public ColliderDistance2D GetContactDistanceInfo(EnergySource energy) {
+            return GetContactDistanceInfo(energy.bodyCollider);
+        }
+
+        public void AngularVelocityDampen(float amt) {
+            if(angularVelocity > 0f) {
+                angularVelocity -= amt;
+                if(angularVelocity < 0f)
+                    angularVelocity = 0f;
+            }
+            else if(angularVelocity < 0f) {
+                angularVelocity += amt;
+                if(angularVelocity > 0f)
+                    angularVelocity = 0f;
+            }
+        }
+
+        public T GetComponentControl<T>() where T : OrganismComponentControl {
+            for(int i = 0; i < mControls.Length; i++) {
+                var ctrl = mControls[i];
+                if(ctrl is T)
+                    return (T)ctrl;
+            }
+
+            return null;
+        }
+
+        void M8.IPoolInit.OnInit() {
+            poolControl = GetComponent<M8.PoolDataController>();
 
             if(sensor)
-                sensor.Setup(stats);
+                sensor.Init(stats);
+
+            //grab controls for components, initialize later once all controls are added (allows some controls to know which controls are available during init)
+            var controlList = new List<ComponentControlInfo>();
+
+            for(int i = 0; i < _comps.Length; i++) {
+                var comp = _comps[i];
+
+                var ctrl = comp.GenerateControl(this);
+                if(ctrl != null)
+                    controlList.Add(new ComponentControlInfo { component=comp, control=ctrl });
+            }
+
+            mControls = new OrganismComponentControl[controlList.Count];
+            for(int i = 0; i < mControls.Length; i++)
+                mControls[i] = controlList[i].control;
+
+            //initialize controls
+            for(int i = 0; i < controlList.Count; i++) {
+                var ctrlInfo = controlList[i];
+                ctrlInfo.control.Init(this, ctrlInfo.component);
+            }
         }
 
         void M8.IPoolSpawn.OnSpawned(M8.GenericParams parms) {
@@ -335,7 +385,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             transform.up = mForward;
 
-            //mContactsUpdateLastTime = Time.time;
+            mContactsUpdateLastTime = Time.time;
 
             //general spawn
             if(bodyDisplay.colorGroup)
@@ -361,15 +411,46 @@ namespace Renegadeware.LL_LS1A1 {
 
             var env = GameModePlay.instance.environmentCurrentControl;
 
-            if(!stats.energyLocked) {
-                stats.EnergyUpdateLast();
+            //update contacts
+            if(!physicsLocked) {
+                var time = Time.time;
+                
+                if(time - mContactsUpdateLastTime >= gameDat.organismContactsUpdateDelay) {
+                    mContactsUpdateLastTime = time;
 
-                //environment hazard
-                for(int i = 0; i < env.hazards.Length; i++) {
-                    var hazard = env.hazards[i];
-                    if(hazard)
-                        hazard.Apply(stats);
+                    contactCount = _bodyCollider.OverlapCollider(gameDat.organismContactFilter, mContactCache);
+
+                    mContactSolids.Clear();
+                    mContactOrganisms.Clear();
+                    mContactEnergies.Clear();
+
+                    for(int i = 0; i < contactCount; i++) {
+                        var contact = mContactCache[i];
+
+                        if(contact.isTrigger)
+                            mContactDistances[i].isValid = false;
+                        else
+                            mContactDistances[i] = _bodyCollider.Distance(contact);
+
+                        if(contact.CompareTag(gameDat.energyTag)) {
+                            var energySrc = contact.GetComponent<EnergySource>();
+                            if(energySrc && energySrc.isActive && stats.EnergyMatch(energySrc.data))
+                                mContactEnergies.Add(energySrc);
+                        }
+                        else if(M8.Util.CheckTag(contact, gameDat.organismEntityTags)) {
+                            var organismEnt = contact.GetComponent<OrganismEntity>();
+                            if(organismEnt)
+                                mContactOrganisms.Add(organismEnt);
+                        }
+                        else //unspecified collision
+                            mContactSolids.Add(contact);
+                    }
                 }
+            }
+
+            //update energy
+            if(!stats.energyLocked) {
+                stats.EnergyUpdate();
 
                 //environment energy
                 for(int i = 0; i < env.energySources.Length; i++) {
@@ -377,41 +458,37 @@ namespace Renegadeware.LL_LS1A1 {
                     if(energySrc)
                         energySrc.Apply(stats);
                 }
+
+                //check for energy source contacts and absorb its energy
+                var energyConsume = stats.energyConsumeRate * Time.deltaTime;
+
+                for(int i = 0; !stats.isEnergyFull && i < contactEnergies.Count; i++) {
+                    var energySrc = contactEnergies[i];
+
+                    float energyAmt;
+                    if(stats.energy + energyConsume < stats.energyCapacity)
+                        energyAmt = energyConsume;
+                    else //cap
+                        energyAmt = (stats.energy + energyConsume) - stats.energyCapacity;
+
+                    energySrc.energy -= energyAmt;
+                    stats.energy += energyAmt;
+                }
+
+                //environment hazard
+                for(int i = 0; i < env.hazards.Length; i++) {
+                    var hazard = env.hazards[i];
+                    if(hazard)
+                        hazard.Apply(stats);
+                }
             }
 
+            //update component controls
+            for(int i = 0; i < mControls.Length; i++)
+                mControls[i].Update();
+
+            //update physics
             if(!physicsLocked) {
-                var time = Time.time;                
-
-                //update contacts
-                //if(time - mContactsUpdateLastTime >= gameDat.organismContactsUpdateDelay) {
-                    //mContactsUpdateLastTime = time;
-
-                contactCount = _bodyCollider.OverlapCollider(gameDat.organismContactFilter, mContactCache);
-
-                mContactOrganisms.Clear();
-                mContactEnergies.Clear();
-
-                for(int i = 0; i < contactCount; i++) {
-                    var contact = mContactCache[i];
-
-                    if(contact.isTrigger)
-                        mContactDistances[i].isValid = false;
-                    else
-                        mContactDistances[i] = _bodyCollider.Distance(contact);
-
-                    if(contact.CompareTag(gameDat.energyTag)) {
-                        var energySrc = contact.GetComponent<EnergySource>();
-                        if(energySrc && energySrc.isActive && stats.EnergyMatch(energySrc.data))
-                            mContactEnergies.Add(energySrc);
-                    }
-                    else if(M8.Util.CheckTag(contact, gameDat.organismEntityTags)) {
-                        var organismEnt = contact.GetComponent<OrganismEntity>();
-                        if(organismEnt)
-                            mContactOrganisms.Add(organismEnt);
-                    }
-                }
-                //}
-
                 var dt = Time.deltaTime;
 
                 //environmental velocity
@@ -432,24 +509,12 @@ namespace Renegadeware.LL_LS1A1 {
 
                 //dampen angular speed
                 if(angularVelocity != 0f) {
-                    if(angularVelocity > 0f) {
-                        angularVelocity -= env.angularDrag * dt;
-                        if(angularVelocity < 0f)
-                            angularVelocity = 0f;
-                    }
-                    else if(angularVelocity < 0f) {
-                        angularVelocity += env.angularDrag * dt;
-                        if(angularVelocity > 0f)
-                            angularVelocity = 0f;
-                    }
+                    AngularVelocityDampen(env.angularDrag * dt);
 
                     //update orientation
                     forward = M8.MathUtil.RotateAngle(forward, angularVelocity * dt);
                 }
             }
-
-            for(int i = 0; i < mControls.Length; i++)
-                mControls[i].Update();
         }
 
         private void UpdateVelocityData() {
@@ -473,6 +538,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             contactCount = 0;
 
+            mContactSolids.Clear();
             mContactOrganisms.Clear();
             mContactEnergies.Clear();
         }
@@ -487,19 +553,6 @@ namespace Renegadeware.LL_LS1A1 {
             else {
                 if(bodyCollider)
                     bodyCollider.enabled = true;
-            }
-        }
-
-        private bool GetContactDistanceInfo(Collider2D coll, out ColliderDistance2D info) {
-            int ind = System.Array.IndexOf(mContactCache, coll);
-
-            if(ind != -1) {
-                info = mContactDistances[ind];
-                return true;
-            }
-            else {
-                info = new ColliderDistance2D();
-                return false;
             }
         }
     }

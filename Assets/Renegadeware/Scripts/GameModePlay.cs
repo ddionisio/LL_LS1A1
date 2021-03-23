@@ -415,19 +415,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnEnvironmentClick(Vector2 pos) {
-            //ensure we can spawn
-            if(mOrganismSpawner.entityCount < environmentCurrentInfo.spawnableCount) {
-                var gameDat = GameData.instance;
-
-                //ensure there are no overlaps
-                mGameSpawnCheckOverlapCount = Physics2D.OverlapCircle(pos, gameDat.organismSpawnCheckRadius, gameDat.organismSpawnContactFilter, mGameSpawnCheckOverlaps);
-                if(mGameSpawnCheckOverlapCount == 0) {
-                    if(level.spawnIsRandomDir)
-                        mOrganismSpawner.SpawnAtRandomDir(pos);
-                    else
-                        mOrganismSpawner.SpawnAt(pos);
-                }
-            }
+            GameSpawnAt(pos);
         }
 
         void OnOrganismBodyChanged() {
@@ -440,6 +428,25 @@ namespace Renegadeware.LL_LS1A1 {
 
         void OnOrganismComponentChanged(int ind) {
             HUD.instance.ModeSelectSetVisible(HUDGetModeSelectFlags());
+        }
+
+        private void GameSpawnAt(Vector2 pos) {
+            //ensure we can spawn
+            if(mOrganismSpawner.entityCount < environmentCurrentInfo.spawnableCount) {
+                var gameDat = GameData.instance;
+
+                var organismSize = mOrganismSpawner.template.size;
+                var radius = Mathf.Max(organismSize.x, organismSize.y) * 0.5f;
+
+                //ensure there are no overlaps
+                mGameSpawnCheckOverlapCount = Physics2D.OverlapCircle(pos, radius, gameDat.organismSpawnContactFilter, mGameSpawnCheckOverlaps);
+                if(mGameSpawnCheckOverlapCount == 0) {
+                    if(level.spawnIsRandomDir)
+                        mOrganismSpawner.SpawnAtRandomDir(pos);
+                    else
+                        mOrganismSpawner.SpawnAt(pos);
+                }
+            }
         }
 
         private ModeSelectFlags HUDGetModeSelectFlags() {

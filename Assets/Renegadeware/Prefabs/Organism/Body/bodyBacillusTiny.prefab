@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2715210906851617839}
   - component: {fileID: 2715210906851617745}
-  - component: {fileID: 2715210906851617838}
+  - component: {fileID: 8004082177535782603}
   - component: {fileID: 2715210906851617747}
+  - component: {fileID: 2715210906851617838}
   - component: {fileID: 2715210906851617744}
   m_Layer: 0
   m_Name: bodyBacillusTiny
@@ -49,6 +50,36 @@ MonoBehaviour:
   _spriteRender: {fileID: 2715210906851617838}
   _colorGroup: {fileID: 2715210906851617747}
   anchorRoot: {fileID: 0}
+--- !u!114 &8004082177535782603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2715210906851617836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e3c1b8f97c11484c9fe0655d93860d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.5
+  delay: 0.15
+--- !u!114 &2715210906851617747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2715210906851617836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a35ca283318625e4997cdc9b5a47f2e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  initOnAwake: 0
+  spriteRenders:
+  - {fileID: 2715210906851617838}
 --- !u!212 &2715210906851617838
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -100,22 +131,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2715210906851617747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2715210906851617836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a35ca283318625e4997cdc9b5a47f2e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1
-  initOnAwake: 0
-  spriteRenders:
-  - {fileID: 2715210906851617838}
 --- !u!70 &2715210906851617744
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

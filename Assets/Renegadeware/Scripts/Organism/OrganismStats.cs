@@ -18,6 +18,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Energy")]
         public float energyCapacity;
+        public float energyConsumeRate; //energy consumption from sources per second
 
         [Header("Life")]
         public float lifespan; //how long does this cell live, set to 0 for immortality. Once expired, energy will drain and not regenerate.
@@ -39,6 +40,18 @@ namespace Renegadeware.LL_LS1A1 {
                     return;
 
                 mEnergy = Mathf.Clamp(value, 0f, energyCapacity); 
+            }
+        }
+
+        /// <summary>
+        /// Energy to consume, this will be transfered to energy based on energySourceConsumeRate
+        /// </summary>
+        public float energyConsume {
+            get { return mEnergyConsume; }
+            set {
+                mEnergyConsume = value;
+                if(mEnergyConsume < 0f)
+                    mEnergyConsume = 0f;
             }
         }
 
@@ -76,6 +89,7 @@ namespace Renegadeware.LL_LS1A1 {
         public bool isEnergyFull { get { return mEnergy == energyCapacity; } }
 
         private float mEnergy;
+        private float mEnergyConsume;
         private float mEnergyLastUpdate;
 
         private float mLastResetTime;
@@ -97,6 +111,9 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public bool EnergyMatch(EnergyData energyData) {
+            if(energyData.ignoreMatch)
+                return true;
+
             if(_energySources == null)
                 return false;
 
@@ -110,8 +127,15 @@ namespace Renegadeware.LL_LS1A1 {
             return danger > otherStats.danger && mass > otherStats.mass; //if edible, make sure it can be swallowed
         }
 
-        public void EnergyUpdateLast() {
+        public void EnergyUpdate() {
             mEnergyLastUpdate = mEnergy;
+
+            if(!energyLocked && !isEnergyFull && energyConsume > 0f) {
+                var energyConsume = energyConsumeRate * Time.deltaTime;
+
+                energy += energyConsume;
+                this.energyConsume -= energyConsume;
+            }
         }
 
         public void Copy(OrganismStats otherStats) {
@@ -120,6 +144,7 @@ namespace Renegadeware.LL_LS1A1 {
             velocityReceiveScale = otherStats.velocityReceiveScale;
 
             energyCapacity = otherStats.energyCapacity;
+            energyConsumeRate = otherStats.energyConsumeRate;
 
             lifespan = otherStats.lifespan;
 
@@ -144,6 +169,7 @@ namespace Renegadeware.LL_LS1A1 {
             velocityReceiveScale += otherStats.velocityReceiveScale;
 
             energyCapacity += otherStats.energyCapacity;
+            energyConsumeRate += otherStats.energyConsumeRate;
 
             lifespan += otherStats.lifespan;
 

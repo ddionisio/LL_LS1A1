@@ -12,7 +12,7 @@ namespace Renegadeware.LL_LS1A1 {
         public float energyRate; //amount of energy per second
 
         public void Apply(OrganismStats stats) {
-            if(stats.EnergyMatch(energySource))
+            if(energySource && stats.EnergyMatch(energySource))
                 stats.energy += energyRate * Time.deltaTime;
         }
     }

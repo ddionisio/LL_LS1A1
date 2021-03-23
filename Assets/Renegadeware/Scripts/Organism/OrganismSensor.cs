@@ -24,7 +24,7 @@ namespace Renegadeware.LL_LS1A1 {
         private Collider2D[] mCollCache = new Collider2D[cacheCapacity];
         private int mCollCount;
 
-        public void Setup(OrganismStats stats) {
+        public void Init(OrganismStats stats) {
             mStats = stats;
         }
 
@@ -79,7 +79,7 @@ namespace Renegadeware.LL_LS1A1 {
             var pos = transform.position;
 
             if(radius > 0f) {
-                Gizmos.color = Color.yellow;
+                Gizmos.color = new Color(1f, 1f, 0f, 0.25f);
                 Gizmos.DrawWireSphere(pos, radius);
             }
         }
