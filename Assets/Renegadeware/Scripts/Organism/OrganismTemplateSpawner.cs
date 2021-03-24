@@ -29,8 +29,6 @@ namespace Renegadeware.LL_LS1A1 {
                         pool = M8.PoolController.CreatePool(name, transform);
                 }
 
-                pool.despawnCallback += OnDespawn;
-
                 mIsPoolInit = true;
             }
             else
@@ -64,6 +62,9 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void Clear() {
+            if(entities != null)
+                entities.Clear();
+
             if(pool)
                 pool.ReleaseAllByType(mTemplate.name);
         }
@@ -72,15 +73,9 @@ namespace Renegadeware.LL_LS1A1 {
             if(entities.IsFull)
                 return null;
 
-            var spawnPt = new Vector3(pt.x, pt.y, GameData.instance.organismDepth);
-
             mParms[OrganismEntity.parmForwardRandom] = true;
 
-            var ent = pool.Spawn<OrganismEntity>(mTemplate.name, mTemplate.name, null, spawnPt, mParms);
-
-            entities.Add(ent);
-
-            return ent;
+            return Spawn(pt);
         }
 
         public OrganismEntity SpawnAt(Vector2 pt) {
@@ -91,27 +86,33 @@ namespace Renegadeware.LL_LS1A1 {
             if(entities.IsFull)
                 return null;
 
-            var spawnPt = new Vector3(pt.x, pt.y, GameData.instance.organismDepth);
-
             mParms[OrganismEntity.parmForwardRandom] = false;
             mParms[OrganismEntity.parmForward] = forward;
 
+            return Spawn(pt);
+        }
+
+        void OnDespawn(M8.PoolDataController pdc) {
+            for(int i = 0; i < entities.Count; i++) {
+                if(entities[i].poolControl == pdc) {
+                    entities.RemoveAt(i);
+                    break;
+                }
+            }
+
+            pdc.despawnCallback -= OnDespawn;
+        }
+
+        private OrganismEntity Spawn(Vector2 pt) {
+            var spawnPt = new Vector3(pt.x, pt.y, GameData.instance.organismDepth);
+
             var ent = pool.Spawn<OrganismEntity>(mTemplate.name, mTemplate.name, null, spawnPt, mParms);
+
+            ent.poolControl.despawnCallback += OnDespawn;
 
             entities.Add(ent);
 
             return ent;
-        }
-
-        void OnDespawn(M8.PoolDataController pdc) {
-            if(pdc.factoryKey == mTemplate.name) {
-                for(int i = 0; i < entities.Count; i++) {
-                    if(entities[i].poolControl == pdc) {
-                        entities.RemoveAt(i);
-                        break;
-                    }
-                }
-            }
         }
     }
 }

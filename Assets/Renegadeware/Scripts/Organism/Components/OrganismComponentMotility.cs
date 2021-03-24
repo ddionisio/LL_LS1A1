@@ -15,6 +15,7 @@ namespace Renegadeware.LL_LS1A1 {
         public float exploreForwardEndDelay = 0.5f;
         public float exploreTurnDuration = 0.3f;
         public float exploreTurnEndDelay = 0.5f;
+        public float exploreTurnAngleVelocityMax = 90f;
 
         [Header("Energy")]
         public float energyMinScale = 0.15f; //minimum energy percentage to activate
@@ -152,10 +153,12 @@ namespace Renegadeware.LL_LS1A1 {
                             if(time - mLastTime < mComp.exploreTurnDuration) {
                                 switch(mTurnSide) {
                                     case M8.MathUtil.Side.Left:
-                                        entity.angularVelocity += mComp.turnAccel * dt;
+                                        if(entity.angularVelocity <= mComp.exploreTurnAngleVelocityMax)
+                                            entity.angularVelocity += mComp.turnAccel * dt;
                                         break;
                                     case M8.MathUtil.Side.Right:
-                                        entity.angularVelocity -= mComp.turnAccel * dt;
+                                        if(-entity.angularVelocity <= mComp.exploreTurnAngleVelocityMax)
+                                            entity.angularVelocity -= mComp.turnAccel * dt;
                                         break;
                                 }
 

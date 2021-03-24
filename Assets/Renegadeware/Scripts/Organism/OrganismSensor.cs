@@ -79,7 +79,7 @@ namespace Renegadeware.LL_LS1A1 {
             var pos = transform.position;
 
             if(radius > 0f) {
-                Gizmos.color = new Color(1f, 1f, 0f, 0.25f);
+                Gizmos.color = new Color(1f, 0f, 1f, 0.3f);
                 Gizmos.DrawWireSphere(pos, radius);
             }
         }

@@ -22,17 +22,19 @@ MonoBehaviour:
     speedLimit: 0
     velocityReceiveScale: 0
     energyCapacity: 0
+    energyConsumeRate: 0
     lifespan: 0
     _hazardResistances: []
     _energySources: []
     flags: 0
     danger: 0
   forwardAccel: 1
-  turnAccel: 5
+  turnAccel: 90
   isBidirectional: 0
-  exploreForwardDuration: 0.5
-  exploreForwardEndDelay: 0.5
-  exploreTurnDuration: 0.3
+  exploreForwardDuration: 0.3
+  exploreForwardEndDelay: 0.35
+  exploreTurnDuration: 0.4
   exploreTurnEndDelay: 0.5
+  exploreTurnAngleVelocityMax: 60
   energyMinScale: 0.15
   energyRate: 0.1

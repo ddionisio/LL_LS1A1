@@ -23,8 +23,9 @@ MonoBehaviour:
   organismPlayerTag: OrganismPlayer
   organismPlayerSpawnName: player
   organismDepth: -0.12
-  organismSpawnCheckRadius: 0.5
+  organismContactsUpdateDelay: 0.1
   organismSeparateSpeed: 0.02
+  organismStickySpeed: 0.05
   organismTurnAwayAngle: 60
   organismDeathDelay: 2
   organismSeekTurnAngleThreshold: 2

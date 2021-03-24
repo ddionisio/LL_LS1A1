@@ -22,6 +22,7 @@ MonoBehaviour:
     speedLimit: 0
     velocityReceiveScale: 0
     energyCapacity: 0
+    energyConsumeRate: 0
     lifespan: 0
     _hazardResistances: []
     _energySources: []
@@ -33,6 +34,7 @@ MonoBehaviour:
   exploreForwardDuration: 0.5
   exploreForwardEndDelay: 0.3
   exploreTurnDuration: 0.3
-  exploreTurnEndDelay: 0.5
+  exploreTurnEndDelay: 0.3
+  exploreTurnAngleVelocityMax: 30
   energyMinScale: 0.15
   energyRate: 0.1

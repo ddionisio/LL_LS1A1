@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public class EnergySource : MonoBehaviour, M8.IPoolInit, M8.IPoolSpawn {
+        public const string parmRoot = "esrcRoot";
+        public const string parmRootRadius = "esrcRootR";
+
+        public enum MoveMode {
+            None,
+            Wander,
+        }
+
         public enum State {
             None,
             Spawning,
@@ -15,7 +23,14 @@ namespace Renegadeware.LL_LS1A1 {
         public EnergyData data;
         public float energyCapacity;
         public bool energyIsUnlimited; //energy is not drained when consumed
-        public float lifespan;
+        public float lifespan; //set to 0 for unlimited lifespan
+
+        [Header("Movement")]
+        public MoveMode moveMode = MoveMode.None;
+        public float moveAccel = 0f;
+        public float moveVelocityReceiveScale = 1f;
+        public float moveDelay = 0.3f;
+        public float moveWait = 0.5f;
 
         [Header("Animation")]
         public M8.Animator.Animate animator;
@@ -38,11 +53,15 @@ namespace Renegadeware.LL_LS1A1 {
 
         public Collider2D bodyCollider { get; private set; }
 
+        public M8.PoolDataController poolData { get { return mPoolDataCtrl; } }
+
         private float mEnergy;
 
         private M8.PoolDataController mPoolDataCtrl;
         private State mState;
         private float mLastActiveTime;
+
+        private Vector2 mVelocity;
 
         void M8.IPoolInit.OnInit() {
             mPoolDataCtrl = GetComponent<M8.PoolDataController>();
