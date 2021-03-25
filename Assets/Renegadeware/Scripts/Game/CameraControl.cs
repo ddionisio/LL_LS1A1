@@ -4,11 +4,17 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public class CameraControl : M8.SingletonBehaviour<CameraControl> {
+        [System.Serializable]
+        public struct ZoomLevelInfo {
+            public string label;
+            public float level;
+        }
+
         [Header("Move Info")]
         public float moveToDelay = 0.01f;        
 
         [Header("Zoom Info")]
-        public float[] zoomLevels;
+        public ZoomLevelInfo[] zoomLevels;
         public float zoomDelay = 0.1f;
 
         [Header("Input")]
@@ -45,7 +51,7 @@ namespace Renegadeware.LL_LS1A1 {
                     mZoomIndex = value;
 
                     var camPos = cameraSource.transform.localPosition;
-                    camPos.z = zoomLevels[mZoomIndex];
+                    camPos.z = zoomLevels[mZoomIndex].level;
 
                     cameraSource.transform.localPosition = camPos;
 
@@ -100,7 +106,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             mZoomIndex = toZoomIndex;
             var camPos = cameraSource.transform.localPosition;
-            camPos.z = zoomLevels[mZoomIndex];
+            camPos.z = zoomLevels[mZoomIndex].level;
             cameraSource.transform.localPosition = camPos;
 
             if(setPositionToBounds) {
@@ -162,10 +168,10 @@ namespace Renegadeware.LL_LS1A1 {
             if(mIsZoom) {
                 var camPos = cameraSource.transform.localPosition;
                 var curZoom = zoomLevels[mZoomIndex];
-                if(camPos.z != curZoom) {
+                if(camPos.z != curZoom.level) {
                     var curTime = Time.realtimeSinceStartup;
 
-                    camPos.z = Mathf.SmoothDamp(camPos.z, curZoom, ref mZoomToVel, zoomDelay, Mathf.Infinity, curTime - mZoomLastTime);
+                    camPos.z = Mathf.SmoothDamp(camPos.z, curZoom.level, ref mZoomToVel, zoomDelay, Mathf.Infinity, curTime - mZoomLastTime);
 
                     mZoomLastTime = curTime;
 

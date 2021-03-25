@@ -323,8 +323,14 @@ namespace Renegadeware.LL_LS1A1 {
         IEnumerator DoSimulation() {
             var gameDat = GameData.instance;
 
+            var hud = HUD.instance;
+
+            var camCtrl = CameraControl.instance;
+
+            var envInfo = environmentCurrentInfo;
+
             //start up entities
-            mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, gameDat.organismPlayerSpawnName, gameDat.organismPlayerTag, environmentCurrentInfo.capacity);
+            mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, gameDat.organismPlayerSpawnName, gameDat.organismPlayerTag, envInfo.capacity);
 
             environmentRootGO.SetActive(true);
 
@@ -333,20 +339,56 @@ namespace Renegadeware.LL_LS1A1 {
             yield return DoTransitionShow();
 
             //setup hud
+            hud.TimeIndexSetup(0);
+            hud.TimeUpdate(0f, level.duration);
+
+            hud.ZoomSetup(camCtrl.zoomIndex, camCtrl.zoomLevels);
+
+            hud.OrganismProgressApply(0, envInfo.spawnableCount, envInfo.criteriaCount, envInfo.bonusCount);
+
+            hud.ElementShow(HUD.Element.Gameplay);
+            hud.ElementShow(HUD.Element.ModeSelect);
+
+            while(hud.isBusy)
+                yield return null;
 
             gameIsInputEnabled = true;
+                        
+            var gameStartTime = Time.time;
+
+            var isTimeExpired = false;
 
             mModeSelectNext = ModeSelect.None;
             while(mModeSelectNext == ModeSelect.None) {
+                //update spawn placement display
+                if(hud.spawnPlacementIsActive) {
+
+                }
+
+                //refresh time
+                var curGameTime = Time.time - gameStartTime;
+
+                hud.TimeUpdate(curGameTime, level.duration);
+
+                if(curGameTime >= level.duration) {
+                    isTimeExpired = true;
+                    break;
+                }
+
                 //some simulation update
                 //if(M8.Util.CheckTag(gameObject, GameData.instance.inputSpawnTagFilter))
                 yield return null;
             }
 
+            //determine next mode if time expired
+            if(isTimeExpired) {
+                //met criteria?
+            }
+
             gameIsInputEnabled = false;
 
-            //clear out entities
-            mOrganismSpawner.Clear();
+            //purge player entities
+            mOrganismSpawner.Destroy();
 
             //hide environment if we are editing
             if(mModeSelectNext == ModeSelect.Edit)

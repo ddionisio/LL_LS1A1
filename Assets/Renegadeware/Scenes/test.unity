@@ -835,6 +835,11 @@ MonoBehaviour:
   energyCapacity: 10
   energyIsUnlimited: 0
   lifespan: 0
+  moveMode: 0
+  moveAccel: 0
+  moveVelocityReceiveScale: 1
+  moveDelay: 0.3
+  moveWait: 0.5
   animator: {fileID: 0}
   takeSpawn: 
   takeDespawn: 
@@ -1456,6 +1461,11 @@ MonoBehaviour:
   energyCapacity: 10
   energyIsUnlimited: 0
   lifespan: 0
+  moveMode: 0
+  moveAccel: 0
+  moveVelocityReceiveScale: 1
+  moveDelay: 0.3
+  moveWait: 0.5
   animator: {fileID: 0}
   takeSpawn: 
   takeDespawn: 
@@ -2540,9 +2550,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveToDelay: 0.5
   zoomLevels:
-  - -4
-  - -8
-  - -16
+  - label: 50u
+    level: -4
+  - label: 100u
+    level: -8
+  - label: 1000u
+    level: -16
   zoomDelay: 0.1
   inputMoveSpeed: 5
   inputZoom: {fileID: 11400000, guid: 8af5ec60f2110ee4a85c05f09c80d7a6, type: 2}
@@ -2649,6 +2662,11 @@ MonoBehaviour:
   energyCapacity: 10
   energyIsUnlimited: 0
   lifespan: 0
+  moveMode: 0
+  moveAccel: 0
+  moveVelocityReceiveScale: 1
+  moveDelay: 0.3
+  moveWait: 0.5
   animator: {fileID: 0}
   takeSpawn: 
   takeDespawn: 

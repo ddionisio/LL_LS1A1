@@ -16,6 +16,7 @@ namespace Renegadeware.LL_LS1A1 {
             [Header("Spawn Settings")]
             public int spawnableCount; //threshold count to allow spawning (active count < spawnable count)
             public int criteriaCount; //number of organisms to grow to complete an environment
+            public int bonusCount; //number of count outside criteria to gain maximum bonus
             public int capacity; //max spawn in the world
         }
 
