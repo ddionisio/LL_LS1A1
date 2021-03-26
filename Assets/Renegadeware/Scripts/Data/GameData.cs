@@ -37,8 +37,6 @@ namespace Renegadeware.LL_LS1A1 {
         public float organismSeparateSpeed = 1f;
         public float organismStickySpeed = 1f;
 
-        public float organismTurnAwayAngle = 60f;
-
         /// <summary>
         /// how long to stay dead once an organism's life expired.
         /// </summary>

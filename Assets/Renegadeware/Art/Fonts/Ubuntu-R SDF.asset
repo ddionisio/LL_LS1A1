@@ -22,6 +22,7 @@ MonoBehaviour:
   m_SourceFontFile: {fileID: 12800000, guid: dbb967b1fe6da884dbf8cdf03ddbd670, type: 3}
   m_AtlasPopulationMode: 1
   m_FaceInfo:
+    m_FaceIndex: 0
     m_FamilyName: Ubuntu
     m_StyleName: Regular
     m_PointSize: 41
@@ -21505,8 +21506,8 @@ MonoBehaviour:
     atlasWidth: 512
     atlasHeight: 512
     characterSetSelectionMode: 6
-    characterSequence: 20-7E,A0-FF,2000-200F,2012-2022,2026,202A-2030,2032-2034,2039-203A,203C,203E,2044,205E,206A-206F,20AC,2122,25A1
-    referencedFontAssetGUID: 
+    characterSequence: 20-7E,A0-FF,2013-2015,2018-201A,201C-201E,2020-2022,2026,2030,2039-203A,2044,20AC,2122
+    referencedFontAssetGUID: ecf585c4696448448a31fa025e27a7e1
     referencedTextAssetGUID: 
     fontStyle: 0
     fontStyleModifier: 0
@@ -21560,6 +21561,7 @@ Texture2D:
   m_MipCount: 1
   m_IsReadable: 1
   m_IgnoreMasterTextureLimit: 0
+  m_IsPreProcessed: 0
   m_StreamingMipmaps: 0
   m_StreamingMipmapsPriority: 0
   m_AlphaIsTransparency: 0

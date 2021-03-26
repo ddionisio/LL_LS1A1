@@ -442,8 +442,15 @@ namespace Renegadeware.LL_LS1A1 {
                             if(organismEnt)
                                 mContactOrganisms.Add(organismEnt);
                         }
-                        else //unspecified collision
+                        else if(contact.CompareTag(gameDat.environmentSolidTag)) {
                             mContactSolids.Add(contact);
+
+                            if(mContactDistances[i].distance < 0f) {
+                                position += mContactDistances[i].normal * mContactDistances[i].distance;
+
+                                velocity = Vector2.Reflect(velocityDir, -mContactDistances[i].normal) * speed * 0.3f;
+                            }
+                        }
                     }
                 }
             }

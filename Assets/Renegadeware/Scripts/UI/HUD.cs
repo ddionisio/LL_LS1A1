@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,19 +26,20 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Gameplay Organism Group")]
         public Button organismSpawnButton;
+        public TMP_Text organismSpawnCountLabel;
 
-        public Slider organismProgress;
-        public Slider organismProgressBonus;
+        public Image organismProgress;
+        public Image organismProgressBonus;
         public GameObject[] organismProgressMedalActives;
 
         [Header("Gameplay Time Group")]
         public Button timePlayButton;
         public GameObject[] timePlayStateActives;
 
-        public Slider timeProgress;
+        public Image timeProgress;
 
         [Header("Gameplay View Group")]
-        public Text zoomLabel;
+        public TMP_Text zoomLabel;
         public Button zoomInButton;
         public Button zoomOutButton;
 
@@ -65,7 +67,14 @@ namespace Renegadeware.LL_LS1A1 {
 
         public bool spawnPlacementIsActive {
             get { return spawnPlacementRootGO.activeSelf; }
-            set { spawnPlacementRootGO.SetActive(value); }
+            set {
+                if(spawnPlacementRootGO.activeSelf != value) {
+                    spawnPlacementRootGO.SetActive(value);
+
+                    if(value)
+                        spawnPlacementColorGroup.applyColor = spawnPlacementColorValid;
+                }
+            }
         }
 
         public bool spawnPlacementIsValid {
@@ -79,7 +88,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         public event System.Action<ModeSelect> modeSelectClickCallback;
 
-        public event System.Action organismSpawnCallback;
+        public event System.Action spawnActivateCallback;
         public event System.Action<int> timePlayCallback; //time index: 0 - stop, 1 - 1x speed, 2 - 2x speed, etc.
         public event System.Action<int> zoomCallback;
 
@@ -132,12 +141,12 @@ namespace Renegadeware.LL_LS1A1 {
         public void OrganismProgressApply(int currentCount, int spawnMinCount, int goalCount, int goalBonusCount) {
             organismSpawnButton.interactable = currentCount < spawnMinCount;
 
-            organismProgress.normalizedValue = Mathf.Clamp01((float)currentCount / goalCount);
+            organismProgress.fillAmount = Mathf.Clamp01((float)currentCount / goalCount);
 
             if(currentCount > goalCount) {
                 organismProgressBonus.gameObject.SetActive(true);
 
-                organismProgressBonus.normalizedValue = Mathf.Clamp01((float)(currentCount - goalCount) / goalBonusCount);
+                organismProgressBonus.fillAmount = Mathf.Clamp01((float)(currentCount - goalCount) / goalBonusCount);
             }
             else
                 organismProgressBonus.gameObject.SetActive(false);
@@ -152,15 +161,17 @@ namespace Renegadeware.LL_LS1A1 {
                 for(int i = 0; i < organismProgressMedalActives.Length; i++)
                     organismProgressMedalActives[i].SetActive(false);
             }
+
+            organismSpawnCountLabel.text = currentCount.ToString();
         }
 
-        public void TimeIndexSetup(int timeIndex) {
+        public void TimePlaySetIndex(int timeIndex) {
             mTimeIndex = timeIndex;
             TimeDisplayRefresh();
         }
 
         public void TimeUpdate(float time, float duration) {
-            timeProgress.normalizedValue = time / duration;
+            timeProgress.fillAmount = time / duration;
         }
 
         public void ZoomSetup(int startIndex, CameraControl.ZoomLevelInfo[] infos) {
@@ -215,11 +226,13 @@ namespace Renegadeware.LL_LS1A1 {
                 case Element.Gameplay:
                     if(gameplayRootGO) gameplayRootGO.SetActive(true);
 
-                    if(gameplayCanvasGroup) gameplayCanvasGroup.interactable = false;
+                    if(gameplayTransition) {
+                        if(gameplayCanvasGroup) gameplayCanvasGroup.interactable = false;
 
-                    gameplayTransition.PlayEnter();
+                        yield return gameplayTransition.PlayEnterWait();
 
-                    if(gameplayCanvasGroup) gameplayCanvasGroup.interactable = true;
+                        if(gameplayCanvasGroup) gameplayCanvasGroup.interactable = true;
+                    }
                     break;
             }
         }
@@ -240,10 +253,13 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
 
                 case Element.Gameplay:
-                    if(gameplayCanvasGroup) gameplayCanvasGroup.interactable = false;
+                    spawnPlacementIsActive = false;
 
-                    if(gameplayTransition)
+                    if(gameplayTransition) {
+                        if(gameplayCanvasGroup) gameplayCanvasGroup.interactable = false;
+
                         yield return gameplayTransition.PlayExitWait();
+                    }
 
                     if(gameplayRootGO) gameplayRootGO.SetActive(false);
                     break;
@@ -251,22 +267,14 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnOrganismSpawnClick() {
-            //toggle time: when spawning, time is paused.
-            if(mTimeIndex > 0)
-                TimeIndexSetup(0);
-            else //resume
-                TimeIndexSetup(1);
-
-            timePlayCallback?.Invoke(mTimeIndex);
-
-            organismSpawnCallback?.Invoke();
+            spawnActivateCallback?.Invoke();
         }
 
         void OnTimePlayClick() {
             if(mTimeIndex < timePlayStateActives.Length - 1)
-                mTimeIndex = 1;
-            else
                 mTimeIndex++;
+            else
+                mTimeIndex = 1;
 
             TimeDisplayRefresh();
 

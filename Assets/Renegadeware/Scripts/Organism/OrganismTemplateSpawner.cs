@@ -14,6 +14,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         public OrganismEntity template { get { return mTemplate; } }
 
+        public event System.Action<OrganismEntity> spawnCallback;
+        public event System.Action<OrganismEntity> releaseCallback;
+
         private OrganismEntity mTemplate;
 
         private M8.GenericParams mParms = new M8.GenericParams();
@@ -93,14 +96,19 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnDespawn(M8.PoolDataController pdc) {
+            OrganismEntity ent = null;
+
             for(int i = 0; i < entities.Count; i++) {
                 if(entities[i].poolControl == pdc) {
+                    ent = entities[i];
                     entities.RemoveAt(i);
                     break;
                 }
             }
 
             pdc.despawnCallback -= OnDespawn;
+
+            releaseCallback?.Invoke(ent);
         }
 
         private OrganismEntity Spawn(Vector2 pt) {
@@ -111,6 +119,8 @@ namespace Renegadeware.LL_LS1A1 {
             ent.poolControl.despawnCallback += OnDespawn;
 
             entities.Add(ent);
+
+            spawnCallback?.Invoke(ent);
 
             return ent;
         }

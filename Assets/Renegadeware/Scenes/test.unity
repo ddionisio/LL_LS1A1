@@ -389,6 +389,7 @@ MonoBehaviour:
   debugPlay: 1
   debugPlayEnvIndex: 0
   debugPlayOrganism: {fileID: 11400000, guid: d61054d2df859dd489e24b0c482d92ae, type: 2}
+  debugPlayTimeUnlimited: 1
 --- !u!1001 &265448750
 PrefabInstance:
   m_ObjectHideFlags: 0

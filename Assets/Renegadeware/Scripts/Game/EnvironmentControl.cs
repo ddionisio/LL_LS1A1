@@ -99,7 +99,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
-            GameData.instance.signalEnvironmentClick.Invoke(eventData.pointerCurrentRaycast.worldPosition);
+            if(!isDragging && eventData.pointerCurrentRaycast.isValid)
+                GameData.instance.signalEnvironmentClick.Invoke(eventData.pointerCurrentRaycast.worldPosition);
         }
     }
 }

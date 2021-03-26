@@ -33,6 +33,7 @@ namespace Renegadeware.LL_LS1A1 {
         public bool debugPlay; //set to true to directly go to Play with given env. index and template
         public int debugPlayEnvIndex;
         public OrganismTemplate debugPlayOrganism;
+        public bool debugPlayTimeUnlimited = false;
 
         /////////////////////////////
 
@@ -100,6 +101,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         private Collider2D[] mGameSpawnCheckOverlaps = new Collider2D[8];
         private int mGameSpawnCheckOverlapCount;
+        private float mGameSpawnRadius;
+
+        private int mGameTimeIndex;
 
         //transition stuff
         private TransitionState mTransitionState;
@@ -110,15 +114,26 @@ namespace Renegadeware.LL_LS1A1 {
 
                 gameDat.signalEnvironmentChanged.callback -= OnEnvironmentChanged;
 
+                gameDat.signalCameraZoom.callback -= OnCameraZoom;
+
                 gameDat.signalOrganismBodyChanged.callback -= OnOrganismBodyChanged;
                 gameDat.signalOrganismComponentEssentialChanged.callback -= OnOrganismComponentEssentialChanged;
                 gameDat.signalOrganismComponentChanged.callback -= OnOrganismComponentChanged;
             }
 
+            if(mOrganismSpawner) {
+                mOrganismSpawner.spawnCallback -= OnOrganismSpawnerSpawn;
+                mOrganismSpawner.releaseCallback -= OnOrganismSpawnerRelease;
+            }
+
             if(HUD.isInstantiated) {
                 var hud = HUD.instance;
 
-                hud.modeSelectClickCallback -= OnModeSelect;
+                hud.modeSelectClickCallback -= OnHUDModeSelect;
+
+                hud.spawnActivateCallback -= OnHUDSpawnActivate;
+                hud.zoomCallback -= OnHUDZoom;
+                hud.timePlayCallback -= SetTimeIndex;
 
                 hud.HideAll();
             }
@@ -169,6 +184,9 @@ namespace Renegadeware.LL_LS1A1 {
             //grab organism spawner
             mOrganismSpawner = gameRootGO.GetComponent<OrganismTemplateSpawner>();
 
+            mOrganismSpawner.spawnCallback += OnOrganismSpawnerSpawn;
+            mOrganismSpawner.releaseCallback += OnOrganismSpawnerRelease;
+
             gameRootGO.SetActive(false);
 
             /////////////////////////////
@@ -181,6 +199,8 @@ namespace Renegadeware.LL_LS1A1 {
             //initialize signals
             gameDat.signalEnvironmentChanged.callback += OnEnvironmentChanged;
 
+            gameDat.signalCameraZoom.callback += OnCameraZoom;
+
             gameDat.signalOrganismBodyChanged.callback += OnOrganismBodyChanged;
             gameDat.signalOrganismComponentEssentialChanged.callback += OnOrganismComponentEssentialChanged;
             gameDat.signalOrganismComponentChanged.callback += OnOrganismComponentChanged;
@@ -191,7 +211,13 @@ namespace Renegadeware.LL_LS1A1 {
             yield return base.Start();
 
             //hook-up hud interaction
-            HUD.instance.modeSelectClickCallback += OnModeSelect;
+            var hud = HUD.instance;
+
+            hud.modeSelectClickCallback += OnHUDModeSelect;
+
+            hud.spawnActivateCallback += OnHUDSpawnActivate;
+            hud.timePlayCallback += OnHUDTimeIndexChange;
+            hud.zoomCallback += OnHUDZoom;            
 
             //game flow
             if(debugPlay) {
@@ -329,8 +355,14 @@ namespace Renegadeware.LL_LS1A1 {
 
             var envInfo = environmentCurrentInfo;
 
+            //initialize game states
+            SetTimeIndex(1);
+
             //start up entities
             mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, gameDat.organismPlayerSpawnName, gameDat.organismPlayerTag, envInfo.capacity);
+
+            var organismSize = mOrganismSpawner.template.size;
+            mGameSpawnRadius = Mathf.Max(organismSize.x, organismSize.y) * 0.5f;
 
             environmentRootGO.SetActive(true);
 
@@ -339,7 +371,7 @@ namespace Renegadeware.LL_LS1A1 {
             yield return DoTransitionShow();
 
             //setup hud
-            hud.TimeIndexSetup(0);
+            hud.TimePlaySetIndex(mGameTimeIndex);
             hud.TimeUpdate(0f, level.duration);
 
             hud.ZoomSetup(camCtrl.zoomIndex, camCtrl.zoomLevels);
@@ -362,7 +394,24 @@ namespace Renegadeware.LL_LS1A1 {
             while(mModeSelectNext == ModeSelect.None) {
                 //update spawn placement display
                 if(hud.spawnPlacementIsActive) {
+                    bool isValid = false;
 
+                    var mousePos = Input.mousePosition;
+                    if(mousePos.x >= 0f && mousePos.x < Screen.width && mousePos.y >= 0f && mousePos.y < Screen.height) {
+                        Vector2 pos = CameraControl.instance.cameraSource.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, -CameraControl.instance.cameraSource.transform.position.z));
+
+                        //ensure there are no overlaps
+                        mGameSpawnCheckOverlapCount = Physics2D.OverlapCircle(pos, mGameSpawnRadius, gameDat.organismSpawnContactFilter, mGameSpawnCheckOverlaps);
+
+                        //Debug.Log("pos: " + pos);
+
+                        isValid = mGameSpawnCheckOverlapCount == 0;
+                    }
+
+                    hud.spawnPlacementPointer.position = new Vector3(Mathf.Clamp(mousePos.x, 0f, Screen.width), Mathf.Clamp(mousePos.y, 0f, Screen.height), 0f);
+
+                    if(hud.spawnPlacementIsValid != isValid)
+                        hud.spawnPlacementIsValid = isValid;
                 }
 
                 //refresh time
@@ -370,7 +419,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                 hud.TimeUpdate(curGameTime, level.duration);
 
-                if(curGameTime >= level.duration) {
+                if(!debugPlayTimeUnlimited && curGameTime >= level.duration) {
                     isTimeExpired = true;
                     break;
                 }
@@ -387,12 +436,19 @@ namespace Renegadeware.LL_LS1A1 {
 
             gameIsInputEnabled = false;
 
+            //revert time
+            SetTimeIndex(1);
+
             //purge player entities
             mOrganismSpawner.Destroy();
 
             //hide environment if we are editing
             if(mModeSelectNext == ModeSelect.Edit)
                 StartCoroutine(DoTransitionHide());
+
+            //hide hud
+            HUD.instance.ElementHide(HUD.Element.Gameplay);
+            HUD.instance.ElementHide(HUD.Element.ModeSelect);
 
             //wait for transitions
             while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || transitionIsBusy)
@@ -436,8 +492,38 @@ namespace Renegadeware.LL_LS1A1 {
             mTransitionState = TransitionState.Hidden;
         }
 
-        void OnModeSelect(ModeSelect toMode) {
+        void OnHUDModeSelect(ModeSelect toMode) {
             mModeSelectNext = toMode;
+        }
+
+        void OnHUDSpawnActivate() {
+            var hud = HUD.instance;
+
+            hud.spawnPlacementIsActive = !hud.spawnPlacementIsActive;
+
+            if(hud.spawnPlacementIsActive) {
+                if(mGameTimeIndex > 1) {
+                    SetTimeIndex(1);
+                    hud.TimePlaySetIndex(mGameTimeIndex);
+                }
+            }
+        }
+
+        void OnHUDTimeIndexChange(int timeIndex) {
+            var hud = HUD.instance;
+
+            if(hud.spawnPlacementIsActive)
+                hud.spawnPlacementIsActive = false;
+
+            SetTimeIndex(timeIndex);
+        }
+
+        void OnHUDZoom(int zoomIndex) {
+            CameraControl.instance.ZoomTo(zoomIndex);
+        }
+
+        void OnCameraZoom(int zoomIndex) {
+            HUD.instance.ZoomApply(zoomIndex);
         }
 
         void OnEnvironmentChanged(int envInd) {
@@ -447,17 +533,37 @@ namespace Renegadeware.LL_LS1A1 {
         void OnEnvironmentDrag(Vector2 delta) {
             var camCtrl = CameraControl.instance;
 
-            Vector2 pos;
+            /*Vector2 pos;
             if(camCtrl.isMoving)
                 pos = camCtrl.positionMoveTo;
             else
-                pos = camCtrl.position;
+                pos = camCtrl.position;*/
 
             camCtrl.position -= delta * GameData.instance.environmentInputDragScale;
         }
 
         void OnEnvironmentClick(Vector2 pos) {
-            GameSpawnAt(pos);
+            var hud = HUD.instance;
+            if(hud.spawnPlacementIsActive) {
+                var screenPos = CameraControl.instance.cameraSource.WorldToScreenPoint(pos);
+                hud.spawnPlacementPointer.position = new Vector3(Mathf.Clamp(screenPos.x, 0f, Screen.width), Mathf.Clamp(screenPos.y, 0f, Screen.height), 0f);
+
+                //ensure there are no overlaps
+                if(mGameSpawnCheckOverlapCount == 0) {
+                    if(level.spawnIsRandomDir)
+                        mOrganismSpawner.SpawnAtRandomDir(pos);
+                    else
+                        mOrganismSpawner.SpawnAt(pos);
+
+                    //no longer have spawnables, deactivate spawn placement and resume game
+                    if(mOrganismSpawner.entityCount >= environmentCurrentInfo.spawnableCount) {
+                        hud.spawnPlacementIsActive = false;
+
+                        SetTimeIndex(1);
+                        hud.TimePlaySetIndex(mGameTimeIndex);
+                    }
+                }
+            }
         }
 
         void OnOrganismBodyChanged() {
@@ -472,28 +578,33 @@ namespace Renegadeware.LL_LS1A1 {
             HUD.instance.ModeSelectSetVisible(HUDGetModeSelectFlags());
         }
 
-        private void GameSpawnAt(Vector2 pos) {
-            //ensure we can spawn
-            if(mOrganismSpawner.entityCount < environmentCurrentInfo.spawnableCount) {
-                var gameDat = GameData.instance;
+        void OnOrganismSpawnerSpawn(OrganismEntity ent) {
+            var envInfo = environmentCurrentInfo;
 
-                var organismSize = mOrganismSpawner.template.size;
-                var radius = Mathf.Max(organismSize.x, organismSize.y) * 0.5f;
+            var hud = HUD.instance;
 
-                //ensure there are no overlaps
-                mGameSpawnCheckOverlapCount = Physics2D.OverlapCircle(pos, radius, gameDat.organismSpawnContactFilter, mGameSpawnCheckOverlaps);
-                if(mGameSpawnCheckOverlapCount == 0) {
-                    if(level.spawnIsRandomDir)
-                        mOrganismSpawner.SpawnAtRandomDir(pos);
-                    else
-                        mOrganismSpawner.SpawnAt(pos);
-                }
-            }
+            hud.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.spawnableCount, envInfo.criteriaCount, envInfo.bonusCount);
+
+            if(hud.spawnPlacementIsActive && mOrganismSpawner.entityCount >= envInfo.spawnableCount)
+                hud.spawnPlacementIsActive = false;
+        }
+
+        void OnOrganismSpawnerRelease(OrganismEntity ent) {
+            var envInfo = environmentCurrentInfo;
+
+            HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.spawnableCount, envInfo.criteriaCount, envInfo.bonusCount);
+        }
+
+        private void SetTimeIndex(int timeIndex) {
+            mGameTimeIndex = timeIndex;
+
+            if(timeIndex == 0)
+                M8.SceneManager.instance.timeScale = 0f;
+            else
+                M8.SceneManager.instance.timeScale = 1<<(timeIndex - 1);
         }
 
         private ModeSelectFlags HUDGetModeSelectFlags() {
-            var hud = HUD.instance;
-
             //check if current organism template is valid
             var organismTemplate = GameData.instance.organismTemplateCurrent;
             var organismTemplateValid = organismTemplate.isEssentialComponentsFilled;

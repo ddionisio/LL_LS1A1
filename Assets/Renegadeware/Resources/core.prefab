@@ -58,7 +58,7 @@ MonoBehaviour:
   _mode: 0
   levelString: level
   stackEnable: 0
-  isTimeScaleOverride: 0
+  isTimeScaleOverride: 1
 --- !u!114 &8074287908149608912
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -16,6 +16,7 @@ namespace Renegadeware.LL_LS1A1 {
         public float exploreTurnDuration = 0.3f;
         public float exploreTurnEndDelay = 0.5f;
         public float exploreTurnAngleVelocityMax = 90f;
+        public float exploreTurnAwayAngle = 30f;
 
         [Header("Energy")]
         public float energyMinScale = 0.15f; //minimum energy percentage to activate
@@ -117,14 +118,21 @@ namespace Renegadeware.LL_LS1A1 {
 
                             for(int i = 0; i < entity.contactSolids.Count; i++) {
                                 var distInfo = entity.GetContactDistanceInfo(entity.contactSolids[i]);
-                                if(distInfo.isValid && distInfo.isOverlapped) {
+                                if(distInfo.isValid && distInfo.distance <= 0f) {
                                     mTurnAway += distInfo.normal;
                                     validCount++;
                                 }
                             }
 
                             if(validCount > 0) {
-                                mTurnAway.Normalize();
+                                if(validCount > 1)
+                                    mTurnAway.Normalize();
+
+                                mTurnSide = Mathf.Sign(Vector2.SignedAngle(mTurnAway, entity.forward)) < 0f ? M8.MathUtil.Side.Left : M8.MathUtil.Side.Right;
+                                mTurnAway = entity.forward;
+
+                                entity.angularVelocity = 0f;
+
                                 mExploreState = ExploreState.TurnAway;
                             }
                         }
@@ -176,9 +184,12 @@ namespace Renegadeware.LL_LS1A1 {
                             break;
 
                         case ExploreState.TurnAway:
-                            var angle = Vector2.SignedAngle(mTurnAway, entity.forward);
-                            if(Mathf.Abs(angle) < GameData.instance.organismTurnAwayAngle) {
-                                entity.angularVelocity -= Mathf.Sign(angle) * mComp.turnAccel * dt;
+                            var angle = Vector2.Angle(mTurnAway, entity.forward);
+                            if(angle < mComp.exploreTurnAwayAngle) {
+                                if(mTurnSide == M8.MathUtil.Side.Right)
+                                    entity.angularVelocity -= mComp.turnAccel * dt;
+                                else
+                                    entity.angularVelocity += mComp.turnAccel * dt;
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
@@ -222,36 +233,59 @@ namespace Renegadeware.LL_LS1A1 {
             if(stats.energyLocked || stats.energyScale <= mComp.energyMinScale)
                 return;
 
-            //seek/danger
+            var pos = entity.position;
+
+            //seek/retreat from closest
+            Transform seek = null;
+            float seekDistSqr = float.MaxValue;
+
+            Transform retreat = null;
+            float retreatDistSqr = float.MaxValue;
+
+
             //check for danger, or an organism we can eat
             for(int i = 0; i < sensor.organisms.Count; i++) {
                 var organism = sensor.organisms[i];
                 if(organism && !organism.isReleased) {
                     //can this organism eat us?
                     if(organism.stats.CanEat(stats)) {
-                        ChangeToState(State.Retreat, organism.transform);
-                        return;
+                        var distSqr = (organism.position - pos).sqrMagnitude;
+                        if(distSqr < retreatDistSqr) {
+                            retreat = organism.transform;
+                            retreatDistSqr = distSqr;
+                        }
                     }
-                    //can we eat it?
-                    else if(stats.CanEat(organism.stats)) {
-                        ChangeToState(State.Seek, organism.transform);
-                        return;
+                    //can we eat it, if we are not retreating?
+                    else if(!retreat && stats.CanEat(organism.stats)) {
+                        var distSqr = (organism.position - pos).sqrMagnitude;
+                        if(distSqr < seekDistSqr) {
+                            seek = organism.transform;
+                            seekDistSqr = distSqr;
+                        }
                     }
                 }
             }
 
-            //check for energy source
-            if(entity.contactEnergies.Count == 0) {
+            //check for energy source, if not retreating
+            if(!retreat && entity.contactEnergies.Count == 0) {
                 for(int i = 0; i < sensor.energies.Count; i++) {
                     var energy = sensor.energies[i];
                     if(energy && energy.isActive) {
-                        ChangeToState(State.Seek, energy.transform);
-                        return;
+                        var distSqr = ((Vector2)energy.transform.position - pos).sqrMagnitude;
+                        if(distSqr < seekDistSqr) {
+                            seek = energy.transform;
+                            seekDistSqr = distSqr;
+                        }
                     }
                 }
             }
 
-            mTarget = null;
+            if(retreat)
+                ChangeToState(State.Retreat, retreat);
+            else if(seek)
+                ChangeToState(State.Seek, seek);
+            else
+                mTarget = null;
         }
 
         private void ChangeToState(State toState, Transform target) {
