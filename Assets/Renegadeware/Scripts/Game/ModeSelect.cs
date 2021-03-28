@@ -4,7 +4,8 @@ namespace Renegadeware.LL_LS1A1 {
         None = -1,
         Environment,
         Edit,
-        Play
+        Play,
+        NextLevel
     }
 
     [System.Flags]

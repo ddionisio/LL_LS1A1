@@ -21,11 +21,15 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public class EnvironmentStat {
-            public int organismTemplateID = GameData.invalidID; //cell template used for this environment
-            public int count = 0; //organism count made after play, if >= criteriaCount, then this environment is complete
+            public int organismTemplateID; //cell template used for this environment
+            public int count; //organism count made after play, if >= criteriaCount, then this environment is complete
 
             private const string userDataKeySubOrganismID = "_id";
             private const string userDataKeySubOrganismCount = "_count";
+
+            public EnvironmentStat() {
+                Reset();
+            }
 
             public EnvironmentStat(M8.UserData usrData, string key) {
                 LoadFrom(usrData, key);
@@ -59,6 +63,18 @@ namespace Renegadeware.LL_LS1A1 {
 
         public OrganismComponentGroup organismBodyGroup;
 
+        public EnvironmentStat[] stats {
+            get {
+                if(mStats == null) {
+                    mStats = new EnvironmentStat[environments.Length];
+                    for(int i = 0; i < mStats.Length; i++)
+                        mStats[i] = new EnvironmentStat();
+                }
+
+                return mStats;
+            }
+        }
+
         private const string userDataKeyEnvironmentStat = "envStat";
 
         private EnvironmentStat[] mStats;
@@ -68,20 +84,18 @@ namespace Renegadeware.LL_LS1A1 {
         //cell spawn restriction, etc.
 
         public bool IsEnvironmentComplete(int envInd) {
-            if(mStats == null || envInd >= mStats.Length)
-                return false;
+            return stats[envInd].count >= environments[envInd].criteriaCount;
+        }
 
-            return mStats[envInd].count >= environments[envInd].criteriaCount;
+        public bool IsComplete() {
+            return GetProgressCount() >= progressCount;
         }
 
         public int GetProgressCount() {
-            if(mStats == null)
-                return 0;
-
             int progressCount = 0;
 
-            for(int i = 0; i < mStats.Length; i++) {
-                if(mStats[i].count >= environments[i].criteriaCount)
+            for(int i = 0; i < stats.Length; i++) {
+                if(stats[i].count >= environments[i].criteriaCount)
                     progressCount++;
             }
 
@@ -89,6 +103,11 @@ namespace Renegadeware.LL_LS1A1 {
             progressCount = Mathf.Clamp(progressCount, 0, progressCount);
 
             return progressCount;
+        }
+
+        public void ApplyStats(int envInd, int templateID, int spawnCount) {
+            stats[envInd].organismTemplateID = templateID;
+            stats[envInd].count = spawnCount;
         }
 
         public void LoadStatsFrom(M8.UserData usrData) {

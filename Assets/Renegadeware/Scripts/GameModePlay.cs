@@ -77,6 +77,8 @@ namespace Renegadeware.LL_LS1A1 {
 
                     if(CameraControl.isInstantiated)
                         CameraControl.instance.inputEnabled = value;
+
+                    RefreshSpawnPlacementActive();
                 }
             }
         }
@@ -129,9 +131,8 @@ namespace Renegadeware.LL_LS1A1 {
             if(HUD.isInstantiated) {
                 var hud = HUD.instance;
 
-                hud.modeSelectClickCallback -= OnHUDModeSelect;
+                hud.modeSelectClickCallback -= OnModeSelect;
 
-                hud.spawnActivateCallback -= OnHUDSpawnActivate;
                 hud.zoomCallback -= OnHUDZoom;
                 hud.timePlayCallback -= SetTimeIndex;
 
@@ -213,9 +214,8 @@ namespace Renegadeware.LL_LS1A1 {
             //hook-up hud interaction
             var hud = HUD.instance;
 
-            hud.modeSelectClickCallback += OnHUDModeSelect;
+            hud.modeSelectClickCallback += OnModeSelect;
 
-            hud.spawnActivateCallback += OnHUDSpawnActivate;
             hud.timePlayCallback += OnHUDTimeIndexChange;
             hud.zoomCallback += OnHUDZoom;            
 
@@ -409,9 +409,7 @@ namespace Renegadeware.LL_LS1A1 {
                     }
 
                     hud.spawnPlacementPointer.position = new Vector3(Mathf.Clamp(mousePos.x, 0f, Screen.width), Mathf.Clamp(mousePos.y, 0f, Screen.height), 0f);
-
-                    if(hud.spawnPlacementIsValid != isValid)
-                        hud.spawnPlacementIsValid = isValid;
+                    hud.spawnPlacementIsValid = isValid;
                 }
 
                 //refresh time
@@ -429,35 +427,62 @@ namespace Renegadeware.LL_LS1A1 {
                 yield return null;
             }
 
-            //determine next mode if time expired
-            if(isTimeExpired) {
-                //met criteria?
-            }
+            //hide hud
+            HUD.instance.ElementHide(HUD.Element.Gameplay);
+            HUD.instance.ElementHide(HUD.Element.ModeSelect);
 
             gameIsInputEnabled = false;
 
             //revert time
             SetTimeIndex(1);
 
+            //determine next mode if time expired
+            if(isTimeExpired) {
+                //met criteria?
+                if(mOrganismSpawner.entityCount >= environmentCurrentInfo.criteriaCount) { //victory
+                    //save progress
+                    level.ApplyStats(environmentCurrentIndex, gameDat.organismTemplateCurrent.ID, mOrganismSpawner.entityCount);
+                    gameDat.Progress();
+
+                    //setup stats for victory display
+
+                    M8.ModalManager.main.Open(gameDat.modalVictory, mModalParms);
+
+                    while(M8.ModalManager.main.isBusy || M8.ModalManager.main.IsInStack(gameDat.modalVictory))
+                        yield return null;
+
+                    //check if we are ready to move on
+                    if(level.IsComplete())
+                        mModeSelectNext = ModeSelect.NextLevel;
+                    else
+                        mModeSelectNext = ModeSelect.Environment;
+                }
+                else { //retry
+                    mModeSelectNext = ModeSelect.None;
+
+                    mModalParms[ModalRetry.parmCallback] = (System.Action<ModeSelect>)OnModeSelect;
+
+                    M8.ModalManager.main.Open(gameDat.modalRetry, mModalParms);
+
+                    while(mModeSelectNext == ModeSelect.None)
+                        yield return null;
+                }
+            }
+
             //purge player entities
             mOrganismSpawner.Destroy();
+            gameRootGO.SetActive(false);
 
             //hide environment if we are editing
             if(mModeSelectNext == ModeSelect.Edit)
                 StartCoroutine(DoTransitionHide());
 
-            //hide hud
-            HUD.instance.ElementHide(HUD.Element.Gameplay);
-            HUD.instance.ElementHide(HUD.Element.ModeSelect);
-
             //wait for transitions
             while(M8.ModalManager.main.isBusy || HUD.instance.isBusy || transitionIsBusy)
                 yield return null;
 
-            if(mModeSelectNext == ModeSelect.Edit)
+            if(mTransitionState == TransitionState.Hidden)
                 environmentRootGO.SetActive(false);
-
-            gameRootGO.SetActive(false);
 
             ChangeToMode(mModeSelectNext);
         }
@@ -492,21 +517,8 @@ namespace Renegadeware.LL_LS1A1 {
             mTransitionState = TransitionState.Hidden;
         }
 
-        void OnHUDModeSelect(ModeSelect toMode) {
+        void OnModeSelect(ModeSelect toMode) {
             mModeSelectNext = toMode;
-        }
-
-        void OnHUDSpawnActivate() {
-            var hud = HUD.instance;
-
-            hud.spawnPlacementIsActive = !hud.spawnPlacementIsActive;
-
-            if(hud.spawnPlacementIsActive) {
-                if(mGameTimeIndex > 1) {
-                    SetTimeIndex(1);
-                    hud.TimePlaySetIndex(mGameTimeIndex);
-                }
-            }
         }
 
         void OnHUDTimeIndexChange(int timeIndex) {
@@ -581,18 +593,31 @@ namespace Renegadeware.LL_LS1A1 {
         void OnOrganismSpawnerSpawn(OrganismEntity ent) {
             var envInfo = environmentCurrentInfo;
 
-            var hud = HUD.instance;
+            HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.spawnableCount, envInfo.criteriaCount, envInfo.bonusCount);
 
-            hud.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.spawnableCount, envInfo.criteriaCount, envInfo.bonusCount);
-
-            if(hud.spawnPlacementIsActive && mOrganismSpawner.entityCount >= envInfo.spawnableCount)
-                hud.spawnPlacementIsActive = false;
+            RefreshSpawnPlacementActive();
         }
 
         void OnOrganismSpawnerRelease(OrganismEntity ent) {
             var envInfo = environmentCurrentInfo;
 
             HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.spawnableCount, envInfo.criteriaCount, envInfo.bonusCount);
+
+            RefreshSpawnPlacementActive();
+        }
+
+        private void RefreshSpawnPlacementActive() {
+            if(mGameInputEnabled && mOrganismSpawner.entityCount < environmentCurrentInfo.spawnableCount) {
+                HUD.instance.spawnPlacementIsActive = true;
+
+                if(mGameTimeIndex > 1) {
+                    SetTimeIndex(1);
+                    HUD.instance.TimePlaySetIndex(mGameTimeIndex);
+                }
+            }
+            else {
+                HUD.instance.spawnPlacementIsActive = false;
+            }
         }
 
         private void SetTimeIndex(int timeIndex) {
@@ -649,6 +674,9 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
                 case ModeSelect.Play:
                     StartCoroutine(DoSimulation());
+                    break;
+                case ModeSelect.NextLevel:                    
+                    GameData.instance.Current(); //this should load the next scene since this level's progress is fully complete
                     break;
             }
         }

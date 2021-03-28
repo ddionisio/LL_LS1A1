@@ -25,7 +25,7 @@ namespace Renegadeware.LL_LS1A1 {
         public AnimatorEnterExit gameplayTransition;
 
         [Header("Gameplay Organism Group")]
-        public Button organismSpawnButton;
+        public GameObject organismSpawnActiveGO;
         public TMP_Text organismSpawnCountLabel;
 
         public Image organismProgress;
@@ -68,12 +68,8 @@ namespace Renegadeware.LL_LS1A1 {
         public bool spawnPlacementIsActive {
             get { return spawnPlacementRootGO.activeSelf; }
             set {
-                if(spawnPlacementRootGO.activeSelf != value) {
+                if(spawnPlacementRootGO.activeSelf != value)
                     spawnPlacementRootGO.SetActive(value);
-
-                    if(value)
-                        spawnPlacementColorGroup.applyColor = spawnPlacementColorValid;
-                }
             }
         }
 
@@ -88,7 +84,6 @@ namespace Renegadeware.LL_LS1A1 {
 
         public event System.Action<ModeSelect> modeSelectClickCallback;
 
-        public event System.Action spawnActivateCallback;
         public event System.Action<int> timePlayCallback; //time index: 0 - stop, 1 - 1x speed, 2 - 2x speed, etc.
         public event System.Action<int> zoomCallback;
 
@@ -139,7 +134,7 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void OrganismProgressApply(int currentCount, int spawnMinCount, int goalCount, int goalBonusCount) {
-            organismSpawnButton.interactable = currentCount < spawnMinCount;
+            organismSpawnActiveGO.SetActive(currentCount < spawnMinCount);
 
             organismProgress.fillAmount = Mathf.Clamp01((float)currentCount / goalCount);
 
@@ -192,13 +187,13 @@ namespace Renegadeware.LL_LS1A1 {
             if(modeSelectCanvasGroup)
                 mModeSelectInteractive = modeSelectCanvasGroup.interactable;
 
+            spawnPlacementIsActive = false;
+
             //hook up calls
             for(int i = 0; i < modeSelectButtons.Length; i++) {
                 var mode = (ModeSelect)i;
                 modeSelectButtons[i].onClick.AddListener(delegate () { modeSelectClickCallback?.Invoke(mode); });
             }
-
-            organismSpawnButton.onClick.AddListener(OnOrganismSpawnClick);
 
             timePlayButton.onClick.AddListener(OnTimePlayClick);
 
@@ -264,10 +259,6 @@ namespace Renegadeware.LL_LS1A1 {
                     if(gameplayRootGO) gameplayRootGO.SetActive(false);
                     break;
             }
-        }
-
-        void OnOrganismSpawnClick() {
-            spawnActivateCallback?.Invoke();
         }
 
         void OnTimePlayClick() {

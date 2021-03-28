@@ -17,6 +17,8 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Modals")]
         public string modalEnvironmentSelect = "environmentSelect";
         public string modalOrganismEdit = "organismEdit";
+        public string modalRetry = "retry";
+        public string modalVictory = "victory";
 
         [Header("Environment Settings")]
         [M8.TagSelector]
@@ -277,10 +279,10 @@ namespace Renegadeware.LL_LS1A1 {
                 isGameStarted = true;
             }
 
-            if(LoLManager.isInstantiated) {
-                if(mOrganismTemplateCurrent)
-                    mOrganismTemplateCurrent.Reset();
+            if(mOrganismTemplateCurrent)
+                mOrganismTemplateCurrent.Reset();
 
+            if(isGameStarted) {
                 SaveUserData();
 
                 LoLManager.instance.ApplyProgress(curProgress + 1);
