@@ -169,17 +169,30 @@ namespace Renegadeware.LL_LS1A1 {
         /// </summary>
         public ContactFilter2D organismSensorContactFilter {
             get {
-                if(!mOrganismSensorContactInit) {
+                if(!mOrganismSensorContactFilterInit) {
                     var min = Mathf.Min(organismDepth, energyDepth);
                     var max = Mathf.Max(organismDepth, energyDepth);
 
-                    mOrganismSensorContact.SetDepth(min, max);
-                    mOrganismSensorContact.useTriggers = true;
+                    mOrganismSensorContactFilter.SetDepth(min, max);
+                    mOrganismSensorContactFilter.useTriggers = true;
 
-                    mOrganismSensorContactInit = true;
+                    mOrganismSensorContactFilterInit = true;
                 }
 
-                return mOrganismSensorContact;
+                return mOrganismSensorContactFilter;
+            }
+        }
+
+        public ContactFilter2D organismSolidContactFilter {
+            get {
+                if(!mOrganismSolidContactFilterInit) {
+                    mOrganismSolidContactFilter.SetDepth(environmentDepth, environmentDepth);
+                    mOrganismSolidContactFilter.useTriggers = false;
+
+                    mOrganismSolidContactFilterInit = true;
+                }
+
+                return mOrganismSolidContactFilter;
             }
         }
 
@@ -201,8 +214,11 @@ namespace Renegadeware.LL_LS1A1 {
         private ContactFilter2D mOrganismContactFilter = new ContactFilter2D();
         private bool mOrganismContactFilterInit = false;
 
-        private ContactFilter2D mOrganismSensorContact = new ContactFilter2D();
-        private bool mOrganismSensorContactInit = false;
+        private ContactFilter2D mOrganismSensorContactFilter = new ContactFilter2D();
+        private bool mOrganismSensorContactFilterInit = false;
+
+        private ContactFilter2D mOrganismSolidContactFilter = new ContactFilter2D();
+        private bool mOrganismSolidContactFilterInit = false;
 
         /// <summary>
         /// Called in start scene
@@ -357,7 +373,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             mOrganismSpawnContactFilterInit = false;
             mOrganismContactFilterInit = false;
-            mOrganismSensorContactInit = false;
+            mOrganismSensorContactFilterInit = false;
+            mOrganismSolidContactFilterInit = false;
             //
 
             //generate organism component look-up

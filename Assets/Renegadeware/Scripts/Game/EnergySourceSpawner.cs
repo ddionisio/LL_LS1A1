@@ -142,8 +142,8 @@ namespace Renegadeware.LL_LS1A1 {
             Vector2 pt = spawnPointInfo.GetPoint();
             Vector3 spawnPt = new Vector3(pt.x, pt.y, GameData.instance.energyDepth);
 
-            mSpawnParms[EnergySource.parmRoot] = spawnPointInfo.root;
-            mSpawnParms[EnergySource.parmRootRadius] = spawnPointInfo.radius;
+            mSpawnParms[EnergySource.parmAnchorPos] = (Vector2)spawnPointInfo.root.position;
+            mSpawnParms[EnergySource.parmAnchorRadius] = spawnPointInfo.radius;
 
             var energySrc = mPool.Spawn<EnergySource>(template.name, null, spawnPt, mSpawnParms);
 
