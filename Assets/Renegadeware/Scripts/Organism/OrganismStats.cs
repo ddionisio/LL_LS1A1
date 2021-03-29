@@ -13,6 +13,8 @@ namespace Renegadeware.LL_LS1A1 {
     public class OrganismStats {
         [Header("Physics")]
         public float mass;
+        public float forwardAccel; //used by motility control
+        public float turnAccel; //used by motility control
         public float speedLimit; //set to 0 for no limit
         public float velocityReceiveScale; //influence amount of velocity received (environment velocity, fields)
 
@@ -54,6 +56,11 @@ namespace Renegadeware.LL_LS1A1 {
                     mEnergyConsume = 0f;
             }
         }
+
+        /// <summary>
+        /// Used for distributing energy when in contact with similar organisms
+        /// </summary>
+        public float energyShare { get; set; }
 
         /// <summary>
         /// Energy value normalized relative to energyCapacity.
@@ -98,6 +105,7 @@ namespace Renegadeware.LL_LS1A1 {
             mEnergy = energyInitial;
             mEnergyLastUpdate = mEnergy;
 
+            energyShare = 0f;
             energyLocked = false;
 
             mLastResetTime = Time.time;
@@ -127,11 +135,11 @@ namespace Renegadeware.LL_LS1A1 {
             return danger > otherStats.danger && mass > otherStats.mass; //if edible, make sure it can be swallowed
         }
 
-        public void EnergyUpdate() {
+        public void EnergyUpdate(float deltaTime) {
             mEnergyLastUpdate = mEnergy;
 
             if(!energyLocked && !isEnergyFull && energyConsume > 0f) {
-                var energyConsume = energyConsumeRate * Time.deltaTime;
+                var energyConsume = energyConsumeRate * deltaTime;
 
                 energy += energyConsume;
                 this.energyConsume -= energyConsume;
@@ -140,6 +148,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public void Copy(OrganismStats otherStats) {
             mass = otherStats.mass;
+            forwardAccel = otherStats.forwardAccel;
+            turnAccel = otherStats.turnAccel;
             speedLimit = otherStats.speedLimit;
             velocityReceiveScale = otherStats.velocityReceiveScale;
 
@@ -165,6 +175,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public void Append(OrganismStats otherStats) {
             mass += otherStats.mass;
+            forwardAccel += otherStats.forwardAccel;
+            turnAccel += otherStats.turnAccel;
             speedLimit += otherStats.speedLimit;
             velocityReceiveScale += otherStats.velocityReceiveScale;
 

@@ -11,9 +11,9 @@ namespace Renegadeware.LL_LS1A1 {
         /// </summary>
         public float energyDrainScale;
 
-        public void Apply(OrganismStats stats) {
-            if(!stats.HazardMatch(hazard))
-                stats.energy -= stats.energyCapacity * energyDrainScale * Time.deltaTime;
-        }
+        public float moveScale = 0.5f;
+        public float turnScale = 0.5f;
+
+        public bool isActive { get { return gameObject.activeSelf; } }
     }
 }

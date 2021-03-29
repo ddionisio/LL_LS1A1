@@ -838,9 +838,11 @@ MonoBehaviour:
   lifespan: 0
   moveMode: 0
   moveAccel: 0
-  moveVelocityReceiveScale: 1
+  moveSpeedCap: 2
   moveDelay: 0.3
   moveWait: 0.5
+  moveSolidCheck: 0
+  moveSolidCheckDelay: 0.3
   animator: {fileID: 0}
   takeSpawn: 
   takeDespawn: 
@@ -1464,9 +1466,11 @@ MonoBehaviour:
   lifespan: 0
   moveMode: 0
   moveAccel: 0
-  moveVelocityReceiveScale: 1
+  moveSpeedCap: 2
   moveDelay: 0.3
   moveWait: 0.5
+  moveSolidCheck: 0
+  moveSolidCheckDelay: 0.3
   animator: {fileID: 0}
   takeSpawn: 
   takeDespawn: 
@@ -2665,9 +2669,11 @@ MonoBehaviour:
   lifespan: 0
   moveMode: 0
   moveAccel: 0
-  moveVelocityReceiveScale: 1
+  moveSpeedCap: 2
   moveDelay: 0.3
   moveWait: 0.5
+  moveSolidCheck: 0
+  moveSolidCheckDelay: 0.3
   animator: {fileID: 0}
   takeSpawn: 
   takeDespawn: 

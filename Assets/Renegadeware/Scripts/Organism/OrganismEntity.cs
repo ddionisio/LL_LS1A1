@@ -148,6 +148,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         public M8.CacheList<Collider2D> contactSolids { get { return mContactSolids; } }
         public M8.CacheList<OrganismEntity> contactOrganisms { get { return mContactOrganisms; } }
+        public M8.CacheList<OrganismEntity> contactOrganismMatches { get { return mContactOrganismMatches; } }
         public M8.CacheList<EnergySource> contactEnergies { get { return mContactEnergies; } }
 
         private struct ComponentControlInfo {
@@ -171,6 +172,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         private M8.CacheList<Collider2D> mContactSolids = new M8.CacheList<Collider2D>(contactCapacity);
         private M8.CacheList<OrganismEntity> mContactOrganisms = new M8.CacheList<OrganismEntity>(contactCapacity);
+        private M8.CacheList<OrganismEntity> mContactOrganismMatches = new M8.CacheList<OrganismEntity>(contactCapacity);
         private M8.CacheList<EnergySource> mContactEnergies = new M8.CacheList<EnergySource>(contactCapacity);
 
         private OrganismComponentControl[] mControls;
@@ -422,6 +424,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                     mContactSolids.Clear();
                     mContactOrganisms.Clear();
+                    mContactOrganismMatches.Clear();
                     mContactEnergies.Clear();
 
                     for(int i = 0; i < contactCount; i++) {
@@ -439,8 +442,12 @@ namespace Renegadeware.LL_LS1A1 {
                         }
                         else if(M8.Util.CheckTag(contact, gameDat.organismEntityTags)) {
                             var organismEnt = contact.GetComponent<OrganismEntity>();
-                            if(organismEnt)
+                            if(organismEnt) {
                                 mContactOrganisms.Add(organismEnt);
+
+                                if(IsMatchTemplate(organismEnt))
+                                    mContactOrganismMatches.Add(organismEnt);
+                            }
                         }
                         else if(contact.CompareTag(gameDat.environmentSolidTag)) {
                             mContactSolids.Add(contact);
@@ -457,36 +464,50 @@ namespace Renegadeware.LL_LS1A1 {
 
             //update energy
             if(!stats.energyLocked) {
-                stats.EnergyUpdate();
+                var dt = Time.deltaTime;
+
+                stats.EnergyUpdate(dt);
+
+                //initial energy from other matching organisms
+                float energyAmt = stats.energyShare;
+                stats.energyShare = 0f;
+
+                //check for energy source contacts and absorb its energy
+                if(mContactEnergies.Count > 0) {
+                    var energyConsume = stats.energyConsumeRate * dt;
+
+                    for(int i = 0; i < mContactEnergies.Count; i++) {
+                        var energySrc = mContactEnergies[i];
+
+                        energySrc.energy -= energyConsume;
+                        energyAmt += energyConsume;
+                    }
+                }
+                
+                if(energyAmt > 0f) {
+                    //divide the amount of energy received, and share it to matching organisms
+                    if(mContactOrganismMatches.Count > 0) {
+                        energyAmt /= mContactOrganismMatches.Count + 1;
+
+                        for(int i = 0; i < mContactOrganismMatches.Count; i++)
+                            mContactOrganismMatches[i].stats.energyShare += energyAmt;
+                    }
+
+                    stats.energy += energyAmt;
+                }
 
                 //environment energy
                 for(int i = 0; i < env.energySources.Length; i++) {
                     var energySrc = env.energySources[i];
-                    if(energySrc)
-                        energySrc.Apply(stats);
-                }
-
-                //check for energy source contacts and absorb its energy
-                var energyConsume = stats.energyConsumeRate * Time.deltaTime;
-
-                for(int i = 0; !stats.isEnergyFull && i < contactEnergies.Count; i++) {
-                    var energySrc = contactEnergies[i];
-
-                    float energyAmt;
-                    if(stats.energy + energyConsume < stats.energyCapacity)
-                        energyAmt = energyConsume;
-                    else //cap
-                        energyAmt = (stats.energy + energyConsume) - stats.energyCapacity;
-
-                    energySrc.energy -= energyAmt;
-                    stats.energy += energyAmt;
+                    if(energySrc && energySrc.isActive && stats.EnergyMatch(energySrc.energySource))
+                        stats.energy += energySrc.energyRate * dt;
                 }
 
                 //environment hazard
                 for(int i = 0; i < env.hazards.Length; i++) {
                     var hazard = env.hazards[i];
-                    if(hazard)
-                        hazard.Apply(stats);
+                    if(hazard && hazard.isActive && !stats.HazardMatch(hazard.hazard))
+                        stats.energy -= stats.energyCapacity * hazard.energyDrainScale * dt;
                 }
             }
 
@@ -547,6 +568,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             mContactSolids.Clear();
             mContactOrganisms.Clear();
+            mContactOrganismMatches.Clear();
             mContactEnergies.Clear();
         }
 

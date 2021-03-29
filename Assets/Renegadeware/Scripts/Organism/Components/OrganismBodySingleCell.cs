@@ -5,6 +5,14 @@ using UnityEngine;
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "body", menuName = "Game/Organism/Component/Body SingleCell")]
     public class OrganismBodySingleCell : OrganismBody {
+        public enum SplitMode {
+            Horizontal,
+            Vertical
+        }
+
+        [Header("Split Settings")]
+        public SplitMode splitMode = SplitMode.Horizontal;
+
         [Header("Death Settings")]
         public Color deathTint = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 
@@ -134,9 +142,9 @@ namespace Renegadeware.LL_LS1A1 {
                             }
 
                             //only stick to same organisms
-                            for(int i = 0; !mStickies.IsFull && i < entity.contactOrganisms.Count; i++) {
-                                var contactEntity = entity.contactOrganisms[i];
-                                if(!contactEntity.isReleased && !contactEntity.physicsLocked && entity.IsMatchTemplate(contactEntity)) {
+                            for(int i = 0; !mStickies.IsFull && i < entity.contactOrganismMatches.Count; i++) {
+                                var contactEntity = entity.contactOrganismMatches[i];
+                                if(!contactEntity.isReleased && !contactEntity.physicsLocked) {
                                     //ensure contacted is not already stuck to us
                                     var bodySingleCellCtrl = contactEntity.GetComponentControl<OrganismBodySingleCellControl>();
                                     if(bodySingleCellCtrl != null && !bodySingleCellCtrl.mStickies.Exists(entity.bodyCollider))
@@ -169,15 +177,28 @@ namespace Renegadeware.LL_LS1A1 {
                     if(!entity.animator || !entity.animator.isPlaying) {
                         var spawner = GameModePlay.instance.gameSpawner;
 
+                        var entPt = entity.position;
+
                         var forward = entity.forward;
 
-                        //split horizontally
-                        var dist = entity.size.x * 0.3f;
+                        Vector2 pt1, pt2;
+                        float dist;
 
-                        //get two spawn point
-                        var entPt = entity.position;
-                        var pt1 = entPt + entity.left * dist;
-                        var pt2 = entPt + entity.right * dist;
+                        switch(mComp.splitMode) {
+                            case OrganismBodySingleCell.SplitMode.Horizontal:
+                                dist = entity.size.x * 0.25f;
+
+                                pt1 = entPt + entity.left * dist;
+                                pt2 = entPt + entity.right * dist;
+                                break;
+
+                            default:
+                                dist = entity.size.y * 0.25f;
+
+                                pt1 = entPt + entity.forward * dist;
+                                pt2 = entPt - entity.forward * dist;
+                                break;
+                        }
 
                         //release this
                         entity.Release();
@@ -185,7 +206,6 @@ namespace Renegadeware.LL_LS1A1 {
                         //spawn two
                         spawner.SpawnAt(pt1, forward);
                         spawner.SpawnAt(pt2, forward);
-
                         return;
                     }
                     break;

@@ -17,6 +17,8 @@ MonoBehaviour:
     path: 
   modalEnvironmentSelect: environmentSelect
   modalOrganismEdit: organismEdit
+  modalRetry: retry
+  modalVictory: victory
   environmentSolidTag: Solid
   environmentDepth: -0.1
   environmentInputDragScale: 0.03
@@ -29,7 +31,7 @@ MonoBehaviour:
   organismDeathDelay: 2
   organismSeekTurnAngleThreshold: 2
   organismSeekAngleThreshold: 30
-  organismStickyDistanceThreshold: 0.25
+  organismStickyDistanceThreshold: 0.15
   organismEntityTags:
   - Organism
   - OrganismPlayer

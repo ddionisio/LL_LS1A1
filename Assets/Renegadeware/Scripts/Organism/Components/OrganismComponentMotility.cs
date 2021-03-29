@@ -6,8 +6,6 @@ namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "motility", menuName = "Game/Organism/Component/Motility")]
     public class OrganismComponentMotility : OrganismComponent {
         [Header("Movement")]
-        public float forwardAccel = 1f;
-        public float turnAccel = 5f;
         public bool isBidirectional;
 
         [Header("Explore")]
@@ -99,9 +97,9 @@ namespace Renegadeware.LL_LS1A1 {
                     else {
                         //try to dampen our movement
                         //if(entity.speed > 0f)
-                            //entity.speed -= mComp.forwardAccel * dt;
+                            //entity.speed -= stats.forwardAccel * dt;
 
-                        entity.AngularVelocityDampen(mComp.turnAccel * dt);
+                        entity.AngularVelocityDampen(stats.turnAccel * dt);
                     }
                     break;
 
@@ -139,10 +137,15 @@ namespace Renegadeware.LL_LS1A1 {
                     }
 
                     //move forward or turn
+
+                    //get forward and turn scale
+                    float moveScale, turnScale;
+                    GetMovementScale(out moveScale, out turnScale);
+
                     switch(mExploreState) {
                         case ExploreState.Forward:
                             if(time - mLastTime < mComp.exploreForwardDuration) {
-                                entity.velocity += entity.forward * mComp.forwardAccel * dt;
+                                entity.velocity += entity.forward * stats.forwardAccel * dt * moveScale;
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
@@ -162,11 +165,11 @@ namespace Renegadeware.LL_LS1A1 {
                                 switch(mTurnSide) {
                                     case M8.MathUtil.Side.Left:
                                         if(entity.angularVelocity <= mComp.exploreTurnAngleVelocityMax)
-                                            entity.angularVelocity += mComp.turnAccel * dt;
+                                            entity.angularVelocity += stats.turnAccel * dt * turnScale;
                                         break;
                                     case M8.MathUtil.Side.Right:
                                         if(-entity.angularVelocity <= mComp.exploreTurnAngleVelocityMax)
-                                            entity.angularVelocity -= mComp.turnAccel * dt;
+                                            entity.angularVelocity -= stats.turnAccel * dt * turnScale;
                                         break;
                                 }
 
@@ -187,9 +190,9 @@ namespace Renegadeware.LL_LS1A1 {
                             var angle = Vector2.Angle(mTurnAway, entity.forward);
                             if(angle < mComp.exploreTurnAwayAngle) {
                                 if(mTurnSide == M8.MathUtil.Side.Right)
-                                    entity.angularVelocity -= mComp.turnAccel * dt;
+                                    entity.angularVelocity -= stats.turnAccel * dt * turnScale;
                                 else
-                                    entity.angularVelocity += mComp.turnAccel * dt;
+                                    entity.angularVelocity += stats.turnAccel * dt * turnScale;
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
@@ -325,6 +328,21 @@ namespace Renegadeware.LL_LS1A1 {
             if(targetDist == 0f)
                 return;
 
+            var stats = entity.stats;
+
+            //get forward and turn scale
+            float moveScale, turnScale;
+            GetMovementScale(out moveScale, out turnScale);
+
+            var env = GameModePlay.instance.environmentCurrentControl;
+            for(int i = 0; i < env.hazards.Length; i++) {
+                var hazard = env.hazards[i];
+                if(hazard && hazard.isActive && !stats.HazardMatch(hazard.hazard)) {
+                    moveScale *= hazard.moveScale;
+                    turnScale *= hazard.turnScale;
+                }
+            }
+
             var gameDat = GameData.instance;
 
             var targetDir = dpos / targetDist;
@@ -353,12 +371,28 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             if(diffAngleAbs > gameDat.organismSeekTurnAngleThreshold)
-                entity.angularVelocity -= Mathf.Sign(diffAngle) * mComp.turnAccel * timeDelta;
+                entity.angularVelocity -= Mathf.Sign(diffAngle) * stats.turnAccel * timeDelta * turnScale;
             else
-                entity.AngularVelocityDampen(mComp.turnAccel * timeDelta);
+                entity.AngularVelocityDampen(stats.turnAccel * timeDelta);
 
             if(diffAngleAbs <= gameDat.organismSeekAngleThreshold)
-                entity.velocity += targetDir * mComp.forwardAccel * timeDelta;
+                entity.velocity += targetDir * stats.forwardAccel * timeDelta * moveScale;
+        }
+
+        private void GetMovementScale(out float moveScale, out float turnScale) {
+            moveScale = 1.0f;
+            turnScale = 1.0f;
+
+            var env = GameModePlay.instance.environmentCurrentControl;
+            var stats = entity.stats;
+
+            for(int i = 0; i < env.hazards.Length; i++) {
+                var hazard = env.hazards[i];
+                if(hazard && hazard.isActive && !stats.HazardMatch(hazard.hazard)) {
+                    moveScale *= hazard.moveScale;
+                    turnScale *= hazard.turnScale;
+                }
+            }
         }
     }
 }

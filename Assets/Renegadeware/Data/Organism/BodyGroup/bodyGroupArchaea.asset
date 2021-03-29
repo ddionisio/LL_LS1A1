@@ -16,6 +16,6 @@ MonoBehaviour:
   nameRef: categoryBody
   descRef: 
   components:
-  - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
-  - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
+  - {fileID: 11400000, guid: 556857367a22be0419e19b1933907bf4, type: 2}
+  - {fileID: 11400000, guid: 4329496c0722ab44aa16fa732b665e59, type: 2}
   - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
