@@ -14,9 +14,6 @@ namespace Renegadeware.LL_LS1A1 {
             Exit
         }
 
-        [Header("Level Data")]
-        public LevelData level;
-
         [Header("Environments")]
         public GameObject environmentRootGO; //should have Environment components and CameraControl here
 
@@ -30,12 +27,16 @@ namespace Renegadeware.LL_LS1A1 {
         public AnimatorEnterExit transition; //this is also treated as the root GO of transition
 
         [Header("Debug")]
+        public LevelData debugLevel;
+
         public bool debugPlay; //set to true to directly go to Play with given env. index and template
         public int debugPlayEnvIndex;
         public OrganismTemplate debugPlayOrganism;
         public bool debugPlayTimeUnlimited = false;
 
         /////////////////////////////
+
+        public LevelData level { get { return mLevelData; } }
 
         public EnvironmentControl[] environments { get; private set; }
         public int environmentCurrentIndex { get; private set; }
@@ -88,6 +89,8 @@ namespace Renegadeware.LL_LS1A1 {
         public bool gameIsCriteriaMet { get { return gameSpawner.entityCount >= environmentCurrentInfo.criteriaCount; } }
 
         /////////////////////////////
+
+        private LevelData mLevelData;
 
         //general
         private M8.GenericParams mModalParms = new M8.GenericParams();
@@ -148,6 +151,11 @@ namespace Renegadeware.LL_LS1A1 {
             base.OnInstanceInit();
 
             var gameDat = GameData.instance;
+
+            if(debugLevel)
+                mLevelData = debugLevel;
+            else
+                mLevelData = gameDat.currentLevelData;
 
             /////////////////////////////
             //initialize environment
@@ -417,7 +425,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                 hud.TimeUpdate(curGameTime, level.duration);
 
-                if(!debugPlayTimeUnlimited && curGameTime >= level.duration) {
+                if(!(debugPlay && debugPlayTimeUnlimited) && curGameTime >= level.duration) {
                     isTimeExpired = true;
                     break;
                 }
@@ -621,12 +629,11 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void SetTimeIndex(int timeIndex) {
-            mGameTimeIndex = timeIndex;
+            var gameDat = GameData.instance;
 
-            if(timeIndex == 0)
-                M8.SceneManager.instance.timeScale = 0f;
-            else
-                M8.SceneManager.instance.timeScale = 1<<(timeIndex - 1);
+            mGameTimeIndex = Mathf.Clamp(timeIndex, 0, gameDat.timeScales.Length - 1);
+
+            M8.SceneManager.instance.timeScale = gameDat.timeScales[mGameTimeIndex];
         }
 
         private ModeSelectFlags HUDGetModeSelectFlags() {

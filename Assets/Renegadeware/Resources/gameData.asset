@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1120d6571995834295bca95b4d5cb2c, type: 3}
   m_Name: gameData
   m_EditorClassIdentifier: 
+  levels:
+  - {fileID: 11400000, guid: 950f3bd841e6f2946a22536d20c22581, type: 2}
   endScene:
     name: 
     path: 
@@ -39,9 +41,14 @@ MonoBehaviour:
   organismTakeDeath: death
   energyTag: Energy
   energyDepth: -0.11
-  levels: []
+  timeScales:
+  - 0
+  - 1
+  - 8
   organismComponents:
   - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
+  - {fileID: 11400000, guid: 4329496c0722ab44aa16fa732b665e59, type: 2}
+  - {fileID: 11400000, guid: 556857367a22be0419e19b1933907bf4, type: 2}
   - {fileID: 11400000, guid: f4289bc98e1bc4c40b0e3dbaf57186b3, type: 2}
   - {fileID: 11400000, guid: d784cf704cbeddf48896fe376aed751a, type: 2}
   - {fileID: 11400000, guid: 42b2fc9572b9a854590e55b47d06432c, type: 2}

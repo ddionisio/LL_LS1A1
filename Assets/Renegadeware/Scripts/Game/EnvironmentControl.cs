@@ -10,15 +10,11 @@ namespace Renegadeware.LL_LS1A1 {
 
         public Rect bounds;
 
+        public GameObject controlRoot; //grab velocity, hazards, energies here
+
         [Header("Physics")]
         public float linearDrag = 1f;
         public float angularDrag = 5f;
-
-        public EnvironmentVelocity velocityControl;
-
-        [Header("Attributes")]
-        public EnvironmentHazard[] hazards;
-        public EnvironmentEnergy[] energySources;
 
         [Header("Editor")]
         public float editBoundsSteps = 1.0f;
@@ -36,6 +32,15 @@ namespace Renegadeware.LL_LS1A1 {
                 gameObject.SetActive(value);
             }
         }
+
+        public EnvironmentVelocity velocityControl { get { return mVelocityCtrl; } }
+
+        public EnvironmentHazard[] hazards { get { return mHazards; } }
+        public EnvironmentEnergy[] energySources { get { return mEnergySrcs; } }
+
+        private EnvironmentVelocity mVelocityCtrl;
+        private EnvironmentHazard[] mHazards;
+        private EnvironmentEnergy[] mEnergySrcs;
 
         public Vector2 Clamp(Vector2 center, Vector2 ext) {
             Vector2 min = bounds.min + ext;
@@ -74,6 +79,12 @@ namespace Renegadeware.LL_LS1A1 {
         void OnDisable() {
             if(isDragging)
                 ((IEndDragHandler)this).OnEndDrag(null);
+        }
+
+        void Awake() {
+            mVelocityCtrl = controlRoot.GetComponentInChildren<EnvironmentVelocity>(true);
+            mHazards = controlRoot.GetComponentsInChildren<EnvironmentHazard>(true);
+            mEnergySrcs = controlRoot.GetComponentsInChildren<EnvironmentEnergy>(true);
         }
 
         void OnDrawGizmos() {

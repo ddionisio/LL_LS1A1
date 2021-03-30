@@ -11,6 +11,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         public const int organismComponentCapacity = 8;
 
+        [Header("Levels")]
+        public LevelData[] levels;
+
         [Header("Scene")]
         public M8.SceneAssetPath endScene;
 
@@ -72,10 +75,10 @@ namespace Renegadeware.LL_LS1A1 {
         public string energyTag;
         public float energyDepth = -0.15f;
 
-        //[Header("Input Settings")]        
+        [Header("Time Settings")]
+        public float[] timeScales;
 
-        [Header("Levels")]
-        public LevelData[] levels;
+        //[Header("Input Settings")]
 
         [Header("Organism Components")]
         public OrganismComponent[] organismComponents;
@@ -100,6 +103,19 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.SignalInteger signalCameraZoom; //zoom index
 
         public bool isGameStarted { get; private set; } //true: we got through start normally, false: debug
+
+        public LevelData currentLevelData {
+            get {
+                var curScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+
+                for(int i = 0; i < levels.Length; i++) {
+                    if(levels[i].scene == curScene)
+                        return levels[i];
+                }
+
+                return null;
+            }
+        }
 
         public OrganismTemplate organismTemplateCurrent {
             get {

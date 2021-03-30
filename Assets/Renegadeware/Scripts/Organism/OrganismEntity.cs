@@ -487,10 +487,15 @@ namespace Renegadeware.LL_LS1A1 {
                 if(energyAmt > 0f) {
                     //divide the amount of energy received, and share it to matching organisms
                     if(mContactOrganismMatches.Count > 0) {
-                        energyAmt /= mContactOrganismMatches.Count + 1;
+                        var shareAmt = energyAmt / (mContactOrganismMatches.Count + 1);
 
-                        for(int i = 0; i < mContactOrganismMatches.Count; i++)
-                            mContactOrganismMatches[i].stats.energyShare += energyAmt;
+                        for(int i = 0; i < mContactOrganismMatches.Count; i++) {
+                            var entStats = mContactOrganismMatches[i].stats;
+                            if(!entStats.energyLocked && !entStats.isEnergyFull && entStats.energyDelta <= 0f) {
+                                entStats.energyShare += shareAmt;
+                                energyAmt -= shareAmt;
+                            }
+                        }
                     }
 
                     stats.energy += energyAmt;
@@ -520,7 +525,7 @@ namespace Renegadeware.LL_LS1A1 {
                 var dt = Time.deltaTime;
 
                 //environmental velocity
-                if(env.velocityControl)
+                if(env.velocityControl && env.velocityControl.isActive)
                     velocity += env.velocityControl.GetVelocity(position, forward, dt) * stats.velocityReceiveScale;
 
                 //limit/dampen speed

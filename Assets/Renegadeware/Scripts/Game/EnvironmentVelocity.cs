@@ -5,6 +5,8 @@ using UnityEngine;
 namespace Renegadeware.LL_LS1A1 {
     public abstract class EnvironmentVelocity : MonoBehaviour {
 
+        public bool isActive { get { return gameObject.activeSelf; } }
+
         public abstract Vector2 GetVelocity(Vector2 pos, Vector2 forward, float deltaTime);
     }
 }
