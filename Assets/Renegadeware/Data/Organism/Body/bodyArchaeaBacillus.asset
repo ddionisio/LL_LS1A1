@@ -21,7 +21,7 @@ MonoBehaviour:
     mass: 0.03
     forwardAccel: 0
     turnAccel: 0
-    speedLimit: 3
+    speedLimit: 1.75
     velocityReceiveScale: 0.8
     energyCapacity: 8
     energyConsumeRate: 0

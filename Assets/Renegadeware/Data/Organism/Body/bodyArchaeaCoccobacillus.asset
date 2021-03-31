@@ -19,9 +19,9 @@ MonoBehaviour:
   attributeInfos: []
   stats:
     mass: 0.02
-    forwardAccel: 1
-    turnAccel: 5
-    speedLimit: 4
+    forwardAccel: 0.15
+    turnAccel: 15
+    speedLimit: 2
     velocityReceiveScale: 1.2
     energyCapacity: 6
     energyConsumeRate: 0

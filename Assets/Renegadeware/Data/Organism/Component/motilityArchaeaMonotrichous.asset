@@ -20,7 +20,7 @@ MonoBehaviour:
   stats:
     mass: 0
     forwardAccel: 3
-    turnAccel: 45
+    turnAccel: 70
     speedLimit: 0
     velocityReceiveScale: 0
     energyCapacity: 0
@@ -31,7 +31,7 @@ MonoBehaviour:
     flags: 0
     danger: 0
   isBidirectional: 0
-  exploreForwardDuration: 0.5
+  exploreForwardDuration: 0.6
   exploreForwardEndDelay: 0.3
   exploreTurnDuration: 0.3
   exploreTurnEndDelay: 0.3

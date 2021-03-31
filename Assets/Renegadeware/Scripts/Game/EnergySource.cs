@@ -142,13 +142,12 @@ namespace Renegadeware.LL_LS1A1 {
 
                         var curMoveTime = time - mLastMoveTime;
 
-                        if(curMoveTime > moveWait) {
+                        if(curMoveTime < moveDelay) {
                             mMoveVelocity += mMoveCurDir * moveAccel * dt;
-
-                            if(curMoveTime > moveWait + moveDelay) {
-                                MoveUpdateDir();
-                                mLastMoveTime = time;
-                            }
+                        }
+                        else if(curMoveTime > moveDelay + moveWait) {
+                            MoveUpdateDir();
+                            mLastMoveTime = time;
                         }
 
                         //check for solids

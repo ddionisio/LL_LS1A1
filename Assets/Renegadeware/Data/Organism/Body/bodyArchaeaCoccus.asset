@@ -20,8 +20,8 @@ MonoBehaviour:
   stats:
     mass: 0.01
     forwardAccel: 0
-    turnAccel: 15
-    speedLimit: 3
+    turnAccel: 25
+    speedLimit: 1.75
     velocityReceiveScale: 1
     energyCapacity: 5
     energyConsumeRate: 0

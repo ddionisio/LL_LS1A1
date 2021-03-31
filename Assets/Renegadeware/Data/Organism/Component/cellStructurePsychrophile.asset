@@ -19,10 +19,12 @@ MonoBehaviour:
   attributeInfos: []
   stats:
     mass: 0
+    forwardAccel: 0
+    turnAccel: 0
     speedLimit: 0
     velocityReceiveScale: 0
     energyCapacity: 0
-    energyConsumeRate: 0.5
+    energyConsumeRate: 1
     lifespan: 20
     _hazardResistances:
     - {fileID: 11400000, guid: 7d15249bcb225c14a9a96e059c7b0a30, type: 2}

@@ -11,30 +11,21 @@ namespace Renegadeware.LL_LS1A1 {
             Delay
         }
 
-        [System.Serializable]
-        public struct SpawnPointInfo {
-            public Transform root;
-            public float radius;
-            public int count;
-
-            public Vector2 GetPoint() {
-                return (Vector2)root.position + (Random.insideUnitCircle * radius);
-            }
-        }
-
         public string poolGroup = "energySourcePool";
 
+        [Header("Template")]
         public EnergySource template;        
         public bool templateIsPrefab = true;
         public int templateCapacity;
 
-        public SpawnPointInfo[] spawnPoints;
-
+        [Header("Spawn Info")]
         public int spawnCount;
         public float spawnWait;
         public float spawnDelay;
 
         private M8.PoolController mPool;
+
+        private SpawnPoint[] mSpawnPoints;
 
         private M8.CacheList<EnergySource> mEnergyActives;
 
@@ -45,20 +36,22 @@ namespace Renegadeware.LL_LS1A1 {
 
         private M8.GenericParams mSpawnParms = new M8.GenericParams();
 
+        void OnEnable() {
+            if(mState == State.None)
+                ChangeState(State.Spawn);
+        }
+
         void Awake() {
             mPool = M8.PoolController.CreatePool(poolGroup);
 
-            mPool.AddType(template.gameObject, templateCapacity, templateCapacity, transform);
+            mPool.AddType(template.gameObject, templateCapacity, templateCapacity);
 
             if(!templateIsPrefab)
                 template.gameObject.SetActive(false);
 
             mEnergyActives = new M8.CacheList<EnergySource>(spawnCount);
-        }
 
-        void OnEnable() {
-            if(mState == State.None)
-                ChangeState(State.Spawn);
+            mSpawnPoints = GetComponentsInChildren<SpawnPoint>();
         }
 
         void Update() {
@@ -67,7 +60,7 @@ namespace Renegadeware.LL_LS1A1 {
                     if(mEnergyActives.IsFull)
                         ChangeState(State.SpawnWait);
                     else if(Time.time - mLastTime >= spawnWait) {
-                        var spawnPt = spawnPoints[mSpawnPointIndex];
+                        var spawnPt = mSpawnPoints[mSpawnPointIndex];
 
                         Spawn(spawnPt);
 
@@ -110,7 +103,7 @@ namespace Renegadeware.LL_LS1A1 {
             switch(toState) {
                 case State.Spawn:
                     if(mSpawnPointIndex == -1) {
-                        M8.ArrayUtil.Shuffle(spawnPoints);
+                        M8.ArrayUtil.Shuffle(mSpawnPoints);
                         mSpawnPointIndex = 0;
                     }
 
@@ -130,35 +123,26 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void SpawnPointNext() {
-            if(mSpawnPointIndex + 1 == spawnPoints.Length) {
-                M8.ArrayUtil.Shuffle(spawnPoints);
+            if(mSpawnPointIndex + 1 == mSpawnPoints.Length) {
+                M8.ArrayUtil.Shuffle(mSpawnPoints);
                 mSpawnPointIndex = 0;
             }
             else
                 mSpawnPointIndex++;
         }
 
-        private void Spawn(SpawnPointInfo spawnPointInfo) {
-            Vector2 pt = spawnPointInfo.GetPoint();
+        private void Spawn(SpawnPoint spawnPoint) {
+            Vector2 pt = spawnPoint.GetPoint();
             Vector3 spawnPt = new Vector3(pt.x, pt.y, GameData.instance.energyDepth);
 
-            mSpawnParms[EnergySource.parmAnchorPos] = (Vector2)spawnPointInfo.root.position;
-            mSpawnParms[EnergySource.parmAnchorRadius] = spawnPointInfo.radius;
+            mSpawnParms[EnergySource.parmAnchorPos] = spawnPoint.position;
+            mSpawnParms[EnergySource.parmAnchorRadius] = spawnPoint.radius;
 
-            var energySrc = mPool.Spawn<EnergySource>(template.name, null, spawnPt, mSpawnParms);
+            var energySrc = mPool.Spawn<EnergySource>(template.name, transform, spawnPt, mSpawnParms);
+
+            mEnergyActives.Add(energySrc);
 
             energySrc.poolData.despawnCallback += OnDespawn;
-        }
-
-        void OnDrawGizmos() {
-            Gizmos.color = new Color(1.0f, 1.0f, 0f, 0.3f);
-
-            for(int i = 0; i < spawnPoints.Length; i++) {
-                var spawnPt = spawnPoints[i];
-                if(spawnPt.root && spawnPt.radius > 0f) {
-                    Gizmos.DrawWireSphere(spawnPt.root.position, spawnPt.radius);
-                }
-            }
         }
     }
 }

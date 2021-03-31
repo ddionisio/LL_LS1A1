@@ -245,7 +245,7 @@ namespace Renegadeware.LL_LS1A1 {
                     ent._size = (ent._bodyCollider as BoxCollider2D).size * scale;
                 else if(ent._bodyCollider is CircleCollider2D) {
                     var diameter = (ent._bodyCollider as CircleCollider2D).radius * 2f;
-                    ent._size = new Vector2(diameter, diameter);
+                    ent._size = new Vector2(diameter, diameter) * scale;
                 }
                 else if(ent._bodyCollider is CapsuleCollider2D)
                     ent._size = (ent._bodyCollider as CapsuleCollider2D).size * scale;

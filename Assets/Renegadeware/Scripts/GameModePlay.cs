@@ -79,7 +79,8 @@ namespace Renegadeware.LL_LS1A1 {
                     if(CameraControl.isInstantiated)
                         CameraControl.instance.inputEnabled = value;
 
-                    RefreshSpawnPlacementActive();
+                    if(HUD.isInstantiated)
+                        RefreshSpawnPlacementActive();
                 }
             }
         }
@@ -618,10 +619,10 @@ namespace Renegadeware.LL_LS1A1 {
             if(mGameInputEnabled && mOrganismSpawner.entityCount < environmentCurrentInfo.spawnableCount) {
                 HUD.instance.spawnPlacementIsActive = true;
 
-                if(mGameTimeIndex > 1) {
-                    SetTimeIndex(1);
-                    HUD.instance.TimePlaySetIndex(mGameTimeIndex);
-                }
+                //if(mGameTimeIndex > 1) {
+                    //SetTimeIndex(1);
+                    //HUD.instance.TimePlaySetIndex(mGameTimeIndex);
+                //}
             }
             else {
                 HUD.instance.spawnPlacementIsActive = false;
