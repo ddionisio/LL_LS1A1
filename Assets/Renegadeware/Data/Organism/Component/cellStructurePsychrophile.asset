@@ -25,7 +25,7 @@ MonoBehaviour:
     velocityReceiveScale: 0
     energyCapacity: 0
     energyConsumeRate: 1
-    lifespan: 20
+    lifespan: 10
     _hazardResistances:
     - {fileID: 11400000, guid: 7d15249bcb225c14a9a96e059c7b0a30, type: 2}
     _energySources:

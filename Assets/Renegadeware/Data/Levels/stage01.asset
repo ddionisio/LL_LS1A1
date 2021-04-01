@@ -27,8 +27,20 @@ MonoBehaviour:
     capacity: 80
   - nameRef: test2
     descRef: 
-    spawnableCount: 5
-    criteriaCount: 25
-    bonusCount: 25
-    capacity: 100
+    spawnableCount: 10
+    criteriaCount: 50
+    bonusCount: 50
+    capacity: 120
+  - nameRef: test2
+    descRef: 
+    spawnableCount: 10
+    criteriaCount: 50
+    bonusCount: 50
+    capacity: 120
+  - nameRef: test2
+    descRef: 
+    spawnableCount: 10
+    criteriaCount: 50
+    bonusCount: 50
+    capacity: 120
   organismBodyGroup: {fileID: 11400000, guid: 7152d0674f474a74bb4abcbb2a4c2046, type: 2}

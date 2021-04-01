@@ -33,21 +33,63 @@ namespace Renegadeware.LL_LS1A1 {
             Divide
         }
 
+        public struct StickyInfo {
+            public OrganismEntity entity;
+            public Collider2D coll;
+
+            public bool isValid {
+                get {
+                    if(coll && coll.enabled) {
+                        if(entity) {
+                            if(!entity.stats.energyLocked && entity.stats.energyDelta > 0f)
+                                return true;
+                        }
+                        else
+                            return true;
+                    }
+
+                    return false;
+                }
+            }
+
+            public bool isSolid { get { return coll && !entity; } }
+        }
+
         public bool isStickied { get { return mStickies != null && mStickies.Count > 0; } }
 
         private OrganismBodySingleCell mComp;
 
-        private M8.CacheList<Collider2D> mStickies;
+        private M8.CacheList<StickyInfo> mStickies;
 
         private State mState;
+
+        public bool IsStickTo(Collider2D coll) {
+            if(mStickies != null) {
+                for(int i = 0; i < mStickies.Count; i++) {
+                    if(mStickies[i].coll == coll)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsStickTo(OrganismEntity ent) {
+            if(mStickies != null) {
+                for(int i = 0; i < mStickies.Count; i++) {
+                    if(mStickies[i].entity == ent)
+                        return true;
+                }
+            }
+            return false;
+        }
 
         public override void Init(OrganismEntity ent, OrganismComponent owner) {
             base.Init(ent, owner);
 
             mComp = owner as OrganismBodySingleCell;
 
-            if((ent.stats.flags & OrganismFlag.Sticky) == OrganismFlag.Sticky)
-                mStickies = new M8.CacheList<Collider2D>(stickyCapacity);
+            if((ent.stats.flags & (OrganismFlag.Sticky | OrganismFlag.StickySolid)) != 0)
+                mStickies = new M8.CacheList<StickyInfo>(stickyCapacity);
         }
 
         public override void Spawn(M8.GenericParams parms) {
@@ -102,53 +144,72 @@ namespace Renegadeware.LL_LS1A1 {
                     }
                     else if(mStickies != null) {
                         if(!entity.physicsLocked) {
+                            var isEnergyRateUp = entity.stats.energyDelta > 0f;
+
                             //update stickies
                             for(int i = mStickies.Count - 1; i >= 0; i--) {
                                 var sticky = mStickies[i];
 
                                 //check if invalid
-                                if(!(sticky && sticky.enabled)) {
+                                if(!sticky.isValid) {
                                     mStickies.RemoveLast();
                                     continue;
                                 }
 
-                                var distInfo = entity.bodyCollider.Distance(sticky);
+                                //unstick to solids if we are not getting any energy
+                                if(!isEnergyRateUp && sticky.isSolid) {
+                                    mStickies.RemoveLast();
+                                    continue;
+                                }
+
+                                var distInfo = entity.bodyCollider.Distance(sticky.coll);
                                 if(!distInfo.isValid) {
                                     mStickies.RemoveLast();
                                     continue;
                                 }
 
-                                if(distInfo.distance <= 0f)
+                                if(distInfo.distance <= 0f) //separate a bit
+                                    //entity.velocity += distInfo.normal * gameDat.organismSeparateSpeed;
                                     continue;
-
-                                //disconnect if distance is too far
-                                if(distInfo.distance >= gameDat.organismStickyDistanceThreshold) {
+                                else if(distInfo.distance >= gameDat.organismStickyDistanceThreshold) //disconnect if distance is too far
                                     mStickies.RemoveLast();
-                                    continue;
+                                else //move towards
+                                    entity.velocity -= distInfo.normal * gameDat.organismStickySpeed;//distInfo.distance;
+                            }
+
+                            //check for new stickies, if we are getting energy
+                            if(isEnergyRateUp) {
+                                //stick to solid?
+                                if((entity.stats.flags & OrganismFlag.StickySolid) == OrganismFlag.StickySolid) {
+                                    for(int i = 0; !mStickies.IsFull && i < entity.contactSolids.Count; i++) {
+                                        var coll = entity.contactSolids[i];
+
+                                        if(coll.enabled && !IsStickTo(coll)) {
+                                            mStickies.Add(new StickyInfo { coll = coll });
+
+                                            entity.velocity = Vector2.zero;
+                                        }
+                                    }
                                 }
 
-                                //move towards
-                                entity.velocity += distInfo.normal * gameDat.organismStickySpeed;//distInfo.distance;
+                                //only stick to same organisms, and if they are generating energy
+                                for(int i = 0; !mStickies.IsFull && i < entity.contactOrganismMatches.Count; i++) {
+                                    var contactEntity = entity.contactOrganismMatches[i];
+                                    if(!contactEntity.isReleased && !contactEntity.physicsLocked && contactEntity.stats.energyDelta > 0f && !IsStickTo(contactEntity)) {
+                                        //ensure contacted is not already stuck to us
+                                        var bodySingleCellCtrl = contactEntity.GetComponentControl<OrganismBodySingleCellControl>();
+                                        if(bodySingleCellCtrl == null || !bodySingleCellCtrl.IsStickTo(entity))
+                                            mStickies.Add(new StickyInfo { entity = contactEntity, coll = contactEntity.bodyCollider });
+                                    }
+                                }
                             }
+                            else {
+                                //only stick to solid energy compatibles
+                                for(int i = 0; !mStickies.IsFull && i < entity.contactEnergies.Count; i++) {
+                                    var energySrc = entity.contactEnergies[i];
 
-                            //check for new stickies
-
-                            //only stick to solid energy compatibles
-                            for(int i = 0; !mStickies.IsFull && i < entity.contactEnergies.Count; i++) {
-                                var energySrc = entity.contactEnergies[i];
-
-                                if(energySrc.isActive && energySrc.isSolid && !mStickies.Exists(energySrc.bodyCollider))
-                                    mStickies.Add(energySrc.bodyCollider);
-                            }
-
-                            //only stick to same organisms
-                            for(int i = 0; !mStickies.IsFull && i < entity.contactOrganismMatches.Count; i++) {
-                                var contactEntity = entity.contactOrganismMatches[i];
-                                if(!contactEntity.isReleased && !contactEntity.physicsLocked) {
-                                    //ensure contacted is not already stuck to us
-                                    var bodySingleCellCtrl = contactEntity.GetComponentControl<OrganismBodySingleCellControl>();
-                                    if(bodySingleCellCtrl != null && !bodySingleCellCtrl.mStickies.Exists(entity.bodyCollider))
-                                        mStickies.Add(contactEntity.bodyCollider);
+                                    if(energySrc.isActive && energySrc.isSolid && !IsStickTo(energySrc.bodyCollider))
+                                        mStickies.Add(new StickyInfo { coll = energySrc.bodyCollider });
                                 }
                             }
                         }
@@ -212,17 +273,19 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             //update velocity
-            if(!entity.physicsLocked && entity.contactCount > 0) {
-                //do separation
-                var separateVel = Vector2.zero;
+            if(!entity.physicsLocked) {
+                if(entity.contactCount > 0) {
+                    //do separation
+                    var separateVel = Vector2.zero;
 
-                for(int i = 0; i < entity.contactCount; i++) {
-                    var distInfo = entity.contactDistances[i];
-                    if(distInfo.isValid && distInfo.distance < 0f)
-                        separateVel -= distInfo.normal * gameDat.organismSeparateSpeed;//distInfo.distance;
+                    for(int i = 0; i < entity.contactCount; i++) {
+                        var distInfo = entity.contactDistances[i];
+                        if(distInfo.isValid && distInfo.distance < 0f)
+                            separateVel -= distInfo.normal * gameDat.organismSeparateSpeed;//distInfo.distance;
+                    }
+
+                    entity.velocity += separateVel;
                 }
-
-                entity.velocity += separateVel;
             }
         }
     }

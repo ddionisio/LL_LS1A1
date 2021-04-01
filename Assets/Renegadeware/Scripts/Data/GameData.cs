@@ -40,6 +40,12 @@ namespace Renegadeware.LL_LS1A1 {
         public float organismContactsUpdateDelay = 0.1f;
 
         public float organismSeparateSpeed = 1f;
+
+        /// <summary>
+        /// How far apart can an organism be considered 'sticky' to another organism/solid. If distance between reaches above this threshold, detach.
+        /// </summary>
+        public float organismStickyDistanceThreshold = 0.25f;
+
         public float organismStickySpeed = 1f;
 
         /// <summary>
@@ -56,11 +62,6 @@ namespace Renegadeware.LL_LS1A1 {
         /// To what angle do we need to turn towards/against a target before moving
         /// </summary>
         public float organismSeekAngleThreshold = 30f;
-
-        /// <summary>
-        /// How far apart can an organism be considered 'sticky' to another organism/solid. If distance between reaches above this threshold, detach.
-        /// </summary>
-        public float organismStickyDistanceThreshold = 0.25f;
 
         [Header("Organism Filter Settings")]
         [M8.TagSelector]
@@ -212,6 +213,19 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        public ContactFilter2D organismEntityContactFilter {
+            get {
+                if(!mOrganismEntityContactFilterInit) {
+                    mOrganismEntityContactFilter.SetDepth(organismDepth, organismDepth);
+                    mOrganismEntityContactFilter.useTriggers = false;
+
+                    mOrganismEntityContactFilterInit = true;
+                }
+
+                return mOrganismEntityContactFilter;
+            }
+        }
+
         private const string userDataKeyOrganismTemplateCount = "organismCount";
         private const string userDataKeyOrganismTemplate = "organism";
         private const string userDataKeyOrganismTemplateCurrent = "organismCurrent";
@@ -235,6 +249,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         private ContactFilter2D mOrganismSolidContactFilter = new ContactFilter2D();
         private bool mOrganismSolidContactFilterInit = false;
+
+        private ContactFilter2D mOrganismEntityContactFilter = new ContactFilter2D();
+        private bool mOrganismEntityContactFilterInit = false;
 
         /// <summary>
         /// Called in start scene

@@ -19,6 +19,7 @@ namespace Renegadeware.LL_LS1A1 {
         public int templateCapacity;
 
         [Header("Spawn Info")]
+        public int spawnStartCount;
         public int spawnCount;
         public float spawnWait;
         public float spawnDelay;
@@ -37,8 +38,20 @@ namespace Renegadeware.LL_LS1A1 {
         private M8.GenericParams mSpawnParms = new M8.GenericParams();
 
         void OnEnable() {
-            if(mState == State.None)
+            if(mState == State.None) {
+                //first time spawn
+                if(spawnStartCount > 0) {
+                    if(mSpawnPointIndex == -1) {
+                        M8.ArrayUtil.Shuffle(mSpawnPoints);
+                        mSpawnPointIndex = 0;
+                    }
+
+                    for(int i = 0; !mEnergyActives.IsFull && i < spawnStartCount; i++)
+                        SpawnIncrement();
+                }
+
                 ChangeState(State.Spawn);
+            }
         }
 
         void Awake() {
@@ -60,17 +73,7 @@ namespace Renegadeware.LL_LS1A1 {
                     if(mEnergyActives.IsFull)
                         ChangeState(State.SpawnWait);
                     else if(Time.time - mLastTime >= spawnWait) {
-                        var spawnPt = mSpawnPoints[mSpawnPointIndex];
-
-                        Spawn(spawnPt);
-
-                        if(mSpawnIndex + 1 == spawnPt.count) {
-                            SpawnPointNext();
-                            mSpawnIndex = 0;
-                        }
-                        else
-                            mSpawnIndex++;
-
+                        SpawnIncrement();
                         mLastTime = Time.time;
                     }
                     break;
@@ -120,6 +123,19 @@ namespace Renegadeware.LL_LS1A1 {
 
             mState = toState;
             mLastTime = Time.time;
+        }
+
+        private void SpawnIncrement() {
+            var spawnPt = mSpawnPoints[mSpawnPointIndex];
+
+            Spawn(spawnPt);
+
+            if(mSpawnIndex + 1 == spawnPt.count) {
+                SpawnPointNext();
+                mSpawnIndex = 0;
+            }
+            else
+                mSpawnIndex++;
         }
 
         private void SpawnPointNext() {

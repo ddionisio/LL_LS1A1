@@ -36,6 +36,11 @@ namespace Renegadeware.LL_LS1A1 {
         public bool moveSolidCheck;
         public float moveSolidCheckDelay = 0.3f;
 
+        [Header("Rotate")]
+        public bool rotateSpawnRandom;
+        public bool rotateSpinEnabled;
+        public M8.RangeFloat rotateSpinSpeed;
+
         [Header("Animation")]
         public M8.Animator.Animate animator;
         [M8.Animator.TakeSelector(animatorField = "animator")]
@@ -85,6 +90,8 @@ namespace Renegadeware.LL_LS1A1 {
         private Vector2 mMoveCurDir;
 
         private Vector2 mMoveVelocity;
+
+        private float mRotateSpeed;
 
         private Collider2D[] mSolidContactCache;
 
@@ -205,6 +212,12 @@ namespace Renegadeware.LL_LS1A1 {
                         Release();
                     break;
             }
+
+            if(rotateSpinEnabled) {
+                var rot = transform.localEulerAngles;
+                rot.z += mRotateSpeed * Time.deltaTime;
+                transform.localEulerAngles = rot;
+            }
         }
 
         private void Spawn() {
@@ -226,6 +239,15 @@ namespace Renegadeware.LL_LS1A1 {
                 mLastMoveTime = time;
                 mLastMoveSolidCheckTime = time;
             }
+
+            if(rotateSpawnRandom) {
+                var rot = transform.localEulerAngles;
+                rot.z = Random.Range(0f, 359f);
+                transform.localEulerAngles = rot;
+            }
+
+            if(rotateSpinEnabled)
+                mRotateSpeed = (Random.Range(0, 2) == 0 ? -1f : 1f) * rotateSpinSpeed.random;
         }
 
         private void Active() {

@@ -6,7 +6,7 @@ namespace Renegadeware.LL_LS1A1 {
     [System.Flags]
     public enum OrganismFlag {
         Sticky = 0x1,
-        Parasitic = 0x2 //eat cell from within after being eaten
+        StickySolid = 0x2,
     }
 
     [System.Serializable]

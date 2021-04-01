@@ -104,6 +104,11 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
 
                 case State.Explore:
+                    if(mBodyCtrl.isStickied) {
+                        ChangeToState(State.Rest, null);
+                        return;
+                    }
+
                     //check if we need to turn/move away from solid collision
                     if(mExploreState != ExploreState.TurnAway && entity.contactSolids.Count > 0) {
                         if(mComp.isBidirectional) { //just turn randomly again
@@ -149,7 +154,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
-                            else if(ShouldRest())
+                            else if(entity.stats.energyDelta > 0f)
                                 ChangeToState(State.Rest, null);
                             else
                                 ExploreChangeToState(ExploreState.ForwardWait);
@@ -175,7 +180,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
-                            else if(ShouldRest())
+                            else if(entity.stats.energyDelta > 0f)
                                 ChangeToState(State.Rest, null);
                             else
                                 ExploreChangeToState(ExploreState.TurnWait);
@@ -196,7 +201,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
-                            else if(ShouldRest())
+                            else if(entity.stats.energyDelta > 0f)
                                 ChangeToState(State.Rest, null);
                             else
                                 ExploreChangeToState(ExploreState.TurnWait);
@@ -227,6 +232,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnSensorUpdate(OrganismSensor sensor) {
+            mTarget = null;
+
             if(entity.physicsLocked)
                 return;
 
@@ -234,6 +241,9 @@ namespace Renegadeware.LL_LS1A1 {
 
             //energy locked (e.g. dividing), or ran out of energy
             if(stats.energyLocked || stats.energyScale <= mComp.energyMinScale)
+                return;
+
+            if(mBodyCtrl.isStickied)
                 return;
 
             var pos = entity.position;
@@ -287,8 +297,6 @@ namespace Renegadeware.LL_LS1A1 {
                 ChangeToState(State.Retreat, retreat);
             else if(seek)
                 ChangeToState(State.Seek, seek);
-            else
-                mTarget = null;
         }
 
         private void ChangeToState(State toState, Transform target) {
@@ -315,10 +323,6 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             mLastTime = Time.time;
-        }
-
-        private bool ShouldRest() {
-            return mBodyCtrl.isStickied || entity.stats.energyDelta > 0f;
         }
 
         private void Steer(Vector2 targetPos, bool isAway, float timeDelta) {

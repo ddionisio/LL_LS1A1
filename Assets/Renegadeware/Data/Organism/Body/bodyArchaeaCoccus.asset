@@ -21,11 +21,11 @@ MonoBehaviour:
     mass: 0.01
     forwardAccel: 0
     turnAccel: 25
-    speedLimit: 1.75
+    speedLimit: 2
     velocityReceiveScale: 1
     energyCapacity: 5
     energyConsumeRate: 0
-    lifespan: 10
+    lifespan: 25
     _hazardResistances: []
     _energySources: []
     flags: 0

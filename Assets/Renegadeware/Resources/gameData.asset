@@ -15,8 +15,8 @@ MonoBehaviour:
   levels:
   - {fileID: 11400000, guid: 950f3bd841e6f2946a22536d20c22581, type: 2}
   endScene:
-    name: 
-    path: 
+    name: end
+    path: Assets/Renegadeware/Scenes/end.unity
   modalEnvironmentSelect: environmentSelect
   modalOrganismEdit: organismEdit
   modalRetry: retry
@@ -29,11 +29,11 @@ MonoBehaviour:
   organismDepth: -0.12
   organismContactsUpdateDelay: 0.1
   organismSeparateSpeed: 0.01
-  organismStickySpeed: 0.05
+  organismStickyDistanceThreshold: 0.15
+  organismStickySpeed: 0.01
   organismDeathDelay: 2
   organismSeekTurnAngleThreshold: 2
   organismSeekAngleThreshold: 30
-  organismStickyDistanceThreshold: 0.15
   organismEntityTags:
   - Organism
   - OrganismPlayer
