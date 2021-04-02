@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public class EnergySource : MonoBehaviour, M8.IPoolInit, M8.IPoolSpawn {
-        public const string parmAnchorPos = "esrcAnchorP";
-        public const string parmAnchorRadius = "esrcAnchorR";
+        public const string parmAnchorPos = "esrcAnchorP"; //Vector2
+        public const string parmAnchorRadius = "esrcAnchorR"; //float
 
         public enum MoveMode {
             None,
@@ -23,6 +23,7 @@ namespace Renegadeware.LL_LS1A1 {
         public EnergyData data;
         public float energyCapacity;
         public bool energyIsUnlimited; //energy is not drained when consumed
+        public float energyRate = 1.0f; //energy per second given to entity
         public float lifespan; //set to 0 for unlimited lifespan
 
         [Header("Movement")]
@@ -95,6 +96,20 @@ namespace Renegadeware.LL_LS1A1 {
 
         private Collider2D[] mSolidContactCache;
 
+        public void Release() {
+            mState = State.None;
+
+            if(mPoolDataCtrl)
+                mPoolDataCtrl.Release();
+            else
+                gameObject.SetActive(false);
+        }
+
+        public void Despawn() {
+            if(mState != State.None && mState != State.Despawning)
+                SetToDespawn();
+        }
+
         void M8.IPoolInit.OnInit() {
             mPoolDataCtrl = GetComponent<M8.PoolDataController>();
         }
@@ -143,7 +158,7 @@ namespace Renegadeware.LL_LS1A1 {
                 case State.Active:
                     var time = Time.time;
                     if(mEnergy == 0f || (lifespan > 0f && time - mLastActiveTime >= lifespan))
-                        Despawn();
+                        SetToDespawn();
                     else if(moveMode != MoveMode.None) {
                         var dt = Time.deltaTime;
 
@@ -255,22 +270,13 @@ namespace Renegadeware.LL_LS1A1 {
             mLastActiveTime = Time.time;
         }
 
-        private void Despawn() {
+        private void SetToDespawn() {
             if(animator && !string.IsNullOrEmpty(takeDespawn)) {
                 animator.Play(takeDespawn);
                 mState = State.Despawning;
             }
             else
                 Release();
-        }
-
-        private void Release() {
-            mState = State.None;
-
-            if(mPoolDataCtrl)
-                mPoolDataCtrl.Release();
-            else
-                gameObject.SetActive(false);
         }
 
         private void MoveUpdateDir() {

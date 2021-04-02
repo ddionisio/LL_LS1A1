@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89f8a70cbc583004792d5f0e84262809, type: 3}
-  m_Name: test
+  m_Script: {fileID: 11500000, guid: 80c55383357e86f48b3210358913e9c9, type: 3}
+  m_Name: signalSpawnLockPrimary
   m_EditorClassIdentifier: 
-  ID: 1
-  componentEssentialIDs: 0300000004000000
-  componentIDs: 0e0000000c0000000d000000

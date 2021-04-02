@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    public class EnergySourceSpawner : MonoBehaviour {
+    public class OrganismEntitySpawner : MonoBehaviour {
         public enum State {
             None,
             Spawn,
@@ -11,11 +11,16 @@ namespace Renegadeware.LL_LS1A1 {
             Delay
         }
 
-        public string poolGroup = "energySourcePool";
+        public string poolGroup = "entitySpawnerPool";
 
         [Header("Template")]
-        public EnergySource template;        
-        public bool templateIsPrefab = true;
+        public OrganismTemplate template; //if set, templateEntity is generated
+        [M8.TagSelector]
+        public string templateTag;
+
+        public OrganismEntity templateEntity;
+        public bool templateEntityIsPrefab = true;
+
         public int templateCapacity;
 
         [Header("Spawn Info")]
@@ -36,11 +41,11 @@ namespace Renegadeware.LL_LS1A1 {
 
                     if(mSpawnLocked) {
                         //despawn all actives
-                        if(mEnergyActives != null) {
-                            for(int i = mEnergyActives.Count - 1; i >= 0; i--) {
-                                var energySrc = mEnergyActives[i];
-                                if(energySrc)
-                                    energySrc.Despawn();
+                        if(mEntityActives != null) {
+                            for(int i = mEntityActives.Count - 1; i >= 0; i--) {
+                                var ent = mEntityActives[i];
+                                if(ent)
+                                    ent.stats.energy = 0f;
                             }
 
                             mState = State.None;
@@ -54,10 +59,11 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private M8.PoolController mPool;
+        private string mPoolTypename;
 
         private SpawnPoint[] mSpawnPoints;
 
-        private M8.CacheList<EnergySource> mEnergyActives;
+        private M8.CacheList<OrganismEntity> mEntityActives;
 
         private State mState = State.None;
         private int mSpawnIndex;
@@ -78,21 +84,21 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(mSpawnLocked) {
                 //completely clear out energies
-                if(mEnergyActives != null) {
-                    for(int i = mEnergyActives.Count - 1; i >= 0; i--) {
-                        var energySrc = mEnergyActives[i];
-                        if(energySrc)
-                            energySrc.Release();
+                if(mEntityActives != null) {
+                    for(int i = mEntityActives.Count - 1; i >= 0; i--) {
+                        var ent = mEntityActives[i];
+                        if(ent)
+                            ent.Release();
                     }
 
-                    mEnergyActives.Clear();
+                    mEntityActives.Clear();
                 }
 
                 mState = State.None;
             }
             else if(mState == State.None)
                 SpawnStart();
-                
+
 
             if(signalListenSpawnLock)
                 signalListenSpawnLock.callback += OnSignalSpawnLock;
@@ -101,12 +107,26 @@ namespace Renegadeware.LL_LS1A1 {
         void Awake() {
             mPool = M8.PoolController.CreatePool(poolGroup);
 
-            mPool.AddType(template.gameObject, templateCapacity, templateCapacity);
+            if(template) {
+                mPoolTypename = template.name;
 
-            if(!templateIsPrefab)
-                template.gameObject.SetActive(false);
+                if(!mPool.IsFactoryTypeExists(mPoolTypename)) {
+                    var templateEntityInst = OrganismEntity.CreateTemplate(template, mPoolTypename, templateTag, mPool.transform);
+                    templateEntityInst.gameObject.SetActive(false);
 
-            mEnergyActives = new M8.CacheList<EnergySource>(spawnCount);
+                    mPool.AddType(mPoolTypename, templateEntityInst.gameObject, templateCapacity, templateCapacity);
+                }
+            }
+            else {
+                mPoolTypename = templateEntity.name;
+
+                mPool.AddType(mPoolTypename, templateEntity.gameObject, templateCapacity, templateCapacity);
+
+                if(!templateEntityIsPrefab)
+                    templateEntity.gameObject.SetActive(false);
+            }
+
+            mEntityActives = new M8.CacheList<OrganismEntity>(spawnCount);
 
             mSpawnPoints = GetComponentsInChildren<SpawnPoint>();
         }
@@ -114,7 +134,7 @@ namespace Renegadeware.LL_LS1A1 {
         void Update() {
             switch(mState) {
                 case State.Spawn:
-                    if(mEnergyActives.IsFull)
+                    if(mEntityActives.IsFull)
                         ChangeState(State.SpawnWait);
                     else if(Time.time - mLastTime >= spawnWait) {
                         SpawnIncrement();
@@ -123,7 +143,7 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
 
                 case State.SpawnWait:
-                    if(mEnergyActives.Count == 0) //wait for all energies to be gone (ensure template has limited energy and life duration)
+                    if(mEntityActives.Count == 0) //wait for all energies to be gone (ensure template has limited energy and life duration)
                         ChangeState(State.Delay);
                     break;
 
@@ -135,10 +155,10 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnDespawn(M8.PoolDataController pdc) {
-            for(int i = 0; i < mEnergyActives.Count; i++) {
-                var energySrc = mEnergyActives[i];
-                if(energySrc.poolData == pdc) {
-                    mEnergyActives.RemoveAt(i);
+            for(int i = 0; i < mEntityActives.Count; i++) {
+                var ent = mEntityActives[i];
+                if(ent.poolControl == pdc) {
+                    mEntityActives.RemoveAt(i);
                     break;
                 }
             }
@@ -156,7 +176,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                 //first time spawn
                 if(spawnStartCount > 0) {
-                    for(int i = 0; !mEnergyActives.IsFull && i < spawnStartCount; i++)
+                    for(int i = 0; !mEntityActives.IsFull && i < spawnStartCount; i++)
                         SpawnIncrement();
                 }
 
@@ -209,20 +229,19 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         private void Spawn(SpawnPoint spawnPoint) {
-            if(mEnergyActives.IsFull)
+            if(mEntityActives.IsFull)
                 return;
 
             Vector2 pt = spawnPoint.GetPoint();
-            Vector3 spawnPt = new Vector3(pt.x, pt.y, GameData.instance.energyDepth);
+            Vector3 spawnPt = new Vector3(pt.x, pt.y, GameData.instance.organismDepth);
 
-            mSpawnParms[EnergySource.parmAnchorPos] = spawnPoint.position;
-            mSpawnParms[EnergySource.parmAnchorRadius] = spawnPoint.radius;
+            mSpawnParms[OrganismEntity.parmForwardRandom] = true;
 
-            var energySrc = mPool.Spawn<EnergySource>(template.name, template.name, transform, spawnPt, mSpawnParms);
+            var ent = mPool.Spawn<OrganismEntity>(mPoolTypename, mPoolTypename, transform, spawnPt, mSpawnParms);
 
-            mEnergyActives.Add(energySrc);
+            mEntityActives.Add(ent);
 
-            energySrc.poolData.despawnCallback += OnDespawn;
+            ent.poolControl.despawnCallback += OnDespawn;
         }
     }
 }

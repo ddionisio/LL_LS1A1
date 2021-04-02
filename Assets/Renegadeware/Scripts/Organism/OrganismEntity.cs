@@ -474,10 +474,10 @@ namespace Renegadeware.LL_LS1A1 {
 
                 //check for energy source contacts and absorb its energy
                 if(mContactEnergies.Count > 0) {
-                    var energyConsume = stats.energyConsumeRate * dt;
-
                     for(int i = 0; i < mContactEnergies.Count; i++) {
                         var energySrc = mContactEnergies[i];
+
+                        var energyConsume = energySrc.energyRate * dt;
 
                         energySrc.energy -= energyConsume;
                         energyAmt += energyConsume;

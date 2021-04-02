@@ -10,12 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21b5b3bfad5724341b9c98a25b779080, type: 3}
-  m_Name: nucleoid
+  m_Name: essentialNucleoid
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  nameRef: nucleoid
+  nameRef: essentialNucleoid
   descRef: 
   ID: 3
+  attributeInfos: []
+  stats:
+    mass: 0
+    forwardAccel: 0
+    turnAccel: 0
+    speedLimit: 0
+    velocityReceiveScale: 0
+    energyCapacity: 0
+    energyConsumeRate: 0
+    lifespan: 0
+    _hazardResistances: []
+    _energySources: []
+    flags: 0
+    danger: 0
   _editPrefab: {fileID: 7640818982007545761, guid: acb10b4de881e9e4bac44c896008106c,
     type: 3}
   _anchorName: body

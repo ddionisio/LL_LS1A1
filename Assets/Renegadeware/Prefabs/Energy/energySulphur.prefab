@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5977170878758406788}
   - component: {fileID: 3200155498291959939}
   m_Layer: 0
-  m_Name: energyH2
+  m_Name: energySulphur
   m_TagString: Energy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,9 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f8694aac507f394d86f2993a769f234, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: d93c409e7f89e594ba7a9c49dfad2275, type: 2}
+  data: {fileID: 11400000, guid: 0fb0c32c9ed00a74a917caefff418d43, type: 2}
   energyCapacity: 5
   energyIsUnlimited: 0
+  energyRate: 1
   lifespan: 6
   moveMode: 1
   moveAccel: 1.2
@@ -56,6 +57,11 @@ MonoBehaviour:
   moveWait: 0.5
   moveSolidCheck: 0
   moveSolidCheckDelay: 0.3
+  rotateSpawnRandom: 0
+  rotateSpinEnabled: 0
+  rotateSpinSpeed:
+    min: 0
+    max: 0
   animator: {fileID: 0}
   takeSpawn: 
   takeDespawn: 

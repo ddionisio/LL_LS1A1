@@ -24,13 +24,12 @@ MonoBehaviour:
     speedLimit: 0
     velocityReceiveScale: 0
     energyCapacity: 0
-    energyConsumeRate: 1
+    energyConsumeRate: 0
     lifespan: 0
     _hazardResistances:
     - {fileID: 11400000, guid: 5e5f9e610700cfd4a982b40bc2700aff, type: 2}
     _energySources:
     - {fileID: 11400000, guid: 0fb0c32c9ed00a74a917caefff418d43, type: 2}
-    - {fileID: 11400000, guid: d93c409e7f89e594ba7a9c49dfad2275, type: 2}
     flags: -1
     danger: 0
   _editPrefab: {fileID: 0}

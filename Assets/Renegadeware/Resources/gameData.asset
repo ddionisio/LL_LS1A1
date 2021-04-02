@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - {fileID: 11400000, guid: 950f3bd841e6f2946a22536d20c22581, type: 2}
+  - {fileID: 11400000, guid: e2688c848202ac44a9fbe8204d7039df, type: 2}
   endScene:
     name: end
     path: Assets/Renegadeware/Scenes/end.unity
@@ -49,17 +50,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
   - {fileID: 11400000, guid: 4329496c0722ab44aa16fa732b665e59, type: 2}
   - {fileID: 11400000, guid: 556857367a22be0419e19b1933907bf4, type: 2}
+  - {fileID: 11400000, guid: b0cd3c967a408ba42a856f91908e98f8, type: 2}
+  - {fileID: 11400000, guid: 4fee986f0f9c81348967252fa013f738, type: 2}
+  - {fileID: 11400000, guid: 0b13a25dd9d436241a58d02e30bb66e9, type: 2}
+  - {fileID: 11400000, guid: 9098d3dc5dc82ce48aa45ca6adcfdb5e, type: 2}
   - {fileID: 11400000, guid: f4289bc98e1bc4c40b0e3dbaf57186b3, type: 2}
   - {fileID: 11400000, guid: d784cf704cbeddf48896fe376aed751a, type: 2}
   - {fileID: 11400000, guid: 42b2fc9572b9a854590e55b47d06432c, type: 2}
   - {fileID: 11400000, guid: 65185ca8c2e47544cb3b205dc68eb9c1, type: 2}
   - {fileID: 11400000, guid: 06b33d312019c9147904bfece88e0efb, type: 2}
   - {fileID: 11400000, guid: 60624a6baca2e204b8c611a71d2b4b77, type: 2}
+  - {fileID: 11400000, guid: f0744b1421eb0dd44806305c24b7d4e5, type: 2}
+  - {fileID: 11400000, guid: f1633226b2891fd4c85f9ff3f9d56f8d, type: 2}
+  - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}
   - {fileID: 11400000, guid: b9edabd369f735f4a9e8ef4b4c322896, type: 2}
   - {fileID: 11400000, guid: 1bf27a41871f8b14d9d856209c65db4f, type: 2}
   - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}
-  - {fileID: 11400000, guid: f0744b1421eb0dd44806305c24b7d4e5, type: 2}
-  - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}
   signalEnvironmentChanged: {fileID: 11400000, guid: 3a152a70959bc3b4397fabc399cde072,
     type: 2}
   signalEnvironmentDragBegin: {fileID: 11400000, guid: 7433fe8b40cd609409be89c81e89fc82,

@@ -9,13 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21b5b3bfad5724341b9c98a25b779080, type: 3}
-  m_Name: ribosome
+  m_Script: {fileID: 11500000, guid: 80c55383357e86f48b3210358913e9c9, type: 3}
+  m_Name: signalSpawnLockSecondary
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
-  nameRef: ribosome
-  descRef: 
-  ID: 4
-  _editPrefab: {fileID: 541852455636073335, guid: 4c46817dd2b19c642beb32eb6c4e722c,
-    type: 3}
-  _anchorName: ribosome

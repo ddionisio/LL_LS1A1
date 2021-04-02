@@ -20,7 +20,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Energy")]
         public float energyCapacity;
-        public float energyConsumeRate; //energy consumption from sources per second
+        [Tooltip("Energy per second to gain from energyConsume.")]
+        public float energyConsumeRate;
 
         [Header("Life")]
         public float lifespan; //how long does this cell live, set to 0 for immortality. Once expired, energy will drain and not regenerate.
@@ -38,7 +39,7 @@ namespace Renegadeware.LL_LS1A1 {
         public float energy { 
             get { return mEnergy; }
             set {
-                if(energyLocked)
+                if(mEnergyLocked)
                     return;
 
                 mEnergy = Mathf.Clamp(value, 0f, energyCapacity); 
@@ -80,7 +81,17 @@ namespace Renegadeware.LL_LS1A1 {
         /// <summary>
         /// Set to true to lock the energy value. Used when dying/reproducing
         /// </summary>
-        public bool energyLocked { get; set; }
+        public bool energyLocked { 
+            get { return mEnergyLocked; }
+            set {
+                if(mEnergyLocked != value) {
+                    mEnergyLocked = value;
+
+                    if(mEnergyLocked)
+                        mEnergyLastUpdate = mEnergy;
+                }
+            }
+        }
 
         public List<EnergyData> energySources { get { return _energySources; } }
 
@@ -99,6 +110,8 @@ namespace Renegadeware.LL_LS1A1 {
         private float mEnergyConsume;
         private float mEnergyLastUpdate;
 
+        private bool mEnergyLocked;
+
         private float mLastResetTime;
 
         public void Reset() {
@@ -106,7 +119,7 @@ namespace Renegadeware.LL_LS1A1 {
             mEnergyLastUpdate = mEnergy;
 
             energyShare = 0f;
-            energyLocked = false;
+            mEnergyLocked = false;
 
             mLastResetTime = Time.time;
         }
@@ -138,7 +151,7 @@ namespace Renegadeware.LL_LS1A1 {
         public void EnergyUpdate(float deltaTime) {
             mEnergyLastUpdate = mEnergy;
 
-            if(!energyLocked && !isEnergyFull && energyConsume > 0f) {
+            if(!mEnergyLocked && !isEnergyFull && energyConsume > 0f) {
                 var energyConsume = energyConsumeRate * deltaTime;
 
                 energy += energyConsume;

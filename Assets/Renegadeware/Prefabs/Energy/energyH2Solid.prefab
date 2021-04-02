@@ -50,6 +50,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: d93c409e7f89e594ba7a9c49dfad2275, type: 2}
   energyCapacity: 10
   energyIsUnlimited: 1
+  energyRate: 1
   lifespan: 20
   moveMode: 1
   moveAccel: 1.25

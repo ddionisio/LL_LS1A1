@@ -41,7 +41,7 @@ namespace Renegadeware.LL_LS1A1 {
                 get {
                     if(coll && coll.enabled) {
                         if(entity) {
-                            if(!entity.stats.energyLocked && entity.stats.energyDelta > 0f)
+                            if(!entity.stats.energyLocked)// && entity.stats.energyDelta > 0f)
                                 return true;
                         }
                         else
@@ -177,40 +177,38 @@ namespace Renegadeware.LL_LS1A1 {
                                     entity.velocity -= distInfo.normal * gameDat.organismStickySpeed;//distInfo.distance;
                             }
 
-                            //check for new stickies, if we are getting energy
-                            if(isEnergyRateUp) {
-                                //stick to solid?
-                                if((entity.stats.flags & OrganismFlag.StickySolid) == OrganismFlag.StickySolid) {
-                                    for(int i = 0; !mStickies.IsFull && i < entity.contactSolids.Count; i++) {
-                                        var coll = entity.contactSolids[i];
+                            //check for new stickies
 
-                                        if(coll.enabled && !IsStickTo(coll)) {
-                                            mStickies.Add(new StickyInfo { coll = coll });
+                            //stick to solid if we are generating energy
+                            if(isEnergyRateUp && (entity.stats.flags & OrganismFlag.StickySolid) == OrganismFlag.StickySolid) {
+                                for(int i = 0; !mStickies.IsFull && i < entity.contactSolids.Count; i++) {
+                                    var coll = entity.contactSolids[i];
 
-                                            entity.velocity = Vector2.zero;
-                                        }
-                                    }
-                                }
+                                    if(coll.enabled && !IsStickTo(coll)) {
+                                        mStickies.Add(new StickyInfo { coll = coll });
 
-                                //only stick to same organisms, and if they are generating energy
-                                for(int i = 0; !mStickies.IsFull && i < entity.contactOrganismMatches.Count; i++) {
-                                    var contactEntity = entity.contactOrganismMatches[i];
-                                    if(!contactEntity.isReleased && !contactEntity.physicsLocked && contactEntity.stats.energyDelta > 0f && !IsStickTo(contactEntity)) {
-                                        //ensure contacted is not already stuck to us
-                                        var bodySingleCellCtrl = contactEntity.GetComponentControl<OrganismBodySingleCellControl>();
-                                        if(bodySingleCellCtrl == null || !bodySingleCellCtrl.IsStickTo(entity))
-                                            mStickies.Add(new StickyInfo { entity = contactEntity, coll = contactEntity.bodyCollider });
+                                        entity.velocity = Vector2.zero;
                                     }
                                 }
                             }
-                            else {
-                                //only stick to solid energy compatibles
-                                for(int i = 0; !mStickies.IsFull && i < entity.contactEnergies.Count; i++) {
-                                    var energySrc = entity.contactEnergies[i];
 
-                                    if(energySrc.isActive && energySrc.isSolid && !IsStickTo(energySrc.bodyCollider))
-                                        mStickies.Add(new StickyInfo { coll = energySrc.bodyCollider });
+                            //only stick to same organisms
+                            for(int i = 0; !mStickies.IsFull && i < entity.contactOrganismMatches.Count; i++) {
+                                var contactEntity = entity.contactOrganismMatches[i];
+                                if(!contactEntity.isReleased && !contactEntity.physicsLocked && !IsStickTo(contactEntity)) {
+                                    //ensure contacted is not already stuck to us
+                                    var bodySingleCellCtrl = contactEntity.GetComponentControl<OrganismBodySingleCellControl>();
+                                    if(bodySingleCellCtrl == null || !bodySingleCellCtrl.IsStickTo(entity))
+                                        mStickies.Add(new StickyInfo { entity = contactEntity, coll = contactEntity.bodyCollider });
                                 }
+                            }
+
+                            //only stick to solid energy compatibles
+                            for(int i = 0; !mStickies.IsFull && i < entity.contactEnergies.Count; i++) {
+                                var energySrc = entity.contactEnergies[i];
+
+                                if(energySrc.isActive && energySrc.isSolid && !IsStickTo(energySrc.bodyCollider))
+                                    mStickies.Add(new StickyInfo { coll = energySrc.bodyCollider });
                             }
                         }
                         else
