@@ -131,7 +131,7 @@ namespace Renegadeware.LL_LS1A1 {
                     }
                     //ready to divide?
                     else if(entity.stats.isEnergyFull) {
-                        if(!GameModePlay.instance.gameSpawner.entities.IsFull) {//don't allow divide if capacity is full
+                        if((entity.stats.flags & OrganismFlag.DivideLocked) == 0 && !GameModePlay.instance.gameSpawner.entities.IsFull) {//don't allow divide if capacity is full
                             if(entity.animator && !string.IsNullOrEmpty(gameDat.organismTakeReproduce))
                                 entity.animator.Play(gameDat.organismTakeReproduce);
 

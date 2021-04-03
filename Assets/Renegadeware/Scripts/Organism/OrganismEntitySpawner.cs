@@ -239,9 +239,12 @@ namespace Renegadeware.LL_LS1A1 {
 
             var ent = mPool.Spawn<OrganismEntity>(mPoolTypename, mPoolTypename, transform, spawnPt, mSpawnParms);
 
-            mEntityActives.Add(ent);
+            //don't allow division
+            ent.stats.flags |= OrganismFlag.DivideLocked;
 
             ent.poolControl.despawnCallback += OnDespawn;
+
+            mEntityActives.Add(ent);
         }
     }
 }

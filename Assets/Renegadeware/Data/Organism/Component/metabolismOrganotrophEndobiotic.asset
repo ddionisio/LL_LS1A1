@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
-  m_Name: cellStructureMethanogen
+  m_Name: metabolismOrganotrophEndobiotic
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  nameRef: cellStructureMethanogen
+  nameRef: metabolismEndobiotic
   descRef: 
-  ID: 11
+  ID: 26
   attributeInfos: []
   stats:
     mass: 0
@@ -26,11 +26,9 @@ MonoBehaviour:
     energyCapacity: 0
     energyConsumeRate: 0
     lifespan: 0
-    _hazardResistances:
-    - {fileID: 11400000, guid: 9a3aaefb553796740a30212451b99437, type: 2}
-    _energySources:
-    - {fileID: 11400000, guid: d93c409e7f89e594ba7a9c49dfad2275, type: 2}
-    flags: 1
+    _hazardResistances: []
+    _energySources: []
+    flags: 0
     danger: 0
   _editPrefab: {fileID: 0}
   _gamePrefab: {fileID: 0}

@@ -7,6 +7,7 @@ namespace Renegadeware.LL_LS1A1 {
     public enum OrganismFlag {
         Sticky = 0x1,
         StickySolid = 0x2,
+        DivideLocked = 0x4, //don't allow cell division
     }
 
     [System.Serializable]

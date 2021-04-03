@@ -12,9 +12,10 @@
     "test2": "Test 2",
     "testBodyCapsule": "Capsule",
     "testBodySphere": "Sphere",
-    "categoryBody": "Body",
-    "categoryCellStructure": "Cell Structure",
+    "categoryBody": "Shape",
+    "categoryCellStructure": "Structure",
     "categoryMotility": "Motility",
+    "categoryMetabolism": "Metabolism",
     "essentialNucleoid": "Nucleoid",
     "essentialRibosome": "Ribosome",
     "essentialPlasmid": "Plasmid DNA",
@@ -29,6 +30,10 @@
     "motilityFlagellaMonotrichous": "Monotrichous Flagella",
     "motilityFlagellaLophotrichous": "Lophotrichous Flagella",
     "motilityFlagellaPeritrichous": "Peritrichous Flagella",
-    "motilityFlagellaAmphitrichous": "Amphitrichous Flagella"
+    "motilityFlagellaAmphitrichous": "Amphitrichous Flagella",
+    "metabolismMethanotroph": "Methanotroph",
+    "metabolismPhotoautotroph": "Photoautotroph",
+    "metabolismOrganotroph": "Organotroph",
+    "metabolismEndobiotic": "Organotroph (Endobiotic)"
   }
 }

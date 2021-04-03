@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
+  m_Name: bacteriaMetabolism
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  nameRef: categoryMetabolism
+  descRef: 
+  components:
+  - {fileID: 11400000, guid: 5569b82bfb3457d47b559fcef39830f8, type: 2}
+  - {fileID: 11400000, guid: 94cb65c0eea45ca419669bbdb734daac, type: 2}
+  - {fileID: 11400000, guid: 70f709b1ac0c6bd4c9f68f6eef2cc135, type: 2}
+  - {fileID: 11400000, guid: 5cae858f39f199d45b0dea1af7473968, type: 2}

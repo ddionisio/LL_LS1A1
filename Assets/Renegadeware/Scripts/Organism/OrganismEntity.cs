@@ -234,44 +234,9 @@ namespace Renegadeware.LL_LS1A1 {
                 ent._comps[i] = comp;
             }
 
-            for(int i = 0; i < ent._comps.Length; i++)
-                ent._comps[i].SetupTemplate(ent);
+            ent.GenerateSize();
 
-            //compute general size of collider (NOTE: assumes shape is centered)
-            if(ent._bodyCollider) {
-                var scale = ent.transform.localScale;
-
-                if(ent._bodyCollider is BoxCollider2D)
-                    ent._size = (ent._bodyCollider as BoxCollider2D).size * scale;
-                else if(ent._bodyCollider is CircleCollider2D) {
-                    var diameter = (ent._bodyCollider as CircleCollider2D).radius * 2f;
-                    ent._size = new Vector2(diameter, diameter) * scale;
-                }
-                else if(ent._bodyCollider is CapsuleCollider2D)
-                    ent._size = (ent._bodyCollider as CapsuleCollider2D).size * scale;
-                else if(ent._bodyCollider is PolygonCollider2D) {
-                    var polyColl = ent._bodyCollider as PolygonCollider2D;
-
-                    Vector2 sMin = new Vector2(float.MaxValue, float.MaxValue), sMax = new Vector2(float.MinValue, float.MinValue);
-
-                    for(int i = 0; i < polyColl.points.Length; i++) {
-                        var pt = polyColl.points[i];
-                        if(pt.x < sMin.x)
-                            sMin.x = pt.x;
-                        if(pt.y < sMin.y)
-                            sMin.y = pt.y;
-
-                        if(pt.x > sMax.x)
-                            sMax.x = pt.x;
-                        if(pt.y > sMax.y)
-                            sMax.y = pt.y;
-                    }
-
-                    ent._size = new Vector2(Mathf.Abs(sMax.x - sMin.x) * scale.x, Mathf.Abs(sMax.y - sMin.y) * scale.y);
-                }
-            }
-            else
-                ent._size = Vector2.zero;
+            ent.ComponentSetupTemplate();
 
             return ent;
         }
@@ -337,6 +302,63 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Used by inspector, this is for creating an organism entity manually.
+        /// </summary>
+        public void GenerateStats() {
+            _stats = new OrganismStats();
+
+            for(int i = 0; i < _comps.Length; i++) {
+                _stats.Append(_comps[i].stats);
+            }
+        }
+
+        public void GenerateSize() {
+            //compute general size of collider (NOTE: assumes shape is centered)
+            if(_bodyCollider) {
+                var scale = transform.localScale;
+
+                if(_bodyCollider is BoxCollider2D)
+                    _size = (_bodyCollider as BoxCollider2D).size * scale;
+                else if(_bodyCollider is CircleCollider2D) {
+                    var diameter = (_bodyCollider as CircleCollider2D).radius * 2f;
+                    _size = new Vector2(diameter, diameter) * scale;
+                }
+                else if(_bodyCollider is CapsuleCollider2D)
+                    _size = (_bodyCollider as CapsuleCollider2D).size * scale;
+                else if(_bodyCollider is PolygonCollider2D) {
+                    var polyColl = _bodyCollider as PolygonCollider2D;
+
+                    Vector2 sMin = new Vector2(float.MaxValue, float.MaxValue), sMax = new Vector2(float.MinValue, float.MinValue);
+
+                    for(int i = 0; i < polyColl.points.Length; i++) {
+                        var pt = polyColl.points[i];
+                        if(pt.x < sMin.x)
+                            sMin.x = pt.x;
+                        if(pt.y < sMin.y)
+                            sMin.y = pt.y;
+
+                        if(pt.x > sMax.x)
+                            sMax.x = pt.x;
+                        if(pt.y > sMax.y)
+                            sMax.y = pt.y;
+                    }
+
+                    _size = new Vector2(Mathf.Abs(sMax.x - sMin.x) * scale.x, Mathf.Abs(sMax.y - sMin.y) * scale.y);
+                }
+            }
+            else
+                _size = Vector2.zero;
+        }
+
+        /// <summary>
+        /// Used in inspector, this is for creating an organism entity manually.
+        /// </summary>
+        public void ComponentSetupTemplate() {
+            for(int i = 0; i < _comps.Length; i++)
+                _comps[i].SetupTemplate(this);
         }
 
         void M8.IPoolInit.OnInit() {
