@@ -61,7 +61,31 @@ namespace Renegadeware.LL_LS1A1 {
 
         private M8.CacheList<StickyInfo> mStickies;
 
+        private OrganismEntity mEndobioticHost;
+
+        private Transform mParentSpawned;
+        private Vector2 mScale;
+
         private State mState;
+
+        public void EndobioticAttach(OrganismEntity host, Transform anchor) {
+            mEndobioticHost = host;
+
+            entity.transform.SetParent(anchor, true);
+            entity.transform.localScale = mScale;
+            entity.transform.localPosition = Vector3.zero;
+
+            entity.physicsLocked = true;
+        }
+
+        public void EndobioticDetach() {
+            entity.transform.SetParent(mParentSpawned, true);
+            entity.transform.localScale = mScale;
+
+            entity.physicsLocked = false;
+
+            mEndobioticHost = null;
+        }
 
         public bool IsStickTo(Collider2D coll) {
             if(mStickies != null) {
@@ -88,17 +112,25 @@ namespace Renegadeware.LL_LS1A1 {
 
             mComp = owner as OrganismBodySingleCell;
 
+            mScale = ent.transform.localScale;
+
             if((ent.stats.flags & (OrganismFlag.Sticky | OrganismFlag.StickySolid)) != 0)
                 mStickies = new M8.CacheList<StickyInfo>(stickyCapacity);
         }
 
         public override void Spawn(M8.GenericParams parms) {
+            mParentSpawned = entity.transform.parent;
+
             mState = State.Normal;
         }
 
         public override void Despawn() {
             if(mStickies != null)
                 mStickies.Clear();
+
+            mParentSpawned = null;
+
+            mEndobioticHost = null;
         }
 
         public override void Update() {
@@ -141,6 +173,16 @@ namespace Renegadeware.LL_LS1A1 {
 
                             mState = State.Divide;
                         }
+                    }
+                    else if(mEndobioticHost != null) { //absorb energy from host
+                        if(!mEndobioticHost.isReleased && mEndobioticHost.stats.energy > 0f) {
+                            var energyAmt = entity.stats.energyConsumeRate * Time.deltaTime;
+
+                            mEndobioticHost.stats.energy -= energyAmt;
+                            entity.stats.energy += energyAmt;
+                        }
+                        else //detach from host
+                            EndobioticDetach();
                     }
                     else if(mStickies != null) {
                         if(!entity.physicsLocked) {
@@ -241,30 +283,56 @@ namespace Renegadeware.LL_LS1A1 {
                         var forward = entity.forward;
 
                         Vector2 pt1, pt2;
-                        float dist;
+                        Vector2 fwd1, fwd2;
 
-                        switch(mComp.splitMode) {
-                            case OrganismBodySingleCell.SplitMode.Horizontal:
-                                dist = entity.size.x * 0.25f;
+                        var entParent = entity.transform.parent;
+                        var entEndobioticHost = mEndobioticHost;
 
-                                pt1 = entPt + entity.left * dist;
-                                pt2 = entPt + entity.right * dist;
-                                break;
+                        if(entEndobioticHost) {
+                            pt1 = pt2 = entParent.position;
 
-                            default:
-                                dist = entity.size.y * 0.25f;
+                            fwd1 = M8.MathUtil.Rotate(forward, Random.Range(0f, M8.MathUtil.TwoPI));
+                            fwd2 = M8.MathUtil.Rotate(forward, Random.Range(0f, M8.MathUtil.TwoPI));
+                        }
+                        else {
+                            float dist;
 
-                                pt1 = entPt + entity.forward * dist;
-                                pt2 = entPt - entity.forward * dist;
-                                break;
+                            switch(mComp.splitMode) {
+                                case OrganismBodySingleCell.SplitMode.Horizontal:
+                                    dist = entity.size.x * 0.25f;
+
+                                    pt1 = entPt + entity.left * dist;
+                                    pt2 = entPt + entity.right * dist;
+                                    break;
+
+                                default:
+                                    dist = entity.size.y * 0.25f;
+
+                                    pt1 = entPt + entity.forward * dist;
+                                    pt2 = entPt - entity.forward * dist;
+                                    break;
+                            }
+
+                            fwd1 = fwd2 = forward;
                         }
 
                         //release this
                         entity.Release();
 
                         //spawn two
-                        spawner.SpawnAt(pt1, forward);
-                        spawner.SpawnAt(pt2, forward);
+                        var ent1 = spawner.SpawnAt(pt1, fwd1);
+                        var ent2 = spawner.SpawnAt(pt2, fwd2);
+
+                        //attach to previous host
+                        if(entEndobioticHost) {
+                            var ent1BodyCtrl = ent1.GetComponentControl<OrganismBodySingleCellControl>();
+                            ent1BodyCtrl.EndobioticAttach(entEndobioticHost, entParent);
+                            ent1.position += Random.insideUnitCircle * entity.radius;
+
+                            var ent2BodyCtrl = ent2.GetComponentControl<OrganismBodySingleCellControl>();
+                            ent2BodyCtrl.EndobioticAttach(entEndobioticHost, entParent);
+                            ent2.position += Random.insideUnitCircle * entity.radius;
+                        }
                         return;
                     }
                     break;

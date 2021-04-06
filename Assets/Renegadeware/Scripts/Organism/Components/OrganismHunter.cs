@@ -4,54 +4,44 @@ using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
     public abstract class OrganismHunter : OrganismComponent {
-        [Header("Hunter Info")]
-        public string anchorContainer = "hunt"; //anchors where to store consumed endobiotics
-
-
     }
 
     public abstract class OrganismHunterControl : OrganismComponentControl {
-
-        private List<Transform> mEntityAnchors;
-        private M8.CacheList<OrganismEntity> mEntityEndobiotics;
-
-        public bool isFull {
-            get {
-                return mEntityEndobiotics != null && mEntityEndobiotics.IsFull;
-            }
-        }
+        private List<Transform> mEndobioticAnchors;
+        private int mEndobioticAnchorIndex; //current available index
 
         public override void Init(OrganismEntity ent, OrganismComponent owner) {
             base.Init(ent, owner);
 
-            var hunterComp = owner as OrganismHunter;
-
-            mEntityAnchors = ent.bodyDisplay.GetAnchors(hunterComp.anchorContainer);
-
-            if(mEntityAnchors != null)
-                mEntityEndobiotics = new M8.CacheList<OrganismEntity>(mEntityAnchors.Count);
+            mEndobioticAnchors = ent.bodyDisplay.GetAnchors(GameData.instance.organismAnchorEndobiotic);
         }
 
         public override void Spawn(M8.GenericParams parms) {
-            
+            mEndobioticAnchorIndex = 0;            
         }
 
-        public override void Despawn() {
-            //clear out and release consumed entities
-            if(mEntityEndobiotics != null) {
-                for(int i = 0; i < mEntityEndobiotics.Count; i++) {
-                    var ent = mEntityEndobiotics[i];
-                    if(ent && !ent.isReleased)
-                        ent.Release();
+        public void Eat(OrganismEntity ent) {
+            var entStats = ent.stats;
+
+            if((entStats.flags & OrganismFlag.Endobiotic) == OrganismFlag.Endobiotic) {
+                var anchor = mEndobioticAnchors[mEndobioticAnchorIndex];
+                mEndobioticAnchorIndex++;
+                if(mEndobioticAnchorIndex == mEndobioticAnchors.Count)
+                    mEndobioticAnchorIndex = 0;
+
+                var entBodyCtrl = ent.GetComponentControl<OrganismBodySingleCellControl>();
+                if(entBodyCtrl != null) {
+                    entBodyCtrl.EndobioticAttach(entity, anchor);
                 }
-
-                mEntityEndobiotics.Clear();
+                else { //just eat it
+                    ent.stats.energyConsume += entStats.energy;
+                    ent.Release();
+                }
             }
-        }
-
-        public override void Update() {
-            //feed consumed endobiotics
-            //if()
+            else {
+                ent.stats.energyConsume += entStats.energy;
+                ent.Release();
+            }
         }
     }
 }

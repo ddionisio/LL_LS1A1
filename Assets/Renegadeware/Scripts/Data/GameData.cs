@@ -58,10 +58,17 @@ namespace Renegadeware.LL_LS1A1 {
         /// </summary>
         public float organismSeekTurnAngleThreshold = 2f;
 
+        public float organismSeekTurnAngleDampenScale = 4f;
+
         /// <summary>
         /// To what angle do we need to turn towards/against a target before moving
         /// </summary>
         public float organismSeekAngleThreshold = 30f;
+
+        /// <summary>
+        /// Anchor on entity to attach endobiotics
+        /// </summary>
+        public string organismAnchorEndobiotic = "endobiotic";
 
         [Header("Organism Filter Settings")]
         [M8.TagSelector]

@@ -129,6 +129,8 @@ namespace Renegadeware.LL_LS1A1 {
         /// </summary>
         public Vector2 size { get { return _size; } }
 
+        public float radius { get { return Mathf.Max(size.x * 0.5f, size.y * 0.5f); } }
+
         /// <summary>
         /// Lock movement and disable collision.
         /// </summary>
@@ -281,14 +283,14 @@ namespace Renegadeware.LL_LS1A1 {
             return GetContactDistanceInfo(energy.bodyCollider);
         }
 
-        public void AngularVelocityDampen(float amt) {
+        public void AngularVelocityDampen(float amt, float scale) {
             if(angularVelocity > 0f) {
-                angularVelocity -= amt;
+                angularVelocity -= amt * scale;
                 if(angularVelocity < 0f)
                     angularVelocity = 0f;
             }
             else if(angularVelocity < 0f) {
-                angularVelocity += amt;
+                angularVelocity += amt * scale;
                 if(angularVelocity > 0f)
                     angularVelocity = 0f;
             }
@@ -564,7 +566,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                 //dampen angular speed
                 if(angularVelocity != 0f) {
-                    AngularVelocityDampen(env.angularDrag * dt);
+                    AngularVelocityDampen(env.angularDrag * dt, 1f);
 
                     //update orientation
                     forward = M8.MathUtil.RotateAngle(forward, angularVelocity * dt);

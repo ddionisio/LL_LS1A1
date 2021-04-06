@@ -31,11 +31,11 @@ MonoBehaviour:
     flags: 0
     danger: 0
   isBidirectional: 0
-  exploreForwardDuration: 0.5
-  exploreForwardEndDelay: 0.3
-  exploreTurnDuration: 0.4
-  exploreTurnEndDelay: 0.3
+  exploreForwardDuration: 1.5
+  exploreForwardEndDelay: 0.5
+  exploreTurnDuration: 1
+  exploreTurnAngleVelocityMin: 15
   exploreTurnAngleVelocityMax: 60
   exploreTurnAwayAngle: 30
   energyMinScale: 0.15
-  energyRate: 0.1
+  energyRate: 0

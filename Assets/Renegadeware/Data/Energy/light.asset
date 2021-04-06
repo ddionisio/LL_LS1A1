@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d787a828849834d9a11d29fa648db9, type: 3}
   m_Name: light
   m_EditorClassIdentifier: 
+  ignoreMatch: 0
+  ethereal: 1

@@ -10,9 +10,9 @@ namespace Renegadeware.LL_LS1A1 {
             entity = ent;
         }
 
-        public abstract void Spawn(M8.GenericParams parms);
+        public virtual void Spawn(M8.GenericParams parms) { }
 
-        public abstract void Despawn();
+        public virtual void Despawn() { }
 
         public abstract void Update();
     }

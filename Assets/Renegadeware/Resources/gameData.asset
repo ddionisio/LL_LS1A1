@@ -33,8 +33,10 @@ MonoBehaviour:
   organismStickyDistanceThreshold: 0.15
   organismStickySpeed: 0.01
   organismDeathDelay: 2
-  organismSeekTurnAngleThreshold: 2
-  organismSeekAngleThreshold: 30
+  organismSeekTurnAngleThreshold: 15
+  organismSeekTurnAngleDampenScale: 4
+  organismSeekAngleThreshold: 45
+  organismAnchorEndobiotic: endobiotic
   organismEntityTags:
   - Organism
   - OrganismPlayer
@@ -54,6 +56,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4fee986f0f9c81348967252fa013f738, type: 2}
   - {fileID: 11400000, guid: 0b13a25dd9d436241a58d02e30bb66e9, type: 2}
   - {fileID: 11400000, guid: 9098d3dc5dc82ce48aa45ca6adcfdb5e, type: 2}
+  - {fileID: 11400000, guid: 8e9194c424d513b40a28be65a931de75, type: 2}
   - {fileID: 11400000, guid: f4289bc98e1bc4c40b0e3dbaf57186b3, type: 2}
   - {fileID: 11400000, guid: d784cf704cbeddf48896fe376aed751a, type: 2}
   - {fileID: 11400000, guid: 42b2fc9572b9a854590e55b47d06432c, type: 2}
@@ -63,6 +66,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f0744b1421eb0dd44806305c24b7d4e5, type: 2}
   - {fileID: 11400000, guid: f1633226b2891fd4c85f9ff3f9d56f8d, type: 2}
   - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}
+  - {fileID: 11400000, guid: 80229e0107e33414cb0a4cd51eef9dc3, type: 2}
   - {fileID: 11400000, guid: 5569b82bfb3457d47b559fcef39830f8, type: 2}
   - {fileID: 11400000, guid: 70f709b1ac0c6bd4c9f68f6eef2cc135, type: 2}
   - {fileID: 11400000, guid: 5cae858f39f199d45b0dea1af7473968, type: 2}

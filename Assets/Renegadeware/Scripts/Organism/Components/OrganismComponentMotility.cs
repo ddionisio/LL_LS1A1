@@ -12,7 +12,7 @@ namespace Renegadeware.LL_LS1A1 {
         public float exploreForwardDuration = 0.5f;
         public float exploreForwardEndDelay = 0.5f;
         public float exploreTurnDuration = 0.3f;
-        public float exploreTurnEndDelay = 0.5f;
+        public float exploreTurnAngleVelocityMin = 5f;
         public float exploreTurnAngleVelocityMax = 90f;
         public float exploreTurnAwayAngle = 30f;
 
@@ -99,7 +99,7 @@ namespace Renegadeware.LL_LS1A1 {
                         //if(entity.speed > 0f)
                             //entity.speed -= stats.forwardAccel * dt;
 
-                        entity.AngularVelocityDampen(stats.turnAccel * dt);
+                        entity.AngularVelocityDampen(stats.turnAccel * dt, 1f);
                     }
                     break;
 
@@ -154,7 +154,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
-                            else if(entity.stats.energyDelta > 0f)
+                            else if(CheckEnergy())
                                 ChangeToState(State.Rest, null);
                             else
                                 ExploreChangeToState(ExploreState.ForwardWait);
@@ -180,15 +180,17 @@ namespace Renegadeware.LL_LS1A1 {
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
-                            else if(entity.stats.energyDelta > 0f)
+                            else if(CheckEnergy())
                                 ChangeToState(State.Rest, null);
                             else
                                 ExploreChangeToState(ExploreState.TurnWait);
                             break;
 
                         case ExploreState.TurnWait:
-                            if(time - mLastTime >= mComp.exploreTurnEndDelay)
+                            if(Mathf.Abs(entity.angularVelocity) <= mComp.exploreTurnAngleVelocityMin)
                                 ExploreChangeToState(ExploreState.Forward); //just have to keep moving forward
+                            else
+                                entity.AngularVelocityDampen(stats.turnAccel * dt, 1f);
                             break;
 
                         case ExploreState.TurnAway:
@@ -201,7 +203,7 @@ namespace Renegadeware.LL_LS1A1 {
 
                                 stats.energy -= mComp.energyRate * dt;
                             }
-                            else if(entity.stats.energyDelta > 0f)
+                            else if(CheckEnergy())
                                 ChangeToState(State.Rest, null);
                             else
                                 ExploreChangeToState(ExploreState.TurnWait);
@@ -260,8 +262,8 @@ namespace Renegadeware.LL_LS1A1 {
             for(int i = 0; i < sensor.organisms.Count; i++) {
                 var organism = sensor.organisms[i];
                 if(organism && !organism.isReleased) {
-                    //can this organism eat us?
-                    if(organism.stats.CanEat(stats)) {
+                    //can this organism eat us? Ignore retreat if we want to be eaten (endobiotics)
+                    if(organism.stats.CanEat(stats) && (stats.flags & OrganismFlag.Endobiotic) == 0) {
                         var distSqr = (organism.position - pos).sqrMagnitude;
                         if(distSqr < retreatDistSqr) {
                             retreat = organism.transform;
@@ -377,7 +379,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(diffAngleAbs > gameDat.organismSeekTurnAngleThreshold)
                 entity.angularVelocity -= Mathf.Sign(diffAngle) * stats.turnAccel * timeDelta * turnScale;
             else
-                entity.AngularVelocityDampen(stats.turnAccel * timeDelta);
+                entity.AngularVelocityDampen(stats.turnAccel * timeDelta, gameDat.organismSeekTurnAngleDampenScale);
 
             if(diffAngleAbs <= gameDat.organismSeekAngleThreshold)
                 entity.velocity += targetDir * stats.forwardAccel * timeDelta * moveScale;
@@ -397,6 +399,23 @@ namespace Renegadeware.LL_LS1A1 {
                     turnScale *= hazard.turnScale;
                 }
             }
+        }
+
+        private bool CheckEnergy() {
+            var energyCount = entity.contactEnergies.Count;
+            if(energyCount > 0) {
+                int etherealCount = 0;
+                for(int i = 0; i < energyCount; i++) {
+                    if(entity.contactEnergies[i].data.ethereal)
+                        etherealCount++;
+                }
+
+                return etherealCount < energyCount;
+            }
+            else if(entity.contactOrganisms.Count > 0)
+                return entity.stats.energyDelta > 0f;
+
+            return false;
         }
     }
 }
