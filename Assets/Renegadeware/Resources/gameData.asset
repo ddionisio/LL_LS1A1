@@ -69,6 +69,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 94cb65c0eea45ca419669bbdb734daac, type: 2}
   - {fileID: 11400000, guid: b9edabd369f735f4a9e8ef4b4c322896, type: 2}
   - {fileID: 11400000, guid: 1bf27a41871f8b14d9d856209c65db4f, type: 2}
+  - {fileID: 11400000, guid: ea7b00eeed5e9ae43991d3c461f68fb8, type: 2}
+  - {fileID: 11400000, guid: 8fffb5d0c83b5c449ac9e4bbff93511c, type: 2}
+  - {fileID: 11400000, guid: db09fd21c5381a948bf0da2f936ea583, type: 2}
+  - {fileID: 11400000, guid: 050280ab4662e4a48b0ba2e96ece2626, type: 2}
+  - {fileID: 11400000, guid: d66f9f5fa3829304197bb2cd5c10a268, type: 2}
   - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}
   signalEnvironmentChanged: {fileID: 11400000, guid: 3a152a70959bc3b4397fabc399cde072,
     type: 2}

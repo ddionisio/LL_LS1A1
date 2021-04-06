@@ -9,28 +9,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
-  m_Name: metabolismMethanotroph
+  m_Script: {fileID: 11500000, guid: dd07c7725c3c10347b42b0ea51e623fd, type: 3}
+  m_Name: motilityHunter
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  nameRef: metabolismMethanotroph
+  nameRef: motilityFlagellaLophotrichous
   descRef: 
-  ID: 23
+  ID: 31
   attributeInfos: []
   stats:
     mass: 0
-    forwardAccel: 0
-    turnAccel: 0
+    forwardAccel: 2
+    turnAccel: 90
     speedLimit: 0
     velocityReceiveScale: 0
     energyCapacity: 0
     energyConsumeRate: 0
     lifespan: 0
-    _hazardResistances:
-    - {fileID: 11400000, guid: 9a3aaefb553796740a30212451b99437, type: 2}
-    _energySources:
-    - {fileID: 11400000, guid: 8dca73c42545a574faece3f8d90be4d6, type: 2}
+    _hazardResistances: []
+    _energySources: []
     flags: 0
     danger: 0
-  _editPrefab: {fileID: 0}
-  _gamePrefab: {fileID: 0}
+  isBidirectional: 0
+  exploreForwardDuration: 0.5
+  exploreForwardEndDelay: 0.3
+  exploreTurnDuration: 0.4
+  exploreTurnEndDelay: 0.3
+  exploreTurnAngleVelocityMax: 60
+  exploreTurnAwayAngle: 30
+  energyMinScale: 0.15
+  energyRate: 0.1

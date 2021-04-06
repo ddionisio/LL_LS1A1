@@ -22,9 +22,9 @@ MonoBehaviour:
   - nameRef: test1
     descRef: 
     spawnableCount: 5
-    criteriaCount: 25
-    bonusCount: 25
-    capacity: 80
+    criteriaCount: 50
+    bonusCount: 50
+    capacity: 120
   - nameRef: test2
     descRef: 
     spawnableCount: 10

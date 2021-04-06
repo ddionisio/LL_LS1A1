@@ -89,7 +89,7 @@ MonoBehaviour:
     type: 3}
   poolGroup: energySource
   poolCapacity: 100
-  energyRequired: 4
+  energyRequired: 2.5
   spawnRadius: 0.2
 --- !u!114 &1803056550675695587
 MonoBehaviour:

@@ -7,8 +7,6 @@ namespace Renegadeware.LL_LS1A1 {
         public enum State {
             None,
             Spawn,
-            SpawnWait,
-            Delay
         }
 
         public string poolGroup = "entitySpawnerPool";
@@ -28,7 +26,6 @@ namespace Renegadeware.LL_LS1A1 {
         public int spawnStartCount;
         public int spawnCount;
         public float spawnWait;
-        public float spawnDelay;
 
         [Header("Signals")]
         public M8.SignalBoolean signalListenSpawnLock;
@@ -135,21 +132,11 @@ namespace Renegadeware.LL_LS1A1 {
             switch(mState) {
                 case State.Spawn:
                     if(mEntityActives.IsFull)
-                        ChangeState(State.SpawnWait);
+                        mLastTime = Time.time;
                     else if(Time.time - mLastTime >= spawnWait) {
                         SpawnIncrement();
                         mLastTime = Time.time;
                     }
-                    break;
-
-                case State.SpawnWait:
-                    if(mEntityActives.Count == 0) //wait for all energies to be gone (ensure template has limited energy and life duration)
-                        ChangeState(State.Delay);
-                    break;
-
-                case State.Delay:
-                    if(Time.time - mLastTime >= spawnDelay)
-                        ChangeState(State.Spawn);
                     break;
             }
         }
@@ -187,13 +174,6 @@ namespace Renegadeware.LL_LS1A1 {
         private void ChangeState(State toState) {
             switch(toState) {
                 case State.Spawn:
-                    break;
-
-                case State.SpawnWait:
-                    mSpawnPointIndex = -1;
-                    break;
-
-                case State.Delay:
                     break;
             }
 

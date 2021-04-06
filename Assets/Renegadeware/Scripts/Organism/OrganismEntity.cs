@@ -53,10 +53,10 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.Animator.Animate animator { get { return _animator; } }
 
         public Vector2 position { 
-            get { return transform.localPosition; } 
+            get { return transform.position; } 
             set {
-                var pos = transform.localPosition;
-                transform.localPosition = new Vector3(value.x, value.y, pos.z);
+                var pos = transform.position;
+                transform.position = new Vector3(value.x, value.y, pos.z);
             } 
         }
 

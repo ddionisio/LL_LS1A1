@@ -8,6 +8,7 @@ namespace Renegadeware.LL_LS1A1 {
         Sticky = 0x1,
         StickySolid = 0x2,
         DivideLocked = 0x4, //don't allow cell division
+        Endobiotic = 0x8, //will not be killed when consumed by a hunter
     }
 
     [System.Serializable]
