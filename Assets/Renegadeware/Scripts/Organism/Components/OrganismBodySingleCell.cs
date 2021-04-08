@@ -325,13 +325,17 @@ namespace Renegadeware.LL_LS1A1 {
 
                         //attach to previous host
                         if(entEndobioticHost) {
-                            var ent1BodyCtrl = ent1.GetComponentControl<OrganismBodySingleCellControl>();
-                            ent1BodyCtrl.EndobioticAttach(entEndobioticHost, entParent);
-                            ent1.position += Random.insideUnitCircle * entity.radius;
+                            if(ent1) {
+                                var ent1BodyCtrl = ent1.GetComponentControl<OrganismBodySingleCellControl>();
+                                ent1BodyCtrl.EndobioticAttach(entEndobioticHost, entParent);
+                                ent1.position += Random.insideUnitCircle * entity.radius;
+                            }
 
-                            var ent2BodyCtrl = ent2.GetComponentControl<OrganismBodySingleCellControl>();
-                            ent2BodyCtrl.EndobioticAttach(entEndobioticHost, entParent);
-                            ent2.position += Random.insideUnitCircle * entity.radius;
+                            if(ent2) {
+                                var ent2BodyCtrl = ent2.GetComponentControl<OrganismBodySingleCellControl>();
+                                ent2BodyCtrl.EndobioticAttach(entEndobioticHost, entParent);
+                                ent2.position += Random.insideUnitCircle * entity.radius;
+                            }
                         }
                         return;
                     }

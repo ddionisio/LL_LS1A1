@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    [CreateAssetMenu(fileName = "hunter", menuName = "Game/Organism/Component/Hunter Contact")]
+    [CreateAssetMenu(fileName = "hunterContact", menuName = "Game/Organism/Component/Hunter Contact")]
     public class OrganismHunterContact : OrganismHunter {
         [Header("Hunter Contact")]
         public float contactAngle = 35f;

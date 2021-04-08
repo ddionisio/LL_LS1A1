@@ -9,6 +9,7 @@ namespace Renegadeware.LL_LS1A1 {
         float _angle;
 
         public float accel;
+        public bool entityApplyVelocityScale; //if true, apply velocityReceiveScale
 
         public float angle {
             get { return _angle; }
@@ -23,7 +24,10 @@ namespace Renegadeware.LL_LS1A1 {
         private Vector2 mDir;
 
         protected override void UpdateEntity(OrganismEntity ent, float timeDelta) {
-            ent.velocity += mDir * accel * timeDelta;
+            if(entityApplyVelocityScale)
+                ent.velocity += mDir * accel * ent.stats.velocityReceiveScale * timeDelta;
+            else
+                ent.velocity += mDir * accel * timeDelta;
         }
 
         protected override void Awake() {

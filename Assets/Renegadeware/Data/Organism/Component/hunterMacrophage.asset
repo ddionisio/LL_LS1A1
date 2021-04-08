@@ -9,30 +9,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d7549050fcfd1845940fe59cc2a63d4, type: 3}
-  m_Name: bodyHunter
+  m_Script: {fileID: 11500000, guid: ab0075e1055ad6248ae9eea4c0548127, type: 3}
+  m_Name: hunterMacrophage
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   nameRef: 
   descRef: 
-  ID: 32
+  ID: 36
   attributeInfos: []
   stats:
-    mass: 0.1
+    mass: 0
     forwardAccel: 0
     turnAccel: 0
-    speedLimit: 1.8
-    velocityReceiveScale: 0.5
-    energyCapacity: 100
-    energyConsumeRate: 1
+    speedLimit: 0
+    velocityReceiveScale: 0
+    energyCapacity: 0
+    energyConsumeRate: 0
     lifespan: 0
     _hazardResistances: []
     _energySources: []
     flags: 0
-    danger: 0
-  _editPrefab: {fileID: 0}
-  _gamePrefab: {fileID: 0}
-  componentEssentials: []
-  componentGroups: []
-  splitMode: 0
-  deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    danger: 1
+  grabTemplate: {fileID: 3494708300621779489, guid: c9ae841029e20e647af3a67b6505d8f5,
+    type: 3}
+  grabCount: 8
+  grabDelay: 0.5
+  grabEaseStart: 3
+  grabEaseEnd: 2
+  grabRadius: 2.25

@@ -400,6 +400,7 @@ namespace Renegadeware.LL_LS1A1 {
             mPhysicsLocked = false;
 
             ResetPhysics();
+            ApplyPhysicsLocked();
 
             if(parms != null) {
                 //forward setting

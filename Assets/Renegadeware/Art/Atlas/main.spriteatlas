@@ -75,6 +75,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 5952baaa48d611842a22716276cee699, type: 3}
   - {fileID: 21300000, guid: 8d268ada08728e64f89466e44eec3b74, type: 3}
   - {fileID: 21300000, guid: 6e46d65c795b56344b389f1886fb3982, type: 3}
+  - {fileID: 21300000, guid: 3b14576c4ee59af4b857b321e5f0f6b8, type: 3}
   - {fileID: 21300000, guid: 36ce24ec9ae04524289ce0e80bf270be, type: 3}
   - {fileID: 21300000, guid: c5a54a7e88b59e547a8905c1ad93d892, type: 3}
   - {fileID: 21300000, guid: d100bf3fba8e48343b4f69fe5447d682, type: 3}
@@ -111,6 +112,7 @@ SpriteAtlas:
   - ringGlow
   - circleQuarter_256
   - devicerMouthClose
+  - grabMacrophage
   - circleGlowTiny
   - edge_shade
   - tutorialHandPoint

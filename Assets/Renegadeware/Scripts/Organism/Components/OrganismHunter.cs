@@ -21,6 +21,9 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void Eat(OrganismEntity ent) {
+            if(ent.isReleased) //fail-safe
+                return;
+
             var entStats = ent.stats;
 
             if((entStats.flags & OrganismFlag.Endobiotic) == OrganismFlag.Endobiotic) {
