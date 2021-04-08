@@ -9,6 +9,7 @@ namespace Renegadeware.LL_LS1A1 {
         StickySolid = 0x2,
         DivideLocked = 0x4, //don't allow cell division
         Endobiotic = 0x8, //will not be killed when consumed by a hunter
+        ToxicImmunity = 0x10, //immune to toxic
     }
 
     [System.Serializable]
@@ -37,6 +38,7 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Specifics")]
         public OrganismFlag flags;
         public float danger; //used for avoidance (danger < other.danger), also determines if this organism is a hunter (danger > 0)
+        public float toxic; //when eaten, energy is reduced by this value.
 
         public float energy { 
             get { return mEnergy; }
@@ -104,7 +106,7 @@ namespace Renegadeware.LL_LS1A1 {
         /// </summary>
         public float spawnTimeElapsed { get { return Time.time - mLastResetTime; } }
 
-        public bool isLifeExpired { get { return lifespan > 0f && spawnTimeElapsed >= lifespan; } }
+        public bool isLifeExpired { get { return mIsForcedLifeExpire || (lifespan > 0f && spawnTimeElapsed >= lifespan); } }
 
         public bool isEnergyFull { get { return mEnergy == energyCapacity; } }
 
@@ -116,6 +118,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         private float mLastResetTime;
 
+        private bool mIsForcedLifeExpire;
+
         public void Reset() {
             mEnergy = energyInitial;
             mEnergyLastUpdate = mEnergy;
@@ -124,6 +128,15 @@ namespace Renegadeware.LL_LS1A1 {
             mEnergyLocked = false;
 
             mLastResetTime = Time.time;
+
+            mIsForcedLifeExpire = false;
+        }
+
+        /// <summary>
+        /// Force this organism to die via life expiration.
+        /// </summary>
+        public void ForcedLifeExpire() {
+            mIsForcedLifeExpire = true;
         }
 
         public bool HazardMatch(HazardData hazardData) {

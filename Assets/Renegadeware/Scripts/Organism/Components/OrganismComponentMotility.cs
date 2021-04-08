@@ -43,6 +43,8 @@ namespace Renegadeware.LL_LS1A1 {
             TurnAway //used for turning away from solid
         }
 
+        public bool isLocked;
+
         private OrganismComponentMotility mComp;
 
         private OrganismBodySingleCellControl mBodyCtrl;
@@ -73,6 +75,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public override void Spawn(M8.GenericParams parms) {
+            isLocked = false;
+
             ChangeToState(State.Explore, null);
         }
 
@@ -83,7 +87,7 @@ namespace Renegadeware.LL_LS1A1 {
             var stats = entity.stats;
 
             //energy locked (e.g. dividing), or ran out of energy
-            if(stats.energyLocked || stats.energyScale <= mComp.energyMinScale)
+            if(isLocked || stats.energyLocked || stats.energyScale <= mComp.energyMinScale)
                 return;
 
             var time = Time.time;
@@ -339,15 +343,6 @@ namespace Renegadeware.LL_LS1A1 {
             //get forward and turn scale
             float moveScale, turnScale;
             GetMovementScale(out moveScale, out turnScale);
-
-            var env = GameModePlay.instance.environmentCurrentControl;
-            for(int i = 0; i < env.hazards.Length; i++) {
-                var hazard = env.hazards[i];
-                if(hazard && hazard.isActive && !stats.HazardMatch(hazard.hazard)) {
-                    moveScale *= hazard.moveScale;
-                    turnScale *= hazard.turnScale;
-                }
-            }
 
             var gameDat = GameData.instance;
 

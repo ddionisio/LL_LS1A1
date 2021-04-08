@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
-  m_Name: bodyGroupArchaea
+  m_Name: bodyGroupProtozoa
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   nameRef: categoryBody
@@ -18,6 +18,4 @@ MonoBehaviour:
   isHidden: 0
   defaultIndex: -1
   components:
-  - {fileID: 11400000, guid: 556857367a22be0419e19b1933907bf4, type: 2}
-  - {fileID: 11400000, guid: 4329496c0722ab44aa16fa732b665e59, type: 2}
-  - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
+  - {fileID: 11400000, guid: 49578deae2eb25c4aab3e33032d19d56, type: 2}

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da254240d32afc94aa3b71be31063424, type: 3}
+  m_Name: hunterTentacle
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  nameRef: 
+  descRef: 
+  ID: 43
+  attributeInfos: []
+  stats:
+    mass: 0
+    forwardAccel: 0
+    turnAccel: 0
+    speedLimit: 0
+    velocityReceiveScale: 0
+    energyCapacity: 0
+    energyConsumeRate: 0
+    lifespan: 0
+    _hazardResistances: []
+    _energySources: []
+    flags: 0
+    danger: 0
+    toxic: 0
+  tentacleTemplate: {fileID: 3494708300621779489, guid: c9ae841029e20e647af3a67b6505d8f5,
+    type: 3}
+  tentacleCount: 8
+  tentacleTractDelay: 0.3
+  grabEaseStart: 3
+  grabEaseEnd: 2
+  tentacleRadius: 2.5
+  tentacleMassRange:
+    min: 0
+    max: 100

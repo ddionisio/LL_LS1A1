@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Renegadeware/Scenes/stage02.unity
     guid: 3fc4f62b6723bc846aacd4163da475ef
   - enabled: 1
+    path: Assets/Renegadeware/Scenes/stage03.unity
+    guid: 85fa8712d2ab24241b76d0027a225e1b
+  - enabled: 1
     path: Assets/Renegadeware/Scenes/end.unity
     guid: 57f992646edcb5c43aec7f65fe7e2c93
   m_configObjects: {}

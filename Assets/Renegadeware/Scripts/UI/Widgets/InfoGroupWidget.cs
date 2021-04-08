@@ -77,17 +77,21 @@ namespace Renegadeware.LL_LS1A1 {
 
         public void Add(InfoData[] infos) {
             for(int i = 0; i < infos.Length; i++) {
+                int ind = mItems.Count;
+
                 var itm = AllocateItem();
-                itm.Setup(infos[i]);
+                itm.Setup(ind, infos[i]);
             }
 
             RefreshNavigation();
         }
 
         public void Add(InfoData info) {
+            int ind = mItems.Count;
+
             var itm = AllocateItem();
 
-            itm.Setup(info);
+            itm.Setup(ind, info);
 
             RefreshNavigation();
         }

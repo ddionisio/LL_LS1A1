@@ -10,31 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 811b3785e1353444696c109edec202ba, type: 3}
-  m_Name: stage02
+  m_Name: stage03
   m_EditorClassIdentifier: 
   scene:
-    name: stage02
-    path: Assets/Renegadeware/Scenes/stage02.unity
+    name: stage03
+    path: Assets/Renegadeware/Scenes/stage03.unity
   progressCount: 2
   duration: 90
   spawnIsRandomDir: 1
   environments:
   - nameRef: test1
     descRef: 
-    spawnableCount: 10
-    criteriaCount: 50
-    bonusCount: 50
-    capacity: 120
+    spawnableCount: 3
+    criteriaCount: 10
+    bonusCount: 10
+    capacity: 40
   - nameRef: test2
     descRef: 
-    spawnableCount: 10
-    criteriaCount: 50
-    bonusCount: 50
-    capacity: 120
+    spawnableCount: 3
+    criteriaCount: 10
+    bonusCount: 10
+    capacity: 40
   - nameRef: test2
     descRef: 
-    spawnableCount: 10
-    criteriaCount: 50
-    bonusCount: 50
-    capacity: 120
-  organismBodyGroup: {fileID: 11400000, guid: 9d8c0bb116d384f40b56fce901587229, type: 2}
+    spawnableCount: 3
+    criteriaCount: 10
+    bonusCount: 10
+    capacity: 40
+  organismBodyGroup: {fileID: 11400000, guid: 7152d0674f474a74bb4abcbb2a4c2046, type: 2}

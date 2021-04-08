@@ -43,4 +43,4 @@ MonoBehaviour:
     criteriaCount: 50
     bonusCount: 50
     capacity: 120
-  organismBodyGroup: {fileID: 11400000, guid: 7152d0674f474a74bb4abcbb2a4c2046, type: 2}
+  organismBodyGroup: {fileID: 11400000, guid: a13506a91459a114687f9b620fd38ce6, type: 2}

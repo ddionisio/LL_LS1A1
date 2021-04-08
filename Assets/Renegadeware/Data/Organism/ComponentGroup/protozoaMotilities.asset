@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
-  m_Name: bodyGroupArchaea
+  m_Name: protozoaMotilities
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  nameRef: categoryBody
+  nameRef: categoryMotility
   descRef: 
   isHidden: 0
-  defaultIndex: -1
+  defaultIndex: 0
   components:
-  - {fileID: 11400000, guid: 556857367a22be0419e19b1933907bf4, type: 2}
-  - {fileID: 11400000, guid: 4329496c0722ab44aa16fa732b665e59, type: 2}
-  - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
+  - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}
+  - {fileID: 11400000, guid: 9eef14ae300851344b1a13dabf31ded3, type: 2}
+  - {fileID: 11400000, guid: f9983b6b0683daf4a8cc6667676b97c9, type: 2}

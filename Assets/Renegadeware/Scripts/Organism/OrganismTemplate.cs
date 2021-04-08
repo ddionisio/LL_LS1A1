@@ -59,10 +59,8 @@ namespace Renegadeware.LL_LS1A1 {
                     var grpCompInd = grp.GetIndex(componentIDs, 1);
                     if(grpCompInd != -1)
                         newCompIds[i + 1] = grp.components[grpCompInd].ID;
-                    else if(grp.components.Length > 0) //set as first item in the group
-                        newCompIds[i + 1] = grp.components[0].ID;
-                    else
-                        newCompIds[i + 1] = GameData.invalidID;
+                    else //set as default from group
+                        newCompIds[i + 1] = grp.defaultComponentID;
                 }
 
                 componentIDs = newCompIds;

@@ -5,8 +5,21 @@ using UnityEngine;
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "organismComponentGroup", menuName = "Game/Organism/Component Group")]
     public class OrganismComponentGroup : InfoData {
+        [Tooltip("Set to true to hide from edit mode.")]
+        public bool isHidden;
+
         [Header("Components")]
+        public int defaultIndex = 0;
         public OrganismComponent[] components;
+
+        public int defaultComponentID { 
+            get {
+                if(defaultIndex >= 0 && defaultIndex < components.Length)
+                    return components[defaultIndex].ID;
+
+                return GameData.invalidID;
+            } 
+        }
 
         public int GetIndex(int compId) {
             for(int i = 0; i < components.Length; i++) {

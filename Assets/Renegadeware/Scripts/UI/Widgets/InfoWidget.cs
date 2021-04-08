@@ -13,6 +13,8 @@ namespace Renegadeware.LL_LS1A1 {
         public Image iconImage;
         public GameObject selectGO;
 
+        public int index { get; private set; }
+
         public InfoData data { get; private set; }
 
         public bool isSelected {
@@ -22,7 +24,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public event System.Action<InfoWidget> clickCallback;
 
-        public void Setup(InfoData aData) {
+        public void Setup(int index, InfoData aData) {
+            this.index = index;
             data = aData;
 
             if(titleText) titleText.text = M8.Localize.Get(data.nameRef);
