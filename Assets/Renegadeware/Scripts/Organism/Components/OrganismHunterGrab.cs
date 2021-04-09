@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "hunterGrab", menuName = "Game/Organism/Component/Hunter Grab")]
     public class OrganismHunterGrab : OrganismHunter {
+        [Header("Grab Settings")]
         public GameObject grabTemplate; //ensure pivot is bottom-center
         public int grabCount;
         public float grabDelay;
@@ -162,7 +163,7 @@ namespace Renegadeware.LL_LS1A1 {
             for(int i = 0; i < entity.contactOrganisms.Count; i++) {
                 var contactEnt = entity.contactOrganisms[i];
 
-                if(contactEnt.isReleased || contactEnt.physicsLocked || contactEnt.stats.energy == 0f || entity.stats.danger <= contactEnt.stats.danger || entity.IsMatchTemplate(contactEnt))
+                if(contactEnt.isReleased || contactEnt.physicsLocked || contactEnt.stats.energy == 0f || !entity.stats.CanEat(contactEnt.stats) || entity.IsMatchTemplate(contactEnt))
                     continue;
 
                 Eat(contactEnt);

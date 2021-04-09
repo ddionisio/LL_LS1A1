@@ -15,6 +15,7 @@ MonoBehaviour:
   levels:
   - {fileID: 11400000, guid: 950f3bd841e6f2946a22536d20c22581, type: 2}
   - {fileID: 11400000, guid: e2688c848202ac44a9fbe8204d7039df, type: 2}
+  - {fileID: 11400000, guid: 2a4c12bb7e6acf44a88f3c87e10edeed, type: 2}
   endScene:
     name: end
     path: Assets/Renegadeware/Scenes/end.unity
@@ -56,10 +57,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4fee986f0f9c81348967252fa013f738, type: 2}
   - {fileID: 11400000, guid: 0b13a25dd9d436241a58d02e30bb66e9, type: 2}
   - {fileID: 11400000, guid: 9098d3dc5dc82ce48aa45ca6adcfdb5e, type: 2}
+  - {fileID: 11400000, guid: 2d916b33f755589408d717dce654444b, type: 2}
+  - {fileID: 11400000, guid: 1f4837ef91749574582bc59abe81a3dc, type: 2}
   - {fileID: 11400000, guid: 8e9194c424d513b40a28be65a931de75, type: 2}
   - {fileID: 11400000, guid: c1f41311e322dc8408c53acb215c9957, type: 2}
   - {fileID: 11400000, guid: f138cb707dec9b54186f5365b9c561fc, type: 2}
+  - {fileID: 11400000, guid: 6de1ec0de894bc04e90f756508388ce7, type: 2}
   - {fileID: 11400000, guid: 49578deae2eb25c4aab3e33032d19d56, type: 2}
+  - {fileID: 11400000, guid: 07fa2a9576a9ccc49992a801b6bfd65f, type: 2}
   - {fileID: 11400000, guid: f4289bc98e1bc4c40b0e3dbaf57186b3, type: 2}
   - {fileID: 11400000, guid: d784cf704cbeddf48896fe376aed751a, type: 2}
   - {fileID: 11400000, guid: 42b2fc9572b9a854590e55b47d06432c, type: 2}
@@ -70,8 +75,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f1633226b2891fd4c85f9ff3f9d56f8d, type: 2}
   - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}
   - {fileID: 11400000, guid: 80229e0107e33414cb0a4cd51eef9dc3, type: 2}
+  - {fileID: 11400000, guid: 31497a5086a5d2849ac9e73b5871ad56, type: 2}
   - {fileID: 11400000, guid: 9be1b2e3f14add74a811b622fb1560d2, type: 2}
   - {fileID: 11400000, guid: b0dd147f6727dd64980d3c4917fddb42, type: 2}
+  - {fileID: 11400000, guid: dbdb78a0d8468bd4c8d1de85c0517bcb, type: 2}
   - {fileID: 11400000, guid: 5569b82bfb3457d47b559fcef39830f8, type: 2}
   - {fileID: 11400000, guid: 70f709b1ac0c6bd4c9f68f6eef2cc135, type: 2}
   - {fileID: 11400000, guid: 5cae858f39f199d45b0dea1af7473968, type: 2}
@@ -82,11 +89,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8fffb5d0c83b5c449ac9e4bbff93511c, type: 2}
   - {fileID: 11400000, guid: db09fd21c5381a948bf0da2f936ea583, type: 2}
   - {fileID: 11400000, guid: 050280ab4662e4a48b0ba2e96ece2626, type: 2}
+  - {fileID: 11400000, guid: 7f65702d440ef9f4a8d0bb7b340d03fc, type: 2}
+  - {fileID: 11400000, guid: 593ab1d68e5ddc54a8453ad733a6462a, type: 2}
   - {fileID: 11400000, guid: d66f9f5fa3829304197bb2cd5c10a268, type: 2}
   - {fileID: 11400000, guid: c246275ef83352a4aabf1fc2a4076439, type: 2}
   - {fileID: 11400000, guid: cff810cc664af024ea437cd9c42c35da, type: 2}
   - {fileID: 11400000, guid: 9eef14ae300851344b1a13dabf31ded3, type: 2}
   - {fileID: 11400000, guid: f9983b6b0683daf4a8cc6667676b97c9, type: 2}
+  - {fileID: 11400000, guid: 5cdeaaeb80665fe45a945a9bc8e34d7d, type: 2}
   - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}
   signalEnvironmentChanged: {fileID: 11400000, guid: 3a152a70959bc3b4397fabc399cde072,
     type: 2}

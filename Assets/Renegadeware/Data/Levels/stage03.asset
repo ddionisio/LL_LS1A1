@@ -24,17 +24,17 @@ MonoBehaviour:
     spawnableCount: 3
     criteriaCount: 10
     bonusCount: 10
-    capacity: 40
+    capacity: 60
   - nameRef: test2
     descRef: 
     spawnableCount: 3
     criteriaCount: 10
     bonusCount: 10
-    capacity: 40
+    capacity: 60
   - nameRef: test2
     descRef: 
     spawnableCount: 3
     criteriaCount: 10
     bonusCount: 10
-    capacity: 40
+    capacity: 60
   organismBodyGroup: {fileID: 11400000, guid: 7152d0674f474a74bb4abcbb2a4c2046, type: 2}

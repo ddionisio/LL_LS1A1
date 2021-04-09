@@ -9,25 +9,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf1ea18b1c94e2f469ee8189153960dc, type: 3}
-  m_Name: hunterContact
+  m_Script: {fileID: 11500000, guid: 8d7549050fcfd1845940fe59cc2a63d4, type: 3}
+  m_Name: bodyGenericProtozoa
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   nameRef: 
   descRef: 
-  ID: 34
+  ID: 45
   attributeInfos: []
   stats:
-    mass: 0
+    mass: 0.15
     forwardAccel: 0
     turnAccel: 0
-    speedLimit: 0
-    velocityReceiveScale: 0
-    energyCapacity: 0
-    energyConsumeRate: 0
-    lifespan: 0
+    speedLimit: 2
+    velocityReceiveScale: 0.5
+    energyCapacity: 40
+    energyConsumeRate: 1
+    lifespan: 120
     _hazardResistances: []
     _energySources: []
     flags: 0
-    danger: 1
-  anchorContainer: hunt
+    danger: 0
+    toxic: 0
+    seekMassMin: 0
+  _editPrefab: {fileID: 0}
+  _gamePrefab: {fileID: 0}
+  componentEssentials: []
+  componentGroups: []
+  splitMode: 0
+  deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

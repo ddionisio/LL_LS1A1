@@ -10,6 +10,7 @@ namespace Renegadeware.LL_LS1A1 {
         DivideLocked = 0x4, //don't allow cell division
         Endobiotic = 0x8, //will not be killed when consumed by a hunter
         ToxicImmunity = 0x10, //immune to toxic
+        ToxicKamikazi = 0x20, //for toxic organisms, expire on contact, and secrete toxins to them
     }
 
     [System.Serializable]
@@ -39,6 +40,7 @@ namespace Renegadeware.LL_LS1A1 {
         public OrganismFlag flags;
         public float danger; //used for avoidance (danger < other.danger), also determines if this organism is a hunter (danger > 0)
         public float toxic; //when eaten, energy is reduced by this value.
+        public float seekMassMin;
 
         public float energy { 
             get { return mEnergy; }
@@ -160,7 +162,7 @@ namespace Renegadeware.LL_LS1A1 {
         /// Check if another entity's attributes allows us to eat it.
         /// </summary>
         public bool CanEat(OrganismStats otherStats) {
-            return danger > otherStats.danger && mass > otherStats.mass; //if edible, make sure it can be swallowed
+            return danger > otherStats.danger && mass > otherStats.mass && otherStats.mass >= seekMassMin; //if edible, make sure it can be swallowed
         }
 
         public void EnergyUpdate(float deltaTime) {
@@ -199,6 +201,8 @@ namespace Renegadeware.LL_LS1A1 {
             flags = otherStats.flags;
 
             danger = otherStats.danger;
+            toxic = otherStats.toxic;
+            seekMassMin = otherStats.seekMassMin;
         }
 
         public void Append(OrganismStats otherStats) {
@@ -230,6 +234,8 @@ namespace Renegadeware.LL_LS1A1 {
             flags |= otherStats.flags;
 
             danger += otherStats.danger;
+            toxic += otherStats.toxic;
+            seekMassMin += otherStats.seekMassMin;
         }
     }
 }

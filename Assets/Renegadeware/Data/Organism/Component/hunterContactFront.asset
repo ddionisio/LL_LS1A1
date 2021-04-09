@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da254240d32afc94aa3b71be31063424, type: 3}
-  m_Name: hunterTentacle
+  m_Script: {fileID: 11500000, guid: bf1ea18b1c94e2f469ee8189153960dc, type: 3}
+  m_Name: hunterContactFront
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   nameRef: 
   descRef: 
-  ID: 43
+  ID: 34
   attributeInfos: []
   stats:
     mass: 0
@@ -29,15 +29,7 @@ MonoBehaviour:
     _hazardResistances: []
     _energySources: []
     flags: 0
-    danger: 0
+    danger: 1
     toxic: 0
-    seekMassMin: 0.1
-  tentacleTemplate: {fileID: 3494708300621779489, guid: c9ae841029e20e647af3a67b6505d8f5,
-    type: 3}
-  tentacleCount: 4
-  tentacleTractDelay: 0.3
-  grabEaseStart: 3
-  grabEaseEnd: 2
-  tentacleRange:
-    min: 2
-    max: 3
+    seekMassMin: 0
+  contactAngle: 35

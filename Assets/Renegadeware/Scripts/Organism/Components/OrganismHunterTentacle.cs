@@ -11,8 +11,7 @@ namespace Renegadeware.LL_LS1A1 {
         public float tentacleTractDelay;
         public DG.Tweening.Ease grabEaseStart = DG.Tweening.Ease.OutSine;
         public DG.Tweening.Ease grabEaseEnd = DG.Tweening.Ease.InSine;
-        public float tentacleRadius; //range to grab from sensor, and max distance
-        public M8.RangeFloat tentacleMassRange; //min and max mass to allow grabbing
+        public M8.RangeFloat tentacleRange; //range to grab from sensor, and max distance
 
         public override OrganismComponentControl GenerateControl(OrganismEntity organismEntity) {
             return new OrganismHunterTentacleControl();
@@ -62,36 +61,40 @@ namespace Renegadeware.LL_LS1A1 {
             /// <summary>
             /// Return true if finish.
             /// </summary>
-            public bool Update(OrganismEntity root, float radius, float time, float delay, DG.Tweening.EaseFunction easeStart, DG.Tweening.EaseFunction easeEnd) {
+            public bool Update(OrganismEntity root, M8.RangeFloat range, float time, float delay, DG.Tweening.EaseFunction easeStart, DG.Tweening.EaseFunction easeEnd) {
                 var curTime = time - mTime;
 
                 var renderSize = mRender.size;
 
                 switch(mState) {
                     case State.Tract:
-                        //stretch towards
-                        if(curTime < delay) {
-                            Vector2 dpos = mTarget.position - root.position;
-                            mDist = dpos.magnitude;
+                        if(!mTarget.isReleased && !mTarget.stats.isLifeExpired && mTarget.stats.energy > 0f) {
+                            //stretch towards
+                            if(curTime < delay) {
+                                Vector2 dpos = mTarget.position - root.position;
+                                mDist = dpos.magnitude;
 
-                            if(mDist > 0f) {
-                                Vector2 dir = dpos / mDist;
+                                if(mDist > 0f) {
+                                    Vector2 dir = dpos / mDist;
 
-                                mRender.transform.up = dir;
+                                    mRender.transform.up = dir;
 
-                                float t = easeStart(curTime, delay, 0f, 0f);
+                                    float t = easeStart(curTime, delay, 0f, 0f);
 
-                                renderSize.y = mDist * t;
+                                    renderSize.y = mDist * t;
+                                }
+                                else
+                                    ChangeState(State.Absorb);
                             }
                             else
                                 ChangeState(State.Absorb);
                         }
                         else
-                            ChangeState(State.Absorb);
+                            ChangeState(State.Retract);
                         break;
 
                     case State.Absorb:
-                        if(mTarget && !mTarget.isReleased && !mTarget.stats.isLifeExpired && mTarget.stats.energy > 0f) {
+                        if(!mTarget.isReleased && !mTarget.stats.isLifeExpired && mTarget.stats.energy > 0f) {
                             Vector2 dpos = mTarget.position - root.position;
                             mDist = dpos.magnitude;
 
@@ -105,19 +108,23 @@ namespace Renegadeware.LL_LS1A1 {
                             var dt = Time.deltaTime;
 
                             //maintain distance
-                            if(mDist > radius)
-                                root.velocity += dir * (root.stats.forwardAccel * dt);
+                            if(mDist < range.max) {
+                                if(mDist > range.min)
+                                    root.velocity += dir * (root.stats.forwardAccel * dt);
 
-                            //absorb from target
-                            var energyAmt = root.stats.energyConsumeRate * dt;
+                                //absorb from target
+                                var energyAmt = root.stats.energyConsumeRate * dt;
 
-                            root.stats.energy += energyAmt;
-                            mTarget.stats.energy -= energyAmt;
+                                root.stats.energy += energyAmt;
+                                mTarget.stats.energy -= energyAmt;
 
-                            //update tentacle render
-                            mRender.transform.up = dir;
+                                //update tentacle render
+                                mRender.transform.up = dir;
 
-                            renderSize.y = mDist;
+                                renderSize.y = mDist;
+                            }
+                            else
+                                ChangeState(State.Retract);
                         }
                         else
                             ChangeState(State.Retract);
@@ -196,42 +203,24 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public override void Despawn() {
-            //clear out grabs
-            for(int i = 0; i < mGrabActives.Count; i++) {
-                var display = mGrabActives[i];
-
-                var ent = display.target;
-                if(ent && !ent.isReleased)
-                    ent.physicsLocked = false;
-
-                display.End();
-
-                mGrabRenderCache.Add(display);
-            }
-
-            mGrabActives.Clear();
+            ClearGrabs();
         }
 
         public override void Update() {
-            //eat any in contact
-            for(int i = 0; i < entity.contactOrganisms.Count; i++) {
-                var contactEnt = entity.contactOrganisms[i];
-
-                if(contactEnt.isReleased || contactEnt.physicsLocked || contactEnt.stats.energy == 0f || entity.stats.danger <= contactEnt.stats.danger || entity.IsMatchTemplate(contactEnt))
-                    continue;
-
-                Eat(contactEnt);
+            if(entity.stats.energyLocked || entity.physicsLocked) {
+                ClearGrabs();
+                return;
             }
 
             //update grabs
             var time = Time.time;
             var delay = mComp.tentacleTractDelay;
-            var radius = mComp.tentacleRadius;
+            var range = mComp.tentacleRange;
 
             for(int i = mGrabActives.Count - 1; i >= 0; i--) {
                 var display = mGrabActives[i];
 
-                if(display.Update(entity, radius, time, delay, mEaseStart, mEaseEnd)) {
+                if(display.Update(entity, range, time, delay, mEaseStart, mEaseEnd)) {
                     mGrabActives.RemoveAt(i);
 
                     display.End();
@@ -244,31 +233,35 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnSensorUpdate(OrganismSensor sensor) {
+            if(entity.stats.energyLocked || entity.physicsLocked)
+                return;
+
+            var minRangeSqr = mComp.tentacleRange.min * mComp.tentacleRange.min;
+
             for(int i = 0; i < sensor.organisms.Count; i++) {
                 var sensorEnt = sensor.organisms[i];
 
                 if(sensorEnt.isReleased
                     || sensorEnt.physicsLocked
                     || sensorEnt.stats.energy == 0f
-                    || entity.stats.danger <= sensorEnt.stats.danger
-                    || !mComp.tentacleMassRange.InRange(sensorEnt.stats.mass)
-                    || entity.IsMatchTemplate(sensorEnt))
+                    || !entity.stats.CanEat(sensorEnt.stats)
+                    || entity.IsMatchTemplate(sensorEnt)
+                    || IsGrabbed(sensorEnt))
                     continue;
 
                 //grab if available
                 if(mGrabRenderCache.Count > 0) {
                     //check distance, start a new grab display
                     var distSqr = (sensorEnt.position - entity.position).sqrMagnitude;
-                    if(distSqr <= mComp.tentacleRadius * mComp.tentacleRadius) {
+                    if(distSqr <= minRangeSqr) {
                         var display = mGrabRenderCache.RemoveLast();
 
                         display.Start(sensorEnt, Time.time);
 
                         mGrabActives.Add(display);
+                        RefreshMotilityLock();
                         break;
                     }
-
-                    RefreshMotilityLock();
                 }
             }
         }
@@ -278,6 +271,34 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(mMotilityCtrl != null)
                 mMotilityCtrl.isLocked = isLocked;
+        }
+
+        private bool IsGrabbed(OrganismEntity ent) {
+            for(int i = 0; i < mGrabActives.Count; i++) {
+                var grab = mGrabActives[i];
+                if(grab.target == ent)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void ClearGrabs() {
+            if(mGrabActives.Count > 0) {
+                for(int i = 0; i < mGrabActives.Count; i++) {
+                    var display = mGrabActives[i];
+
+                    var ent = display.target;
+                    if(ent && !ent.isReleased)
+                        ent.physicsLocked = false;
+
+                    display.End();
+
+                    mGrabRenderCache.Add(display);
+                }
+
+                mGrabActives.Clear();
+            }
         }
     }
 }

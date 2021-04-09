@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: motilityHunter
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  nameRef: motilityFlagellaLophotrichous
+  nameRef: 
   descRef: 
   ID: 31
   attributeInfos: []
@@ -30,6 +30,7 @@ MonoBehaviour:
     _energySources: []
     flags: 0
     danger: 0
+    toxic: 0
   isBidirectional: 0
   exploreForwardDuration: 1.5
   exploreForwardEndDelay: 0.5

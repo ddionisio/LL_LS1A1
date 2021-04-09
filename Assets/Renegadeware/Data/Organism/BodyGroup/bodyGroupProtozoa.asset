@@ -18,4 +18,6 @@ MonoBehaviour:
   isHidden: 0
   defaultIndex: -1
   components:
+  - {fileID: 11400000, guid: 6de1ec0de894bc04e90f756508388ce7, type: 2}
   - {fileID: 11400000, guid: 49578deae2eb25c4aab3e33032d19d56, type: 2}
+  - {fileID: 11400000, guid: 07fa2a9576a9ccc49992a801b6bfd65f, type: 2}

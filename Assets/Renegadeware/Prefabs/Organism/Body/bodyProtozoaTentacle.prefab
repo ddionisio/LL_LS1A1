@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7214955156972174320}
   - component: {fileID: 583181120112772137}
   m_Layer: 0
-  m_Name: bodyHunterTentacle
+  m_Name: bodyProtozoaTentacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,8 +62,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e3c1b8f97c11484c9fe0655d93860d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 3
-  delay: 0.3
+  radius: 3.5
+  delay: 0.15
 --- !u!114 &7214955156972174349
 MonoBehaviour:
   m_ObjectHideFlags: 0

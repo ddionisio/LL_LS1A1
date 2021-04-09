@@ -6,7 +6,7 @@ namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "hunterContact", menuName = "Game/Organism/Component/Hunter Contact")]
     public class OrganismHunterContact : OrganismHunter {
         [Header("Hunter Contact")]
-        public float contactAngle = 35f;
+        public float contactAngle = 35f; //set to 360 for no restriction
 
         public override OrganismComponentControl GenerateControl(OrganismEntity organismEntity) {
             return new OrganismHunterContactControl();
@@ -29,16 +29,20 @@ namespace Renegadeware.LL_LS1A1 {
                 var fwd = entity.forward;
 
                 for(int i = 0; i < entity.contactOrganisms.Count; i++) {
-                    var ent = entity.contactOrganisms[i];
+                    var contactEnt = entity.contactOrganisms[i];
 
-                    if(ent.isReleased || ent.physicsLocked || ent.stats.energy == 0f || entity.stats.danger < ent.stats.danger || entity.IsMatchTemplate(ent))
+                    if(contactEnt.isReleased || contactEnt.physicsLocked || contactEnt.stats.energy == 0f || !entity.stats.CanEat(contactEnt.stats) || entity.IsMatchTemplate(contactEnt))
                         continue;
 
-                    var dpos = ent.position - pos;
-                    var dir = dpos.normalized;
+                    if(mComp.contactAngle < 360f) {
+                        var dpos = contactEnt.position - pos;
+                        var dir = dpos.normalized;
 
-                    if(Vector2.Angle(fwd, dir) <= mComp.contactAngle)
-                        Eat(ent);
+                        if(Vector2.Angle(fwd, dir) <= mComp.contactAngle)
+                            Eat(contactEnt);
+                    }
+                    else
+                        Eat(contactEnt);
                 }
             }
         }

@@ -256,6 +256,22 @@ namespace Renegadeware.LL_LS1A1 {
                         else
                             mStickies.Clear();
                     }
+
+                    //check if we are toxic, and kamikazi on contact
+                    if(entity.stats.toxic > 0f && entity.contactOrganisms.Count > 0) {
+                        int toxicCount = 0;
+
+                        for(int i = 0; i < entity.contactOrganisms.Count; i++) {
+                            var contactEnt = entity.contactOrganisms[i];
+                            if(!contactEnt.isReleased && !contactEnt.stats.energyLocked && contactEnt.stats.energy > 0f && (contactEnt.stats.flags & OrganismFlag.ToxicImmunity) == 0) {
+                                contactEnt.stats.energy -= entity.stats.toxic;
+                                toxicCount++;
+                            }
+                        }
+
+                        if(toxicCount > 0)
+                            entity.stats.ForcedLifeExpire();
+                    }
                     break;
 
                 case State.DeathWait:
