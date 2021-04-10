@@ -22,7 +22,7 @@ MonoBehaviour:
     forwardAccel: 0
     turnAccel: 15
     speedLimit: 3
-    velocityReceiveScale: 0.8
+    velocityReceiveScale: 0.85
     energyCapacity: 40
     energyConsumeRate: 20
     lifespan: 300

@@ -139,6 +139,7 @@ namespace Renegadeware.LL_LS1A1 {
         /// </summary>
         public void ForcedLifeExpire() {
             mIsForcedLifeExpire = true;
+            mLastResetTime = Time.time - lifespan;
         }
 
         public bool HazardMatch(HazardData hazardData) {
