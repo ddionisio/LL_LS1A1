@@ -1598,7 +1598,7 @@ MonoBehaviour:
   transition: {fileID: 830167073}
   debugLevel: {fileID: 0}
   debugPlay: 1
-  debugPlayEnvIndex: 3
+  debugPlayEnvIndex: 0
   debugPlayOrganism: {fileID: 11400000, guid: d61054d2df859dd489e24b0c482d92ae, type: 2}
   debugPlaySpawnCountOverride: 50
   debugPlayTimeUnlimited: 1
@@ -1684,6 +1684,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: -90.75
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!1 &238174096
 GameObject:
   m_ObjectHideFlags: 0
@@ -6324,6 +6325,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: -8.7
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!1 &920057118
 GameObject:
   m_ObjectHideFlags: 0
@@ -6406,6 +6408,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: -146.8
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!1 &922732469
 GameObject:
   m_ObjectHideFlags: 0
@@ -6742,6 +6745,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: 45.83
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!1 &936035974
 GameObject:
   m_ObjectHideFlags: 0
@@ -7146,6 +7150,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: -42.98
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!1 &988061554
 GameObject:
   m_ObjectHideFlags: 0
@@ -7228,6 +7233,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: 88.48
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!1 &1011936150
 GameObject:
   m_ObjectHideFlags: 0
@@ -7507,6 +7513,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: -190.32
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!1 &1064176861
 GameObject:
   m_ObjectHideFlags: 0
@@ -12449,6 +12456,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: 128.02
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!1001 &1732355162
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13594,6 +13602,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: -179.74
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!4 &1939956777 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4585277751490872809, guid: 4f43b3997335ce641a8ac5b0ce9ed3e3,
@@ -13682,6 +13691,7 @@ MonoBehaviour:
   refreshDelay: 0.3
   _angle: -0.6
   accel: 5
+  entityApplyVelocityScale: 0
 --- !u!1 &1978110736
 GameObject:
   m_ObjectHideFlags: 0

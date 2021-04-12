@@ -112,10 +112,10 @@ namespace Renegadeware.LL_LS1A1 {
 
         private int mGameTimeIndex;
 
+        private int mGameSpawnCount;
+
         //transition stuff
         private TransitionState mTransitionState;
-
-        private bool mIsFocusLost;
 
         protected override void OnInstanceDeinit() {
             if(GameData.isInstantiated) {
@@ -224,8 +224,6 @@ namespace Renegadeware.LL_LS1A1 {
                 if(HUD.isInstantiated) {
                     HUD.instance.spawnPlacementIsActive = false;
                 }
-
-                mIsFocusLost = true;
             }
         }
 
@@ -380,6 +378,8 @@ namespace Renegadeware.LL_LS1A1 {
             //initialize game states
             SetTimeIndex(1);
 
+            mGameSpawnCount = envInfo.spawnableCount;
+
             //start up entities
             mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, gameDat.organismPlayerSpawnName, gameDat.organismPlayerTag, envInfo.capacity);
 
@@ -393,12 +393,16 @@ namespace Renegadeware.LL_LS1A1 {
             yield return DoTransitionShow();
 
             //setup hud
+            var cursorSize = mGameSpawnRadius * 32f + 4f;
+
+            hud.spawnPlacementPointer.sizeDelta = new Vector2(cursorSize, cursorSize);
+
             hud.TimePlaySetIndex(mGameTimeIndex);
             hud.TimeUpdate(0f, level.duration);
 
             hud.ZoomSetup(camCtrl.zoomIndex, camCtrl.zoomLevels);
 
-            hud.OrganismProgressApply(0, environmentSpawnableCount, envInfo.criteriaCount, envInfo.bonusCount);
+            hud.OrganismProgressApply(0, envInfo.criteriaCount, envInfo.bonusCount);
 
             hud.ElementShow(HUD.Element.Gameplay);
             hud.ElementShow(HUD.Element.ModeSelect);
@@ -598,12 +602,8 @@ namespace Renegadeware.LL_LS1A1 {
                     }
                 }
             }
-            else if(mIsFocusLost) {
-                if(mGameInputEnabled && mOrganismSpawner.entityCount < environmentSpawnableCount)
-                    HUD.instance.spawnPlacementIsActive = true;
-
-                mIsFocusLost = false;
-            }
+            else if(mGameInputEnabled && mOrganismSpawner.entityCount < environmentSpawnableCount)
+                HUD.instance.spawnPlacementIsActive = true;
         }
 
         void OnOrganismBodyChanged() {
@@ -621,7 +621,7 @@ namespace Renegadeware.LL_LS1A1 {
         void OnOrganismSpawnerSpawn(OrganismEntity ent) {
             var envInfo = environmentCurrentInfo;
 
-            HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, environmentSpawnableCount, envInfo.criteriaCount, envInfo.bonusCount);
+            HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.criteriaCount, envInfo.bonusCount);
 
             RefreshSpawnPlacementActive();
         }
@@ -629,7 +629,7 @@ namespace Renegadeware.LL_LS1A1 {
         void OnOrganismSpawnerRelease(OrganismEntity ent) {
             var envInfo = environmentCurrentInfo;
 
-            HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, environmentSpawnableCount, envInfo.criteriaCount, envInfo.bonusCount);
+            HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.criteriaCount, envInfo.bonusCount);
 
             RefreshSpawnPlacementActive();
         }

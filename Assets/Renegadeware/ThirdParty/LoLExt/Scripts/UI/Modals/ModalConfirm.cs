@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace LoLExt {
     public class ModalConfirm : M8.ModalController, M8.IModalPush, M8.IModalPop, M8.IModalActive {
@@ -12,8 +13,8 @@ namespace LoLExt {
         public const string parmCallback = "confirmCB";
 
         [Header("UI")]
-        public Text titleText;
-        public Text descText;
+        public TMP_Text titleText;
+        public TMP_Text descText;
 
         private static M8.GenericParams mParms = new M8.GenericParams();
 

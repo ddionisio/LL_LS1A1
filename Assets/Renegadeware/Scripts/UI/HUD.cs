@@ -25,7 +25,6 @@ namespace Renegadeware.LL_LS1A1 {
         public AnimatorEnterExit gameplayTransition;
 
         [Header("Gameplay Organism Group")]
-        public GameObject organismSpawnActiveGO;
         public TMP_Text organismSpawnCountLabel;
 
         public Image organismProgress;
@@ -133,9 +132,7 @@ namespace Renegadeware.LL_LS1A1 {
             ApplyModeSelectVisible();
         }
 
-        public void OrganismProgressApply(int currentCount, int spawnMinCount, int goalCount, int goalBonusCount) {
-            organismSpawnActiveGO.SetActive(currentCount < spawnMinCount);
-
+        public void OrganismProgressApply(int currentCount, int goalCount, int goalBonusCount) {
             organismProgress.fillAmount = Mathf.Clamp01((float)currentCount / goalCount);
 
             if(currentCount > goalCount) {
