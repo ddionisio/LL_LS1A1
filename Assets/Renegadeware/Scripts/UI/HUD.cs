@@ -45,6 +45,8 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Spawn Placement")]
         public GameObject spawnPlacementRootGO;
 
+        public TMP_Text spawnPlacementCountLabel;
+
         public RectTransform spawnPlacementPointer;
         public M8.UI.Graphics.ColorGroup spawnPlacementColorGroup;
         public Color spawnPlacementColorValid = Color.green;
@@ -155,6 +157,11 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             organismSpawnCountLabel.text = currentCount.ToString();
+        }
+
+        public void SpawnPlacementSetCount(int count) {
+            if(spawnPlacementCountLabel)
+                spawnPlacementCountLabel.text = count.ToString();
         }
 
         public void TimePlaySetIndex(int timeIndex) {

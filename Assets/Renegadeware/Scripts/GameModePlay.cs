@@ -366,7 +366,7 @@ namespace Renegadeware.LL_LS1A1 {
             ChangeToMode(mModeSelectNext);
         }
 
-        IEnumerator DoSimulation() {
+        IEnumerator DoSimulation(bool isRestart) {
             var gameDat = GameData.instance;
 
             var hud = HUD.instance;
@@ -378,13 +378,15 @@ namespace Renegadeware.LL_LS1A1 {
             //initialize game states
             SetTimeIndex(1);
 
-            mGameSpawnCount = envInfo.spawnableCount;
+            mGameSpawnCount = environmentSpawnableCount;
 
             //start up entities
-            mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, gameDat.organismPlayerSpawnName, gameDat.organismPlayerTag, envInfo.capacity);
+            if(!isRestart) {
+                mOrganismSpawner.Setup(gameDat.organismTemplateCurrent, gameDat.organismPlayerSpawnName, gameDat.organismPlayerTag, envInfo.capacity);
 
-            var organismSize = mOrganismSpawner.template.size;
-            mGameSpawnRadius = Mathf.Max(organismSize.x, organismSize.y) * 0.5f;
+                var organismSize = mOrganismSpawner.template.size;
+                mGameSpawnRadius = Mathf.Max(organismSize.x, organismSize.y) * 0.5f;
+            }
 
             environmentRootGO.SetActive(true);
 
@@ -396,6 +398,8 @@ namespace Renegadeware.LL_LS1A1 {
             var cursorSize = mGameSpawnRadius * 32f + 4f;
 
             hud.spawnPlacementPointer.sizeDelta = new Vector2(cursorSize, cursorSize);
+
+            hud.SpawnPlacementSetCount(mGameSpawnCount);
 
             hud.TimePlaySetIndex(mGameTimeIndex);
             hud.TimeUpdate(0f, level.duration);
@@ -486,6 +490,8 @@ namespace Renegadeware.LL_LS1A1 {
                 else { //retry
                     mModeSelectNext = ModeSelect.None;
 
+                    mModalParms[ModalRetry.parmCurCount] = mOrganismSpawner.entityCount;
+                    mModalParms[ModalRetry.parmCount] = environmentCurrentInfo.criteriaCount;
                     mModalParms[ModalRetry.parmCallback] = (System.Action<ModeSelect>)OnModeSelect;
 
                     M8.ModalManager.main.Open(gameDat.modalRetry, mModalParms);
@@ -496,7 +502,11 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             //purge player entities
-            mOrganismSpawner.Destroy();
+            if(mModeSelectNext == ModeSelect.Retry)
+                mOrganismSpawner.Clear();
+            else
+                mOrganismSpawner.Destroy();
+
             gameRootGO.SetActive(false);
 
             //hide environment if we are editing
@@ -550,8 +560,8 @@ namespace Renegadeware.LL_LS1A1 {
         void OnHUDTimeIndexChange(int timeIndex) {
             var hud = HUD.instance;
 
-            if(hud.spawnPlacementIsActive)
-                hud.spawnPlacementIsActive = false;
+            //if(hud.spawnPlacementIsActive)
+                //hud.spawnPlacementIsActive = false;
 
             SetTimeIndex(timeIndex);
         }
@@ -592,18 +602,10 @@ namespace Renegadeware.LL_LS1A1 {
                         mOrganismSpawner.SpawnAtRandomDir(pos);
                     else
                         mOrganismSpawner.SpawnAt(pos);
-
-                    //no longer have spawnables, deactivate spawn placement and resume game
-                    if(mOrganismSpawner.entityCount >= environmentSpawnableCount) {
-                        hud.spawnPlacementIsActive = false;
-
-                        SetTimeIndex(1);
-                        hud.TimePlaySetIndex(mGameTimeIndex);
-                    }
                 }
             }
-            else if(mGameInputEnabled && mOrganismSpawner.entityCount < environmentSpawnableCount)
-                HUD.instance.spawnPlacementIsActive = true;
+            else
+                RefreshSpawnPlacementActive();
         }
 
         void OnOrganismBodyChanged() {
@@ -623,6 +625,11 @@ namespace Renegadeware.LL_LS1A1 {
 
             HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.criteriaCount, envInfo.bonusCount);
 
+            if(mGameSpawnCount > 0) {
+                mGameSpawnCount--;
+                HUD.instance.SpawnPlacementSetCount(mGameSpawnCount);
+            }
+
             RefreshSpawnPlacementActive();
         }
 
@@ -631,16 +638,22 @@ namespace Renegadeware.LL_LS1A1 {
 
             HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.criteriaCount, envInfo.bonusCount);
 
+            //reset spawnable if there are no player entities left
+            if(mOrganismSpawner.entityCount == 0) {
+                mGameSpawnCount = environmentSpawnableCount;
+                HUD.instance.SpawnPlacementSetCount(mGameSpawnCount);
+            }
+
             RefreshSpawnPlacementActive();
         }
 
         private void RefreshSpawnPlacementActive() {
-            if(mGameInputEnabled && mOrganismSpawner.entityCount < environmentSpawnableCount) {
+            if(mGameInputEnabled && mGameSpawnCount > 0) {
                 HUD.instance.spawnPlacementIsActive = true;
 
                 //if(mGameTimeIndex > 1) {
-                    //SetTimeIndex(1);
-                    //HUD.instance.TimePlaySetIndex(mGameTimeIndex);
+                //SetTimeIndex(1);
+                //HUD.instance.TimePlaySetIndex(mGameTimeIndex);
                 //}
             }
             else {
@@ -700,7 +713,11 @@ namespace Renegadeware.LL_LS1A1 {
                     StartCoroutine(DoOrganismEdit());
                     break;
                 case ModeSelect.Play:
-                    StartCoroutine(DoSimulation());
+                    StartCoroutine(DoSimulation(false));
+                    break;
+                case ModeSelect.Retry:
+                    modeSelect = ModeSelect.Play;
+                    StartCoroutine(DoSimulation(true));
                     break;
                 case ModeSelect.NextLevel:                    
                     GameData.instance.Current(); //this should load the next scene since this level's progress is fully complete

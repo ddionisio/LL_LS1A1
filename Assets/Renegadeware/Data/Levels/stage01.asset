@@ -19,26 +19,23 @@ MonoBehaviour:
   duration: 90
   spawnIsRandomDir: 1
   environments:
-  - nameRef: test1
-    descRef: 
-    spawnableCount: 5
-    criteriaCount: 25
-    bonusCount: 25
-    capacity: 80
   - nameRef: test2
     descRef: 
+    attributes: []
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50
     capacity: 120
   - nameRef: test2
     descRef: 
+    attributes: []
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50
     capacity: 120
   - nameRef: test2
     descRef: 
+    attributes: []
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50

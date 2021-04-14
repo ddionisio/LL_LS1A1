@@ -2,9 +2,13 @@
 namespace Renegadeware.LL_LS1A1 {
     public enum ModeSelect {
         None = -1,
+
         Environment,
         Edit,
         Play,
+
+        Retry,
+
         NextLevel
     }
 

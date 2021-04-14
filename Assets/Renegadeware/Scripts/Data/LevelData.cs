@@ -13,6 +13,8 @@ namespace Renegadeware.LL_LS1A1 {
             [M8.Localize]
             public string descRef;
 
+            public AttributeInfo[] attributes;
+
             [Header("Spawn Settings")]
             public int spawnableCount; //threshold count to allow spawning (active count < spawnable count)
             public int criteriaCount; //number of organisms to grow to complete an environment

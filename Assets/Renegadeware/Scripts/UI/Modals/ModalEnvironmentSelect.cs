@@ -16,6 +16,8 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Display")]
         public TMP_Text titleText;
         public TMP_Text descText;
+        public AttributeGroupWidget attributeGroup;
+        public GameObject completedGO;
 
         [Header("Animation")]
         public M8.Animator.Animate selectAnimator;
@@ -80,6 +82,9 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoEnvironmentSelect() {
+            if(completedGO)
+                completedGO.SetActive(false);
+
             if(selectAnimator) {
                 if(!string.IsNullOrEmpty(selectTakeExit))
                     yield return selectAnimator.PlayWait(selectTakeExit);
@@ -102,6 +107,12 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(titleText) titleText.text = M8.Localize.Get(envInf.nameRef);
             if(descText) descText.text = M8.Localize.Get(envInf.descRef);
+
+            if(attributeGroup)
+                attributeGroup.Setup(envInf.attributes);
+
+            if(completedGO)
+                completedGO.SetActive(GameModePlay.instance.level.IsEnvironmentComplete(mEnvCurInd));
         }
 
         private void ClearRout() {

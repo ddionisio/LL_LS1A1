@@ -7,7 +7,7 @@ namespace Renegadeware.LL_LS1A1 {
         [ID(group = "organismComponent", invalidID = GameData.invalidID)]
         public int ID;
 
-        public AttributeData[] attributeInfos;
+        public AttributeInfo[] attributeInfos;
 
         public OrganismStats stats;
 

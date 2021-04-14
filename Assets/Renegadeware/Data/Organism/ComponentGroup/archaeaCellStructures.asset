@@ -15,8 +15,9 @@ MonoBehaviour:
   icon: {fileID: 0}
   nameRef: categoryCellStructure
   descRef: 
+  isHidden: 0
+  defaultIndex: 0
   components:
   - {fileID: 11400000, guid: 65185ca8c2e47544cb3b205dc68eb9c1, type: 2}
   - {fileID: 11400000, guid: 60624a6baca2e204b8c611a71d2b4b77, type: 2}
   - {fileID: 11400000, guid: 42b2fc9572b9a854590e55b47d06432c, type: 2}
-  - {fileID: 11400000, guid: 06b33d312019c9147904bfece88e0efb, type: 2}
