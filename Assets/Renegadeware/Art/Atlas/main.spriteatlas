@@ -58,8 +58,10 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 085a6372711b9d147864b50f4d431fbf, type: 3}
   - {fileID: 2383154019900357971, guid: c05e5e136fe7a084084e48c38b81b054, type: 3}
   - {fileID: -4249189435241424335, guid: c05e5e136fe7a084084e48c38b81b054, type: 3}
+  - {fileID: 21300000, guid: 15ea4eb34771de842bab6998c927f75f, type: 3}
   - {fileID: 21300000, guid: d985b654a2dd4e54482f774cec3f7b9c, type: 3}
   - {fileID: 21300000, guid: c41b7ac4773379f42bec55818efbfab5, type: 3}
+  - {fileID: 21300000, guid: bed50a0554574f34f8f18bd3090464dd, type: 3}
   - {fileID: 21300000, guid: 7428624581668694ca5e5ec7e287bb0d, type: 3}
   - {fileID: 21300000, guid: e9c8ee955c09c344aa79e9bb93b94216, type: 3}
   - {fileID: 21300000, guid: 965b89d63c1a0c945b857715170b3840, type: 3}
@@ -84,6 +86,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 307a789a1db6ebf4a893ce7f70b38f56, type: 3}
   - {fileID: 21300000, guid: 5952baaa48d611842a22716276cee699, type: 3}
   - {fileID: 21300000, guid: 8d268ada08728e64f89466e44eec3b74, type: 3}
+  - {fileID: 21300000, guid: 00060bfa80081ba489ad4cbb7a88fb20, type: 3}
   - {fileID: 21300000, guid: bddb662b911e1c243ae530e436e0fe1b, type: 3}
   - {fileID: 21300000, guid: 6e46d65c795b56344b389f1886fb3982, type: 3}
   - {fileID: 21300000, guid: 3b14576c4ee59af4b857b321e5f0f6b8, type: 3}
@@ -108,8 +111,10 @@ SpriteAtlas:
   - buttonCellEdit
   - roundRectGlow
   - roundRectGlow_bottom
+  - bacillusEdit
   - circleGlow
   - devicerBody
+  - coccusEdit
   - wrongX
   - outline1x1
   - roundRectOutline_4_1
@@ -134,6 +139,7 @@ SpriteAtlas:
   - buttonWorld
   - ringGlow
   - circleQuarter_256
+  - coccobacillusEdit
   - cycleArrow
   - devicerMouthClose
   - grabMacrophage

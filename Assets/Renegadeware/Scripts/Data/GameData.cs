@@ -23,6 +23,10 @@ namespace Renegadeware.LL_LS1A1 {
         public string modalRetry = "retry";
         public string modalVictory = "victory";
 
+        [Header("Scoring")]
+        public int scoreBase = 1000;
+        public int scoreBonus = 500;
+
         [Header("Environment Settings")]
         [M8.TagSelector]
         public string environmentSolidTag;
@@ -259,6 +263,35 @@ namespace Renegadeware.LL_LS1A1 {
 
         private ContactFilter2D mOrganismEntityContactFilter = new ContactFilter2D();
         private bool mOrganismEntityContactFilterInit = false;
+
+        public int GetScore(int organismCount, int organismCriteriaCount, int organismBonusCount) {
+            int score = 0;
+
+            if(organismCount >= organismCriteriaCount) {
+                score = scoreBase;
+
+                int bonusCount = organismCount - organismCriteriaCount;
+                float bonusScale = (float)bonusCount / organismBonusCount;
+
+                score += Mathf.FloorToInt(scoreBonus * bonusScale);
+            }
+
+            return score;
+        }
+
+        /// <summary>
+        /// Return index medal based on organism count. -1 if no valid medal.
+        /// </summary>
+        public int GetMedalIndex(int medalCount, int organismCount, int organismCriteriaCount, int organismBonusCount) {
+            if(organismCount >= organismCriteriaCount) {
+                if(organismBonusCount > 0)
+                    return Mathf.FloorToInt(Mathf.Clamp01((float)(organismCount - organismCriteriaCount) / organismBonusCount) * (medalCount - 1));
+                else
+                    return 0;
+            }
+
+            return -1;
+        }
 
         /// <summary>
         /// Called in start scene

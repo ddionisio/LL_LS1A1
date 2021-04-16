@@ -78,6 +78,15 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Cache Info")]
         public Transform cacheRoot; //move unused instances here
 
+        public int bodyID {
+            get {
+                if(mComponentIDs != null && mComponentIDs.Length > 0)
+                    return mComponentIDs[0];
+
+                return GameData.invalidID;
+            }
+        }
+
         private OrganismTemplate mTemplate;
 
         private OrganismDisplayBody mBodyDisplay;
@@ -227,6 +236,8 @@ namespace Renegadeware.LL_LS1A1 {
                 mBodyCache.Add(body.ID, mBodyDisplay);
             }
 
+            body.SetupEditBody(mBodyDisplay);
+
             //refresh component essential IDs
             mComponentEssentialIDs = new int[body.componentEssentials.Length];
             for(int i = 0; i < mComponentEssentialIDs.Length; i++) {
@@ -270,6 +281,8 @@ namespace Renegadeware.LL_LS1A1 {
             var comp = GameData.instance.GetOrganismComponent<OrganismComponent>(compID);
             if(!comp)
                 return;
+
+            comp.SetupEditBody(mBodyDisplay);
 
             //don't attach if no prefab
             var prefab = comp.editPrefab;

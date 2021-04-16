@@ -145,9 +145,9 @@ namespace Renegadeware.LL_LS1A1 {
             else
                 organismProgressBonus.gameObject.SetActive(false);
 
-            if(currentCount >= goalCount) {
-                int medalInd = Mathf.FloorToInt(Mathf.Clamp01((float)(currentCount - goalCount) / goalBonusCount) * (organismProgressMedalActives.Length - 1));
+            int medalInd = GameData.instance.GetMedalIndex(organismProgressMedalActives.Length, currentCount, goalCount, goalBonusCount);
 
+            if(medalInd != -1) {
                 for(int i = 0; i < organismProgressMedalActives.Length; i++)
                     organismProgressMedalActives[i].SetActive(i <= medalInd);
             }

@@ -25,5 +25,10 @@ namespace Renegadeware.LL_LS1A1 {
         /// This is called during prefab generation for OrganismTemplate used during simulation mode.
         /// </summary>
         public virtual void SetupTemplate(OrganismEntity organismEntity) { }
+
+        /// <summary>
+        /// This is called during edit
+        /// </summary>
+        public virtual void SetupEditBody(OrganismDisplayBody displayBody) { }
     }
 }

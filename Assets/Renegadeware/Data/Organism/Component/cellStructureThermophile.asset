@@ -32,5 +32,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 0fb0c32c9ed00a74a917caefff418d43, type: 2}
     flags: -1
     danger: 0
-  _editPrefab: {fileID: 0}
+    toxic: 0
+    seekMassMin: 0
+  _editPrefab: {fileID: 2815952976082081042, guid: 11cfa24be099e3c4f92a25737ca4d76b,
+    type: 3}
   _gamePrefab: {fileID: 0}
+  bodyColor: {r: 0.6666667, g: 0.6431373, b: 0.5411765, a: 1}
+  _anchor: body

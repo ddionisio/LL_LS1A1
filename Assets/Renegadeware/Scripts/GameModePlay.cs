@@ -475,6 +475,9 @@ namespace Renegadeware.LL_LS1A1 {
                     gameDat.Progress();
 
                     //setup stats for victory display
+                    mModalParms[ModalVictory.parmCount] = mOrganismSpawner.entityCount;
+                    mModalParms[ModalVictory.parmCriteriaCount] = environmentCurrentInfo.criteriaCount;
+                    mModalParms[ModalVictory.parmBonusCount] = environmentCurrentInfo.bonusCount;
 
                     M8.ModalManager.main.Open(gameDat.modalVictory, mModalParms);
 
