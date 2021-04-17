@@ -30,6 +30,8 @@ MonoBehaviour:
     _energySources: []
     flags: 0
     danger: 0
-  _editPrefab: {fileID: 541852455636073335, guid: 4c46817dd2b19c642beb32eb6c4e722c,
+    toxic: 0
+    seekMassMin: 0
+  _editPrefab: {fileID: 8158462342132412456, guid: 6e9bdf581f49cff438c6c28964533070,
     type: 3}
-  _anchorName: ribosome
+  _anchorName: plasmid

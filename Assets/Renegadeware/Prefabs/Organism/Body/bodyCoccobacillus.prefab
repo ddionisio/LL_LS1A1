@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 1922188881532647129}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.495, y: -1.53, z: 0}
-  m_LocalScale: {x: 0.065, y: 0.065, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteRender: {fileID: 1922188881532647131}
   _colorGroup: {fileID: 1922188881532645670}
-  anchorRoot: {fileID: 0}
+  anchorRoot: {fileID: 1922188881532647130}
 --- !u!114 &5770966139887907902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,12 +119,11 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1272029043503466184, guid: 49d782ef45be5004b9edb429ea0994ce,
-    type: 3}
-  m_Color: {r: 0.3803922, g: 0.5058824, b: 0.6901961, a: 1}
+  m_Sprite: {fileID: 21300000, guid: e45ca4c321af2e948b92c80ba8263f62, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 1
+  m_DrawMode: 0
   m_Size: {x: 3, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -145,5 +144,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 3, y: 4}
+  m_Size: {x: 0.19, y: 0.25}
   m_Direction: 0

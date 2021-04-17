@@ -13,6 +13,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Body")]
         public Color bodyColor = Color.white;
+        public Color bodyEditColor = Color.white;
 
         [SerializeField]
         string _anchor;
@@ -29,7 +30,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         public override void SetupEditBody(OrganismDisplayBody displayBody) {
             if(displayBody.colorGroup)
-                displayBody.colorGroup.ApplyColor(bodyColor);
+                displayBody.colorGroup.ApplyColor(bodyEditColor);
         }
     }
 }

@@ -39,5 +39,6 @@ MonoBehaviour:
   _editPrefab: {fileID: 6017001004929212311, guid: c89190ce0d6fa594287cc5ea87ec193c,
     type: 3}
   _gamePrefab: {fileID: 0}
-  bodyColor: {r: 0.91372555, g: 0.33333334, b: 0.34117648, a: 1}
+  bodyColor: {r: 1, g: 1, b: 1, a: 1}
+  bodyEditColor: {r: 1, g: 0.43921572, b: 0.43921572, a: 1}
   _anchor: body

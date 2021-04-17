@@ -30,5 +30,11 @@ MonoBehaviour:
     _energySources: []
     flags: 8
     danger: 0
-  _editPrefab: {fileID: 0}
+    toxic: 0
+    seekMassMin: 0
+  _editPrefab: {fileID: 4869866281698309007, guid: 0538a6dcdfad83941a19b71c9caac55c,
+    type: 3}
   _gamePrefab: {fileID: 0}
+  bodyColor: {r: 1, g: 1, b: 1, a: 1}
+  bodyEditColor: {r: 0.30980393, g: 0.04705883, b: 0.19607845, a: 1}
+  _anchor: body

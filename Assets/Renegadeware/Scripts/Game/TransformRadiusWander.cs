@@ -7,6 +7,8 @@ namespace Renegadeware.LL_LS1A1 {
         public float delay;
         public float radius;
 
+        public Color previewColor = new Color(0.75f, 0f, 0f, 0.5f);
+
         private Vector2 mOriginPoint;
 
         private Vector2 mEndPos;
@@ -47,7 +49,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         void OnDrawGizmos() {
             if(radius > 0f) {
-                Gizmos.color = new Color(0.75f, 0f, 0f, 0.5f);
+                Gizmos.color = previewColor;
                 Gizmos.DrawWireSphere(transform.position, radius);
             }
         }

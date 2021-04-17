@@ -46,6 +46,9 @@ SpriteAtlas:
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: f0dfad20f6592d8419ccd6e9599d7700, type: 3}
+  - {fileID: 21300000, guid: e8acec409ed58db4591136d717fb37ce, type: 3}
+  - {fileID: 21300000, guid: c22e6e409e174984e90983ac2676023c, type: 3}
   - {fileID: 21300000, guid: be98f690b6a68d8478a95623f406a172, type: 3}
   - {fileID: 21300000, guid: 011ea7c0d1698444e88a2285fec0e1f4, type: 3}
   - {fileID: 21300000, guid: f4683e31b11d8c249ac19e37611319cd, type: 3}
@@ -55,20 +58,30 @@ SpriteAtlas:
   - {fileID: 21300000, guid: cfce0ce1b6c72e54f9981e474f39ca7c, type: 3}
   - {fileID: 21300002, guid: bf8c0222be72dfd48a68e5cf2a7ed5c1, type: 3}
   - {fileID: 21300000, guid: bf8c0222be72dfd48a68e5cf2a7ed5c1, type: 3}
+  - {fileID: 21300000, guid: b8441e224b1ea72479379b0a1a6397c2, type: 3}
   - {fileID: 21300000, guid: 085a6372711b9d147864b50f4d431fbf, type: 3}
+  - {fileID: 21300000, guid: a70ad413b7ea7a846afe3a1bba66630f, type: 3}
   - {fileID: 2383154019900357971, guid: c05e5e136fe7a084084e48c38b81b054, type: 3}
   - {fileID: -4249189435241424335, guid: c05e5e136fe7a084084e48c38b81b054, type: 3}
   - {fileID: 21300000, guid: 15ea4eb34771de842bab6998c927f75f, type: 3}
+  - {fileID: 21300000, guid: e45ca4c321af2e948b92c80ba8263f62, type: 3}
+  - {fileID: 21300000, guid: 72007b44819fffc418da24a102f988cc, type: 3}
   - {fileID: 21300000, guid: d985b654a2dd4e54482f774cec3f7b9c, type: 3}
+  - {fileID: 21300000, guid: 7927f194506da9c4bbb4ddc4349b54c0, type: 3}
   - {fileID: 21300000, guid: c41b7ac4773379f42bec55818efbfab5, type: 3}
   - {fileID: 21300000, guid: bed50a0554574f34f8f18bd3090464dd, type: 3}
   - {fileID: 21300000, guid: 7428624581668694ca5e5ec7e287bb0d, type: 3}
+  - {fileID: 21300000, guid: 94135075f07c3c144aec251e1d6327c0, type: 3}
   - {fileID: 21300000, guid: e9c8ee955c09c344aa79e9bb93b94216, type: 3}
+  - {fileID: 21300000, guid: 39c3e746a905c374ab66507f0c7a5fc2, type: 3}
   - {fileID: 21300000, guid: 965b89d63c1a0c945b857715170b3840, type: 3}
+  - {fileID: 21300000, guid: 6d7d8a273b763684f98c4fa77c4b0f6a, type: 3}
   - {fileID: 21300000, guid: 326ab6c73d9e81346bb6774298a0d825, type: 3}
   - {fileID: 21300000, guid: 5427e4f7e1cb9704892fb4854f1cf6a9, type: 3}
+  - {fileID: 21300000, guid: ee6d65f758ea17442a638cfcdf56ca3e, type: 3}
   - {fileID: 21300000, guid: b5f1f248fc842084cb79fa132167e30b, type: 3}
   - {fileID: 21300000, guid: 98dcbc88df1944742b74d24843f65c75, type: 3}
+  - {fileID: 21300000, guid: 18cb7ae89943b094e9dbf19b4c2f28ef, type: 3}
   - {fileID: 21300010, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
   - {fileID: 21300006, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
   - {fileID: 21300000, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
@@ -76,6 +89,7 @@ SpriteAtlas:
   - {fileID: 21300002, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
   - {fileID: 5754809440454667916, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
   - {fileID: 21300004, guid: 02cb7109eec577d45a27167e2308de23, type: 3}
+  - {fileID: 21300000, guid: c7c6b179af86f384b9f1d8ea8f01616f, type: 3}
   - {fileID: 21300000, guid: a44ac7793e05d8148a07b482a78da98e, type: 3}
   - {fileID: 21300000, guid: bb8a087995e8ab149b0f5c36c07f3d96, type: 3}
   - {fileID: 21300000, guid: ddd7c8a9702d1734ba3f439b0898c9d0, type: 3}
@@ -88,17 +102,27 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 8d268ada08728e64f89466e44eec3b74, type: 3}
   - {fileID: 21300000, guid: 00060bfa80081ba489ad4cbb7a88fb20, type: 3}
   - {fileID: 21300000, guid: bddb662b911e1c243ae530e436e0fe1b, type: 3}
+  - {fileID: 21300000, guid: e06c0edbf517e6c429f36378a8af3c9b, type: 3}
   - {fileID: 21300000, guid: 6e46d65c795b56344b389f1886fb3982, type: 3}
   - {fileID: 21300000, guid: 3b14576c4ee59af4b857b321e5f0f6b8, type: 3}
+  - {fileID: 21300000, guid: 6e0eb2ecd4b652c4e96026948db6f67c, type: 3}
   - {fileID: 21300000, guid: 36ce24ec9ae04524289ce0e80bf270be, type: 3}
+  - {fileID: 21300000, guid: 1d4805fcab571a54cbbbfa33d172eda5, type: 3}
   - {fileID: 21300000, guid: 22645e3dbec995a4eb0b9dc37e7dd917, type: 3}
   - {fileID: 21300000, guid: c5a54a7e88b59e547a8905c1ad93d892, type: 3}
+  - {fileID: 21300000, guid: e0d3b09ecdfd653439de9b7d41b0a555, type: 3}
+  - {fileID: 21300000, guid: ccb2a89e82803d14c889b48801754264, type: 3}
+  - {fileID: 21300000, guid: 2225bafe27d9b4a4c86404f352df7b91, type: 3}
+  - {fileID: 21300000, guid: 4fe6642f63c05d942beec3e9309868c3, type: 3}
   - {fileID: 21300000, guid: d100bf3fba8e48343b4f69fe5447d682, type: 3}
   - {fileID: 21300000, guid: 4446d2bf44d721e4f963db0b17ca6c82, type: 3}
   - {fileID: 21300000, guid: 49f63cbf9fa458c4cbc656fbdbb5124a, type: 3}
   - {fileID: -1272029043503466184, guid: 49d782ef45be5004b9edb429ea0994ce, type: 3}
   - {fileID: -1174144582593101571, guid: 49d782ef45be5004b9edb429ea0994ce, type: 3}
   m_PackedSpriteNamesToIndex:
+  - coccobacillusMethanotroph
+  - coccusMethanotroph
+  - coccusMethanogen
   - star
   - hintButton
   - downArrow
@@ -108,20 +132,30 @@ SpriteAtlas:
   - edge_shade_left_8x1
   - shadeWhite_bottomLeft
   - shadeWhite
+  - coccusOrganotrophEndobiotic
   - buttonCellEdit
+  - bacillusOrganotrophEndobiotic
   - roundRectGlow
   - roundRectGlow_bottom
   - bacillusEdit
+  - coccobacillusHalophile
+  - bacillusMethanotroph
   - circleGlow
+  - coccobacillusOrganotroph
   - devicerBody
   - coccusEdit
   - wrongX
+  - coccobacillusThermophile
   - outline1x1
+  - bacillusMethanogen
   - roundRectOutline_4_1
+  - bacillusOrganotroph
   - circle32x32
   - dot
+  - bacillusThermophile
   - tutorialHandPointDown
   - correctCheck
+  - coccusThermophile
   - blank4x4_top
   - blank4x4_bottomLeft
   - blank4x4_bottom
@@ -129,6 +163,7 @@ SpriteAtlas:
   - blank4x4
   - blank4x4_border2
   - blank4x4_topLeft
+  - coccobacillusOrganotrophEndobiotic
   - circleOutline32x32
   - optionButton
   - cursor
@@ -141,11 +176,18 @@ SpriteAtlas:
   - circleQuarter_256
   - coccobacillusEdit
   - cycleArrow
+  - coccusOrganotroph
   - devicerMouthClose
   - grabMacrophage
+  - coccusHalophile
   - circleGlowTiny
+  - bacillusNeucloid
   - buttonIconPlay
   - edge_shade
+  - coccobacillusMethanogen
+  - coccusNeucloid
+  - coccobacillusNeucloid
+  - bacillusHalophile
   - tutorialHandPoint
   - roundRect_4
   - devicerMouthOpen
