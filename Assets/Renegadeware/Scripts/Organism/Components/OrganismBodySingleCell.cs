@@ -68,6 +68,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         private State mState;
 
+        private int mTakeDeathInd;
+        private int mTakeDivideInd;
+
         public void EndobioticAttach(OrganismEntity host, Transform anchor) {
             mEndobioticHost = host;
 
@@ -116,6 +119,16 @@ namespace Renegadeware.LL_LS1A1 {
 
             if((ent.stats.flags & (OrganismFlag.Sticky | OrganismFlag.StickySolid)) != 0)
                 mStickies = new M8.CacheList<StickyInfo>(stickyCapacity);
+
+            //animation
+            if(ent.animator) {
+                mTakeDeathInd = ent.animator.GetTakeIndex(GameData.instance.organismTakeDeath);
+                mTakeDivideInd = ent.animator.GetTakeIndex(GameData.instance.organismTakeReproduce);
+            }
+            else {
+                mTakeDeathInd = -1;
+                mTakeDivideInd = -1;
+            }
         }
 
         public override void Spawn(M8.GenericParams parms) {
@@ -154,8 +167,8 @@ namespace Renegadeware.LL_LS1A1 {
                     }
                     //ran out of energy?
                     else if(entity.stats.energy == 0f) {
-                        if(entity.animator && !string.IsNullOrEmpty(gameDat.organismTakeDeath))
-                            entity.animator.Play(gameDat.organismTakeDeath);
+                        if(mTakeDeathInd != -1)
+                            entity.animator.Play(mTakeDeathInd);
 
                         entity.stats.energyLocked = true;
 
@@ -164,8 +177,8 @@ namespace Renegadeware.LL_LS1A1 {
                     //ready to divide?
                     else if(entity.stats.isEnergyFull) {
                         if((entity.stats.flags & OrganismFlag.DivideLocked) == 0 && !GameModePlay.instance.gameSpawner.entities.IsFull) {//don't allow divide if capacity is full
-                            if(entity.animator && !string.IsNullOrEmpty(gameDat.organismTakeReproduce))
-                                entity.animator.Play(gameDat.organismTakeReproduce);
+                            if(mTakeDivideInd != -1)
+                                entity.animator.Play(mTakeDivideInd);
 
                             entity.velocity = Vector2.zero;
                             entity.angularVelocity = 0f;
@@ -276,8 +289,8 @@ namespace Renegadeware.LL_LS1A1 {
 
                 case State.DeathWait:
                     if(entity.stats.spawnTimeElapsed >= entity.stats.lifespan + gameDat.organismDeathDelay) {
-                        if(entity.animator && !string.IsNullOrEmpty(gameDat.organismTakeDeath))
-                            entity.animator.Play(gameDat.organismTakeDeath);
+                        if(mTakeDeathInd != -1)
+                            entity.animator.Play(mTakeDeathInd);
 
                         mState = State.Death;
                     }

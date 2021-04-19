@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Renegadeware.LL_LS1A1 {
-    public class EnergySource : MonoBehaviour, M8.IPoolInit, M8.IPoolSpawn {
+    public class EnergySource : MonoBehaviour, M8.IPoolInit, M8.IPoolSpawn, M8.IPoolDespawn {
         public const string parmAnchorPos = "esrcAnchorP"; //Vector2
         public const string parmAnchorRadius = "esrcAnchorR"; //float
 
@@ -38,16 +38,20 @@ namespace Renegadeware.LL_LS1A1 {
         public float moveSolidCheckDelay = 0.3f;
 
         [Header("Rotate")]
-        public bool rotateSpawnRandom;
+        public Transform rotateTarget;
         public bool rotateSpinEnabled;
         public M8.RangeFloat rotateSpinSpeed;
+        public bool rotateSpawnRandom;
+
+        [Header("Display")]
+        public M8.SpriteColorGroup spriteColorGroup;
+        public SpriteShapeColorGroup spriteShapeColorGroup;
 
         [Header("Animation")]
-        public M8.Animator.Animate animator;
-        [M8.Animator.TakeSelector(animatorField = "animator")]
-        public string takeSpawn;
-        [M8.Animator.TakeSelector(animatorField = "animator")]
-        public string takeDespawn;
+        public float animationDelay = 0.3f;
+
+        public DG.Tweening.Ease spawnEase = DG.Tweening.Ease.OutSine;
+        public DG.Tweening.Ease despawnEase = DG.Tweening.Ease.InSine;
 
         public float energy {
             get { return mEnergy; }
@@ -79,7 +83,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         private M8.PoolDataController mPoolDataCtrl;
         private State mState;
-        private float mLastActiveTime;
+        private float mLastTime;
         
         private bool mAnchorIsValid;
         private Vector2 mAnchorPos;
@@ -95,6 +99,11 @@ namespace Renegadeware.LL_LS1A1 {
         private float mRotateSpeed;
 
         private Collider2D[] mSolidContactCache;
+
+        private DG.Tweening.EaseFunction mSpawnEaseFunc;
+        private DG.Tweening.EaseFunction mDespawnEaseFunc;
+
+        private float mSpriteRotateSpeed;
 
         public void Release() {
             mState = State.None;
@@ -112,6 +121,13 @@ namespace Renegadeware.LL_LS1A1 {
 
         void M8.IPoolInit.OnInit() {
             mPoolDataCtrl = GetComponent<M8.PoolDataController>();
+        }
+
+        void M8.IPoolDespawn.OnDespawned() {
+            if(spriteColorGroup)
+                spriteColorGroup.Revert();
+            if(spriteShapeColorGroup)
+                spriteShapeColorGroup.Revert();
         }
 
         void M8.IPoolSpawn.OnSpawned(M8.GenericParams parms) {
@@ -146,28 +162,45 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(moveSolidCheck)
                 mSolidContactCache = new Collider2D[4];
+
+            mSpawnEaseFunc = DG.Tweening.Core.Easing.EaseManager.ToEaseFunction(spawnEase);
+            mDespawnEaseFunc = DG.Tweening.Core.Easing.EaseManager.ToEaseFunction(despawnEase);
+
+            if(!rotateTarget)
+                rotateSpinEnabled = false;
         }
 
         void Update() {
+            float t;
+            var time = Time.time;
+
             switch(mState) {
                 case State.Spawning:
-                    if(!animator.isPlaying)
+                    t = time - mLastTime;
+                    if(t <= animationDelay) {
+                        var clr = Color.Lerp(Color.clear, Color.white, mSpawnEaseFunc(t, animationDelay, 0f, 0f));
+
+                        if(spriteColorGroup)
+                            spriteColorGroup.color = clr;
+                        if(spriteShapeColorGroup)
+                            spriteShapeColorGroup.color = clr;
+                    }
+                    else
                         Active();
                     break;
 
                 case State.Active:
-                    var time = Time.time;
-                    if(mEnergy == 0f || (lifespan > 0f && time - mLastActiveTime >= lifespan))
+                    if(mEnergy == 0f || (lifespan > 0f && time - mLastTime >= lifespan))
                         SetToDespawn();
                     else if(moveMode != MoveMode.None) {
                         var dt = Time.deltaTime;
 
-                        var curMoveTime = time - mLastMoveTime;
+                        t = time - mLastMoveTime;
 
-                        if(curMoveTime < moveDelay) {
+                        if(t < moveDelay) {
                             mMoveVelocity += mMoveCurDir * moveAccel * dt;
                         }
-                        else if(curMoveTime > moveDelay + moveWait) {
+                        else if(t > moveDelay + moveWait) {
                             MoveUpdateDir();
                             mLastMoveTime = time;
                         }
@@ -223,24 +256,38 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
 
                 case State.Despawning:
-                    if(!animator.isPlaying)
+                    t = time - mLastTime;
+                    if(t <= animationDelay) {
+                        var clr = Color.Lerp(Color.white, Color.clear, mDespawnEaseFunc(t, animationDelay, 0f, 0f));
+
+                        if(spriteColorGroup)
+                            spriteColorGroup.color = clr;
+                        if(spriteShapeColorGroup)
+                            spriteShapeColorGroup.color = clr;
+                    }
+                    else
                         Release();
                     break;
             }
 
             if(rotateSpinEnabled) {
-                var rot = transform.localEulerAngles;
+                var rot = rotateTarget.localEulerAngles;
                 rot.z += mRotateSpeed * Time.deltaTime;
-                transform.localEulerAngles = rot;
+                rotateTarget.localEulerAngles = rot;
             }
         }
 
         private void Spawn() {
             mEnergy = energyCapacity;
 
-            if(animator && !string.IsNullOrEmpty(takeSpawn)) {
-                animator.Play(takeSpawn);
+            if(spriteColorGroup || spriteShapeColorGroup) {
                 mState = State.Spawning;
+                mLastTime = Time.time;
+
+                if(spriteColorGroup)
+                    spriteColorGroup.color = Color.clear;
+                if(spriteShapeColorGroup)
+                    spriteShapeColorGroup.color = Color.clear;
             }
             else
                 Active();
@@ -255,10 +302,10 @@ namespace Renegadeware.LL_LS1A1 {
                 mLastMoveSolidCheckTime = time;
             }
 
-            if(rotateSpawnRandom) {
-                var rot = transform.localEulerAngles;
+            if(rotateSpawnRandom && rotateTarget) {
+                var rot = rotateTarget.localEulerAngles;
                 rot.z = Random.Range(0f, 359f);
-                transform.localEulerAngles = rot;
+                rotateTarget.localEulerAngles = rot;
             }
 
             if(rotateSpinEnabled)
@@ -267,13 +314,13 @@ namespace Renegadeware.LL_LS1A1 {
 
         private void Active() {
             mState = State.Active;
-            mLastActiveTime = Time.time;
+            mLastTime = Time.time;
         }
 
         private void SetToDespawn() {
-            if(animator && !string.IsNullOrEmpty(takeDespawn)) {
-                animator.Play(takeDespawn);
+            if(spriteColorGroup || spriteShapeColorGroup) {
                 mState = State.Despawning;
+                mLastTime = Time.time;
             }
             else
                 Release();

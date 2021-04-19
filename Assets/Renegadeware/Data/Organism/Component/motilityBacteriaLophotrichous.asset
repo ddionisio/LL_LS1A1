@@ -30,11 +30,18 @@ MonoBehaviour:
     _energySources: []
     flags: 0
     danger: 0
+    toxic: 0
+    seekMassMin: 0
+  _editPrefab: {fileID: 4352103301590960415, guid: e3474ae378c2ddd4b801f4cdeec60a36,
+    type: 3}
+  _gamePrefab: {fileID: 4421986465156525715, guid: 9ba3076eb3ea50744894bef3d98d46a3,
+    type: 3}
+  _anchor: flagella
   isBidirectional: 0
   exploreForwardDuration: 0.55
   exploreForwardEndDelay: 0.3
   exploreTurnDuration: 0.4
-  exploreTurnEndDelay: 0.3
+  exploreTurnAngleVelocityMin: 5
   exploreTurnAngleVelocityMax: 60
   exploreTurnAwayAngle: 30
   energyMinScale: 0.15

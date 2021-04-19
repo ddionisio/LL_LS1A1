@@ -35,6 +35,12 @@ MonoBehaviour:
   _editPrefab: {fileID: 4869866281698309007, guid: 0538a6dcdfad83941a19b71c9caac55c,
     type: 3}
   _gamePrefab: {fileID: 0}
-  bodyColor: {r: 1, g: 1, b: 1, a: 1}
+  bodySprites:
+  - bodyID: 19
+    sprite: {fileID: 21300000, guid: a70ad413b7ea7a846afe3a1bba66630f, type: 3}
+  - bodyID: 20
+    sprite: {fileID: 21300000, guid: c7c6b179af86f384b9f1d8ea8f01616f, type: 3}
+  - bodyID: 21
+    sprite: {fileID: 21300000, guid: b8441e224b1ea72479379b0a1a6397c2, type: 3}
   bodyEditColor: {r: 0.30980393, g: 0.04705883, b: 0.19607845, a: 1}
   _anchor: body

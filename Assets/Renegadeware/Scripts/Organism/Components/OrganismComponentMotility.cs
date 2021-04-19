@@ -5,6 +5,14 @@ using UnityEngine;
 namespace Renegadeware.LL_LS1A1 {
     [CreateAssetMenu(fileName = "motility", menuName = "Game/Organism/Component/Motility")]
     public class OrganismComponentMotility : OrganismComponent {
+        [Header("Display")]
+        [SerializeField]
+        GameObject _editPrefab;
+        [SerializeField]
+        GameObject _gamePrefab;
+        [SerializeField]
+        string _anchor;
+
         [Header("Movement")]
         public bool isBidirectional;
 
@@ -19,6 +27,10 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Energy")]
         public float energyMinScale = 0.15f; //minimum energy percentage to activate
         public float energyRate = 1f; //energy consumption per second when active
+
+        public override GameObject editPrefab => _editPrefab;
+        public override GameObject gamePrefab => _gamePrefab;
+        public override string anchorName => _anchor;
 
         public override OrganismComponentControl GenerateControl(OrganismEntity organismEntity) {
             return new OrganismComponentMotilityControl();
@@ -44,6 +56,9 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public bool isLocked;
+
+        public State state { get { return mState; } }
+        public ExploreState stateExplore { get { return mExploreState; } }
 
         private OrganismComponentMotility mComp;
 

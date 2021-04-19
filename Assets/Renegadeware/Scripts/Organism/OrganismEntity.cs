@@ -179,6 +179,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         private OrganismComponentControl[] mControls;
 
+        private int mTakeSpawnInd;
+
         /// <summary>
         /// Call this after creating the prefab, before generating the pool.
         /// </summary>
@@ -228,7 +230,10 @@ namespace Renegadeware.LL_LS1A1 {
                     if(anchorList != null) {
                         for(int j = 0; j < anchorList.Count; j++) {
                             var t = anchorList[j];
-                            Instantiate(compPrefab, Vector3.zero, Quaternion.identity, t);
+
+                            var go = Instantiate(compPrefab, t);
+                            go.transform.localPosition = Vector3.zero;
+                            go.transform.localRotation = Quaternion.identity;
                         }
                     }
                 }
@@ -366,6 +371,12 @@ namespace Renegadeware.LL_LS1A1 {
         void M8.IPoolInit.OnInit() {
             poolControl = GetComponent<M8.PoolDataController>();
 
+            //animation
+            if(_animator)
+                mTakeSpawnInd = _animator.GetTakeIndex(GameData.instance.organismTakeSpawn);
+            else
+                mTakeSpawnInd = -1;
+
             if(sensor)
                 sensor.Init(stats);
 
@@ -418,12 +429,12 @@ namespace Renegadeware.LL_LS1A1 {
             if(bodyDisplay.colorGroup)
                 bodyDisplay.colorGroup.Revert();
 
-            if(animator)
-                animator.PlayDefault();
-
             //component control spawns
             for(int i = 0; i < mControls.Length; i++)
                 mControls[i].Spawn(parms);
+
+            if(mTakeSpawnInd != -1)
+                animator.Play(mTakeSpawnInd);
         }
 
         void M8.IPoolDespawn.OnDespawned() {

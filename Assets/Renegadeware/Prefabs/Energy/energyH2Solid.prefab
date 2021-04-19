@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3423276442736650115}
   - component: {fileID: 3511802380258297193}
+  - component: {fileID: 5241437446435422868}
   - component: {fileID: 3771108924170713440}
   - component: {fileID: 5297014592629756769}
   - component: {fileID: 1356076704862417047}
@@ -48,10 +49,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: d93c409e7f89e594ba7a9c49dfad2275, type: 2}
-  energyCapacity: 10
-  energyIsUnlimited: 1
-  energyRate: 1
-  lifespan: 20
+  energyCapacity: 40
+  energyIsUnlimited: 0
+  energyRate: 2
+  lifespan: 15
   moveMode: 1
   moveAccel: 1.25
   moveSpeedCap: 1
@@ -59,14 +60,33 @@ MonoBehaviour:
   moveWait: 0.3
   moveSolidCheck: 0
   moveSolidCheckDelay: 0.3
-  rotateSpawnRandom: 1
+  rotateTarget: {fileID: 3423276442736650115}
   rotateSpinEnabled: 1
   rotateSpinSpeed:
     min: 15
     max: 50
-  animator: {fileID: 0}
-  takeSpawn: 
-  takeDespawn: 
+  rotateSpawnRandom: 1
+  spriteColorGroup: {fileID: 0}
+  spriteShapeColorGroup: {fileID: 5241437446435422868}
+  animationDelay: 0.3
+  spawnEase: 3
+  despawnEase: 2
+--- !u!114 &5241437446435422868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5119689806805486794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aface6a82cf69b7489a95dacf34e09b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  initOnAwake: 1
+  spriteShapeRenders:
+  - {fileID: 3771108924170713440}
 --- !u!1971053207 &3771108924170713440
 SpriteShapeRenderer:
   m_ObjectHideFlags: 0
@@ -106,14 +126,15 @@ SpriteShapeRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -110
   m_Color: {r: 0.9528302, g: 0.8028326, b: 0.39101997, a: 1}
   m_MaskInteraction: 0
   m_ShapeTexture: {fileID: 2800000, guid: dc3c9222a02f0b748abec29faa2ffdd0, type: 3}
-  m_Sprites: []
+  m_Sprites:
+  - {fileID: 21300000, guid: 2945920eb82663b4393a3789e8a85966, type: 3}
   m_LocalAABB:
-    m_Center: {x: 0.046186745, y: 0.118593276, z: 0}
-    m_Extent: {x: 0.8327854, y: 0.8437119, z: 0}
+    m_Center: {x: -0.007992029, y: 0.073119044, z: -0.00005}
+    m_Extent: {x: 0.8899301, y: 0.9178807, z: 0.00005}
 --- !u!114 &5297014592629756769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,70 +150,43 @@ MonoBehaviour:
   m_Spline:
     m_IsOpenEnded: 0
     m_ControlPoints:
-    - position: {x: -0.3100406, y: -0.7251179, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: -0.31949103, y: -0.7309892, z: 0}
+      leftTangent: {x: 0.74925435, y: -0.24252558, z: 0}
+      rightTangent: {x: -0.5326718, y: 0.17242002, z: 0}
+      mode: 1
       height: 1
       bevelCutoff: 0
       bevelSize: 0
       spriteIndex: 0
       corner: 1
-    - position: {x: -0.7865987, y: -0.123342514, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: -0.66321725, y: 0.5742717, z: 0}
+      leftTangent: {x: -0.32170928, y: -0.5268059, z: 0}
+      rightTangent: {x: 0.106666386, y: 0.17466855, z: 0}
+      mode: 1
       height: 1
       bevelCutoff: 0
       bevelSize: 0
       spriteIndex: 0
       corner: 1
-    - position: {x: -0.6834049, y: 0.59445953, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: -0.007898331, y: 0.9286587, z: 0}
+      leftTangent: {x: -0.25427163, y: -0.0011649132, z: 0}
+      rightTangent: {x: 0.6462445, y: 0.002960682, z: 0}
+      mode: 1
       height: 1
       bevelCutoff: 0
       bevelSize: 0
       spriteIndex: 0
       corner: 1
-    - position: {x: 0.07285297, y: 0.9623052, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: 0.8196956, y: -0.12066007, z: 0}
+      leftTangent: {x: 0.019189835, y: 0.3959825, z: 0}
+      rightTangent: {x: -0.022588491, y: -0.46611547, z: 0}
+      mode: 1
       height: 1
       bevelCutoff: 0
       bevelSize: 0
       spriteIndex: 0
       corner: 1
-    - position: {x: 0.6646148, y: 0.7077422, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
-      height: 1
-      bevelCutoff: 0
-      bevelSize: 0
-      spriteIndex: 0
-      corner: 1
-    - position: {x: 0.8789722, y: -0.051503897, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
-      height: 1
-      bevelCutoff: 0
-      bevelSize: 0
-      spriteIndex: 0
-      corner: 1
-    - position: {x: 0.48792756, y: -0.72511864, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
-      height: 1
-      bevelCutoff: 0
-      bevelSize: 0
-      spriteIndex: 0
-      corner: 1
-  m_SpriteShape: {fileID: 11400000, guid: e73460ae43bfd334b8e45b71c328f81d, type: 2}
+  m_SpriteShape: {fileID: 11400000, guid: 705bcef7a5be7dc45958306326fe8a5c, type: 2}
   m_FillPixelPerUnit: 32
   m_StretchTiling: 1
   m_SplineDetail: 4
@@ -201,7 +195,7 @@ MonoBehaviour:
   m_WorldSpaceUV: 0
   m_CornerAngleThreshold: 30
   m_ColliderDetail: 4
-  m_ColliderOffset: 0
+  m_ColliderOffset: 0.4
   m_UpdateCollider: 1
   m_OptimizeCollider: 1
   m_OptimizeGeometry: 1
@@ -232,16 +226,19 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.3100406, y: -0.7251179}
-      - {x: -0.7865987, y: -0.123342514}
-      - {x: -0.6834049, y: 0.59445953}
-      - {x: 0.07285297, y: 0.9623052}
-      - {x: 0.6646148, y: 0.7077422}
-      - {x: 0.8789722, y: -0.051503897}
-      - {x: 0.48792756, y: -0.72511864}
-      - {x: 0.28104684, y: -0.72511834}
-      - {x: -0.103160016, y: -0.7251181}
-      - {x: -0.3100406, y: -0.7251179}
+    - - {x: -0.33103943, y: -0.76666665}
+      - {x: -0.7532131, y: -0.44214532}
+      - {x: -0.8729359, y: 0.041291673}
+      - {x: -0.6954611, y: 0.593418}
+      - {x: -0.28020003, y: 0.9102163}
+      - {x: -0.0052251825, y: 0.96606326}
+      - {x: 0.52176005, y: 0.7750571}
+      - {x: 0.7925423, y: 0.34077606}
+      - {x: 0.857041, y: -0.12406088}
+      - {x: 0.7104844, y: -0.5628814}
+      - {x: 0.3129268, y: -0.8205074}
+      - {x: -0.33103943, y: -0.76666665}
+      - {x: -0.33103943, y: -0.76666665}
 --- !u!114 &6262651642172601115
 MonoBehaviour:
   m_ObjectHideFlags: 0

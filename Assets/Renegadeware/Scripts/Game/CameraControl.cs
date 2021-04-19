@@ -67,6 +67,17 @@ namespace Renegadeware.LL_LS1A1 {
 
         public bool isZooming { get { return mIsZoom; } }
 
+        public float zoomScale {
+            get {
+                if(zoomLevels.Length == 0 || zoomLevels[mZoomIndex].level == 0f)
+                    return 1f;
+
+                var levelBase = zoomLevels[zoomLevels.Length - 1].level;
+
+                return Mathf.Abs(levelBase / zoomLevels[mZoomIndex].level);
+            }
+        }
+
         public bool inputEnabled { 
             get { return mInputEnabled; }
             set {

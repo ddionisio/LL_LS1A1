@@ -79,6 +79,7 @@ namespace Renegadeware.LL_LS1A1 {
         public string[] organismEntityTags;
 
         [Header("Organism Animation Settings")]
+        public string organismTakeSpawn = "spawn";
         public string organismTakeReproduce = "reproduce";
         public string organismTakeDeath = "death";
 

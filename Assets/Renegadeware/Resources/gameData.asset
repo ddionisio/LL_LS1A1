@@ -23,6 +23,8 @@ MonoBehaviour:
   modalOrganismEdit: organismEdit
   modalRetry: retry
   modalVictory: victory
+  scoreBase: 1000
+  scoreBonus: 500
   environmentSolidTag: Solid
   environmentDepth: -0.1
   environmentInputDragScale: 0.03
@@ -41,6 +43,7 @@ MonoBehaviour:
   organismEntityTags:
   - Organism
   - OrganismPlayer
+  organismTakeSpawn: spawn
   organismTakeReproduce: reproduce
   organismTakeDeath: death
   energyTag: Energy
@@ -48,7 +51,7 @@ MonoBehaviour:
   timeScales:
   - 0
   - 1
-  - 8
+  - 6
   organismComponents:
   - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
   - {fileID: 11400000, guid: 4329496c0722ab44aa16fa732b665e59, type: 2}

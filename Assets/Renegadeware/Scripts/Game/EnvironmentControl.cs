@@ -12,6 +12,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         public GameObject controlRoot; //grab velocity, hazards, energies here
 
+        [Header("Display")]
+        public Color backgroundColor = Color.black;
+
         [Header("Physics")]
         public float linearDrag = 1f;
         public float angularDrag = 5f;
@@ -63,10 +66,11 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         /// <summary>
-        /// Set camera's bounds, camera's position to bounds center, and zoom out to last level.
+        /// Set camera's bounds, camera's position to bounds center, and zoom out to last level. Also apply background color.
         /// </summary>
-        public void ApplyBoundsToCamera(CameraControl camCtrl) {
+        public void ApplyToCamera(CameraControl camCtrl) {
             camCtrl.SetBounds(bounds, camCtrl.zoomLevels.Length - 1, true);
+            camCtrl.cameraSource.backgroundColor = backgroundColor;
         }
 
         void OnApplicationFocus(bool focus) {

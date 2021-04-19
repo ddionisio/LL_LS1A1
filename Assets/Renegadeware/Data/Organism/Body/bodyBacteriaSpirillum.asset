@@ -30,6 +30,8 @@ MonoBehaviour:
     _energySources: []
     flags: 0
     danger: 0
+    toxic: 0
+    seekMassMin: 0
   _editPrefab: {fileID: 3754038556565059336, guid: 4ed8e0c1fd416314783c08372ad01552,
     type: 3}
   _gamePrefab: {fileID: 478653542491225004, guid: 45a5a7ec8a739604681f7be1cd1adf9e,
@@ -41,5 +43,6 @@ MonoBehaviour:
   componentGroups:
   - {fileID: 11400000, guid: 19926884ee0697c40815da502fe7b349, type: 2}
   - {fileID: 11400000, guid: f3812520ea5e8f94fb8531d2c325da04, type: 2}
+  bodyColor: {r: 1, g: 1, b: 1, a: 1}
   splitMode: 1
-  deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+  deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}

@@ -103,6 +103,8 @@ namespace Renegadeware.LL_LS1A1 {
         private OrganismDisplayEdit mOrganismEdit;
 
         //game stuff
+        private const float pixelRes = 32f;
+
         private OrganismTemplateSpawner mOrganismSpawner;
         private bool mGameInputEnabled;
 
@@ -395,9 +397,7 @@ namespace Renegadeware.LL_LS1A1 {
             yield return DoTransitionShow();
 
             //setup hud
-            var cursorSize = mGameSpawnRadius * 32f + 4f;
-
-            hud.spawnPlacementPointer.sizeDelta = new Vector2(cursorSize, cursorSize);
+            RefreshSpawnPlacementSize();
 
             hud.SpawnPlacementSetCount(mGameSpawnCount);
 
@@ -574,7 +574,11 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnCameraZoom(int zoomIndex) {
-            HUD.instance.ZoomApply(zoomIndex);
+            var hud = HUD.instance;
+
+            hud.ZoomApply(zoomIndex);
+
+            RefreshSpawnPlacementSize();
         }
 
         void OnEnvironmentChanged(int envInd) {
@@ -601,10 +605,19 @@ namespace Renegadeware.LL_LS1A1 {
 
                 //ensure there are no overlaps
                 if(mGameSpawnCheckOverlapCount == 0) {
+                    OrganismEntity newEnt;
+
                     if(level.spawnIsRandomDir)
-                        mOrganismSpawner.SpawnAtRandomDir(pos);
+                        newEnt = mOrganismSpawner.SpawnAtRandomDir(pos);
                     else
-                        mOrganismSpawner.SpawnAt(pos);
+                        newEnt = mOrganismSpawner.SpawnAt(pos);
+
+                    if(newEnt && mGameSpawnCount > 0) {
+                        mGameSpawnCount--;
+                        HUD.instance.SpawnPlacementSetCount(mGameSpawnCount);
+
+                        RefreshSpawnPlacementActive();
+                    }
                 }
             }
             else
@@ -627,11 +640,6 @@ namespace Renegadeware.LL_LS1A1 {
             var envInfo = environmentCurrentInfo;
 
             HUD.instance.OrganismProgressApply(mOrganismSpawner.entityCount, envInfo.criteriaCount, envInfo.bonusCount);
-
-            if(mGameSpawnCount > 0) {
-                mGameSpawnCount--;
-                HUD.instance.SpawnPlacementSetCount(mGameSpawnCount);
-            }
 
             RefreshSpawnPlacementActive();
         }
@@ -734,7 +742,7 @@ namespace Renegadeware.LL_LS1A1 {
                 return;
 
             //init stuff
-            env.ApplyBoundsToCamera(CameraControl.instance);
+            env.ApplyToCamera(CameraControl.instance);
             env.isActive = true;
         }
 
@@ -744,6 +752,13 @@ namespace Renegadeware.LL_LS1A1 {
                 return;
 
             env.isActive = false;
+        }
+
+        private void RefreshSpawnPlacementSize() {
+            var camCtrl = CameraControl.instance;
+
+            var cursorSize = (mGameSpawnRadius * pixelRes + 4f) * camCtrl.zoomScale;
+            HUD.instance.spawnPlacementPointer.sizeDelta = new Vector2(cursorSize, cursorSize);
         }
     }
 }
