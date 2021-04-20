@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  initOnAwake: 0
+  initOnAwake: 1
   spriteRenders:
   - {fileID: 1922188881532647131}
 --- !u!212 &1922188881532647131

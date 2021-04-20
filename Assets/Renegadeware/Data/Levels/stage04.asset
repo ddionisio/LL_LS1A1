@@ -13,26 +13,29 @@ MonoBehaviour:
   m_Name: stage04
   m_EditorClassIdentifier: 
   scene:
-    name: stage03
-    path: Assets/Renegadeware/Scenes/stage03.unity
+    name: 
+    path: 
   progressCount: 2
   duration: 90
   spawnIsRandomDir: 1
   environments:
   - nameRef: test1
     descRef: 
+    attributes: []
     spawnableCount: 1
     criteriaCount: 5
     bonusCount: 10
     capacity: 60
   - nameRef: test2
     descRef: 
+    attributes: []
     spawnableCount: 1
     criteriaCount: 5
     bonusCount: 10
     capacity: 60
   - nameRef: test2
     descRef: 
+    attributes: []
     spawnableCount: 1
     criteriaCount: 5
     bonusCount: 10

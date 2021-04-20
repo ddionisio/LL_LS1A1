@@ -32,7 +32,7 @@ MonoBehaviour:
     danger: 1
     toxic: 0
     seekMassMin: 0
-  _editPrefab: {fileID: 4373235101939684640, guid: 55f479225be0f2846835ac5d91ed29e9,
+  _editPrefab: {fileID: 7632608664878840836, guid: 55f479225be0f2846835ac5d91ed29e9,
     type: 3}
   _gamePrefab: {fileID: 2161190409157588760, guid: 724c7512a5825d148aa426903e6e7973,
     type: 3}
@@ -40,5 +40,6 @@ MonoBehaviour:
   componentGroups:
   - {fileID: 11400000, guid: 9ccc731b9f2442e46a637156f14e6e38, type: 2}
   - {fileID: 11400000, guid: 64e10a157cfe6e44bb636fc681e22805, type: 2}
+  bodyColor: {r: 1, g: 1, b: 1, a: 1}
   splitMode: 0
   deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

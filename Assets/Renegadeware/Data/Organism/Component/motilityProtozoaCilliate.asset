@@ -32,6 +32,11 @@ MonoBehaviour:
     danger: 0
     toxic: 0
     seekMassMin: 0
+  _editPrefab: {fileID: 6694707333964862534, guid: af6f7671eac969d4981f47afc27b079e,
+    type: 3}
+  _gamePrefab: {fileID: 3447567912287457745, guid: b071c036e1524f542abaa7331b275cf1,
+    type: 3}
+  _anchor: cillia
   isBidirectional: 0
   exploreForwardDuration: 0.6
   exploreForwardEndDelay: 0.15

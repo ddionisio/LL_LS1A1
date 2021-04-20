@@ -21,6 +21,9 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         public void Eat(OrganismEntity target) {
+            if(entity.isReleased || entity.stats.energyLocked || entity.stats.energy == 0f) //dead, don't eat
+                return;
+
             if(target.isReleased) //fail-safe
                 return;
 

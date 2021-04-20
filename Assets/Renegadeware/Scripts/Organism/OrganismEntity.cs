@@ -435,6 +435,9 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(mTakeSpawnInd != -1)
                 animator.Play(mTakeSpawnInd);
+
+            if(sensor)
+                sensor.enabled = true;
         }
 
         void M8.IPoolDespawn.OnDespawned() {

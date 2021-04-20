@@ -15,24 +15,27 @@ MonoBehaviour:
   scene:
     name: stage02
     path: Assets/Renegadeware/Scenes/stage02.unity
-  progressCount: 2
+  progressCount: 3
   duration: 90
   spawnIsRandomDir: 1
   environments:
   - nameRef: test1
     descRef: 
+    attributes: []
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50
     capacity: 120
   - nameRef: test2
     descRef: 
+    attributes: []
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50
     capacity: 120
   - nameRef: test2
     descRef: 
+    attributes: []
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50

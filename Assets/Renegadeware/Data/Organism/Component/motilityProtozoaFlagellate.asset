@@ -31,6 +31,12 @@ MonoBehaviour:
     flags: 0
     danger: 0
     toxic: 0
+    seekMassMin: 0
+  _editPrefab: {fileID: 7354664909319915779, guid: 2f63163a505934746a93b832627dc37e,
+    type: 3}
+  _gamePrefab: {fileID: 1015131740507901980, guid: c606d3d038a66634baac435e63036aea,
+    type: 3}
+  _anchor: flagella
   isBidirectional: 0
   exploreForwardDuration: 1
   exploreForwardEndDelay: 0.3

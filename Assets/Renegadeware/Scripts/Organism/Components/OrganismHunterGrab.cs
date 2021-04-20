@@ -109,7 +109,7 @@ namespace Renegadeware.LL_LS1A1 {
             mComp = owner as OrganismHunterGrab;
 
             //generate grab renders
-            var root = entity.transform;
+            var root = entity.bodyDisplay.anchorRoot;
 
             var grabCount = mComp.grabCount;
 
@@ -143,22 +143,16 @@ namespace Renegadeware.LL_LS1A1 {
 
         public override void Despawn() {
             //clear out grabs
-            for(int i = 0; i < mGrabActives.Count; i++) {
-                var display = mGrabActives[i];
-
-                var ent = display.target;
-                if(ent && !ent.isReleased)
-                    ent.physicsLocked = false;
-
-                display.End();
-
-                mGrabRenderCache.Add(display);
-            }
-
-            mGrabActives.Clear();
+            ClearGrabs();
         }
 
         public override void Update() {
+            if(entity.stats.energyLocked || entity.stats.energy == 0f) { //dead, don't eat
+                if(mGrabActives.Count > 0)
+                    ClearGrabs();
+                return;
+            }
+
             //eat any in contact
             for(int i = 0; i < entity.contactOrganisms.Count; i++) {
                 var contactEnt = entity.contactOrganisms[i];
@@ -189,6 +183,12 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnSensorUpdate(OrganismSensor sensor) {
+            if(entity.stats.energyLocked || entity.stats.energy == 0f) { //dead, don't eat
+                if(mGrabActives.Count > 0)
+                    ClearGrabs();
+                return;
+            }
+
             for(int i = 0; i < sensor.organisms.Count; i++) {
                 var sensorEnt = sensor.organisms[i];
 
@@ -211,6 +211,22 @@ namespace Renegadeware.LL_LS1A1 {
                     }
                 }
             }
+        }
+
+        private void ClearGrabs() {
+            for(int i = 0; i < mGrabActives.Count; i++) {
+                var display = mGrabActives[i];
+
+                var ent = display.target;
+                if(ent && !ent.isReleased)
+                    ent.physicsLocked = false;
+
+                display.End();
+
+                mGrabRenderCache.Add(display);
+            }
+
+            mGrabActives.Clear();
         }
     }
 }

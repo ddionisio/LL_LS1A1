@@ -185,8 +185,14 @@ namespace Renegadeware.LL_LS1A1 {
                         if(spriteShapeColorGroup)
                             spriteShapeColorGroup.color = clr;
                     }
-                    else
+                    else {
+                        if(spriteColorGroup)
+                            spriteColorGroup.Revert();
+                        if(spriteShapeColorGroup)
+                            spriteShapeColorGroup.Revert();
+
                         Active();
+                    }
                     break;
 
                 case State.Active:

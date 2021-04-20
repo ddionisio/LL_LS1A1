@@ -23,16 +23,19 @@ MonoBehaviour:
     turnAccel: 0
     speedLimit: 2
     velocityReceiveScale: 0.5
-    energyCapacity: 50
+    energyCapacity: 20
     energyConsumeRate: 1
     lifespan: 10
     _hazardResistances: []
     _energySources: []
     flags: 0
     danger: 1
+    toxic: 0
+    seekMassMin: 0
   _editPrefab: {fileID: 0}
   _gamePrefab: {fileID: 0}
   componentEssentials: []
   componentGroups: []
+  bodyColor: {r: 1, g: 1, b: 1, a: 1}
   splitMode: 0
   deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

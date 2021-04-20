@@ -25,7 +25,7 @@ MonoBehaviour:
     velocityReceiveScale: 0
     energyCapacity: 0
     energyConsumeRate: 2
-    lifespan: 15
+    lifespan: 20
     _hazardResistances: []
     _energySources: []
     flags: 8

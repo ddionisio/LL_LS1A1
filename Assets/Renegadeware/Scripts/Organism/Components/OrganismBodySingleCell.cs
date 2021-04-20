@@ -163,6 +163,9 @@ namespace Renegadeware.LL_LS1A1 {
                         entity.angularVelocity = 0f;
                         entity.stats.energyLocked = true;
 
+                        if(entity.sensor)
+                            entity.sensor.enabled = false;
+
                         mState = State.DeathWait;
                     }
                     //ran out of energy?
@@ -171,6 +174,9 @@ namespace Renegadeware.LL_LS1A1 {
                             entity.animator.Play(mTakeDeathInd);
 
                         entity.stats.energyLocked = true;
+
+                        if(entity.sensor)
+                            entity.sensor.enabled = false;
 
                         mState = State.Death;
                     }
@@ -184,18 +190,11 @@ namespace Renegadeware.LL_LS1A1 {
                             entity.angularVelocity = 0f;
                             entity.stats.energyLocked = true;
 
+                            if(entity.sensor)
+                                entity.sensor.enabled = false;
+
                             mState = State.Divide;
                         }
-                    }
-                    else if(mEndobioticHost != null) { //absorb energy from host
-                        if(!mEndobioticHost.isReleased && mEndobioticHost.stats.energy > 0f) {
-                            var energyAmt = entity.stats.energyConsumeRate * Time.deltaTime;
-
-                            mEndobioticHost.stats.energy -= energyAmt;
-                            entity.stats.energy += energyAmt;
-                        }
-                        else //detach from host
-                            EndobioticDetach();
                     }
                     else if(mStickies != null) {
                         if(!entity.physicsLocked) {
@@ -268,6 +267,17 @@ namespace Renegadeware.LL_LS1A1 {
                         }
                         else
                             mStickies.Clear();
+                    }
+
+                    if(mEndobioticHost != null) { //absorb energy from host
+                        if(!mEndobioticHost.isReleased && !mEndobioticHost.stats.isLifeExpired && !mEndobioticHost.stats.energyLocked && mEndobioticHost.stats.energy > 0f) {
+                            var energyAmt = entity.stats.energyConsumeRate * Time.deltaTime;
+
+                            mEndobioticHost.stats.energy -= energyAmt;
+                            entity.stats.energy += energyAmt;
+                        }
+                        else //detach from host
+                            EndobioticDetach();
                     }
 
                     //check if we are toxic, and kamikazi on contact
