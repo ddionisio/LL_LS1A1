@@ -25,7 +25,7 @@ MonoBehaviour:
     velocityReceiveScale: 0.85
     energyCapacity: 16
     energyConsumeRate: 0
-    lifespan: 40
+    lifespan: 60
     _hazardResistances: []
     _energySources:
     - {fileID: 11400000, guid: 55f7967882e192f4eaa634fff276aa17, type: 2}
@@ -37,5 +37,6 @@ MonoBehaviour:
   _gamePrefab: {fileID: 0}
   componentEssentials: []
   componentGroups: []
+  bodyColor: {r: 1, g: 1, b: 1, a: 1}
   splitMode: 0
   deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

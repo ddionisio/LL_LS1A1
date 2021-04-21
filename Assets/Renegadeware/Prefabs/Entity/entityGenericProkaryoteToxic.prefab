@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 7380308056833433566}
   - component: {fileID: 7380308056833433564}
   - component: {fileID: 7380308056833431585}
-  - component: {fileID: 9087545348296139477}
+  - component: {fileID: 5141780918472601050}
+  - component: {fileID: 4698648291289735330}
   m_Layer: 0
   m_Name: entityGenericProkaryoteToxic
   m_TagString: Organism
@@ -29,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7380308056833431587}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.4, y: -2.74, z: 0}
-  m_LocalScale: {x: 0.075, y: 0.075, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -59,15 +60,15 @@ MonoBehaviour:
     _hazardResistances: []
     _energySources:
     - {fileID: 11400000, guid: 55f7967882e192f4eaa634fff276aa17, type: 2}
-    flags: 0
+    flags: 48
     danger: 0
     toxic: 20
     seekMassMin: 0
   _bodyDisplay: {fileID: 7380308056833433566}
   _sensor: {fileID: 0}
-  _bodyCollider: {fileID: 9087545348296139477}
-  _size: {x: 0.29999998, y: 0.29999998}
-  _animator: {fileID: 0}
+  _bodyCollider: {fileID: 5141780918472601050}
+  _size: {x: 0.22, y: 0.3}
+  _animator: {fileID: 4698648291289735330}
   _comps:
   - {fileID: 11400000, guid: a271b05d820499b48b4402581c251661, type: 2}
   - {fileID: 11400000, guid: 7f65702d440ef9f4a8d0bb7b340d03fc, type: 2}
@@ -141,20 +142,19 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1174144582593101571, guid: 49d782ef45be5004b9edb429ea0994ce,
-    type: 3}
-  m_Color: {r: 0.5617611, g: 0.18039215, b: 0.8117647, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 8a09017b824008547a7cad0b57d49385, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 4, y: 6.5}
+  m_Size: {x: 0.31343284, y: 0.3880597}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &9087545348296139477
-CircleCollider2D:
+--- !u!70 &5141780918472601050
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -167,5 +167,54 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 1.9999999
+  m_Size: {x: 0.22, y: 0.3}
+  m_Direction: 0
+--- !u!114 &4698648291289735330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7380308056833431587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 189a50e0ddb1421498ef25dcd885c95b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  takeData: []
+  _defaultTakeName: 
+  _meta: {fileID: 11400000, guid: be53d5689be376146964e3703dad645c, type: 2}
+  sequenceLoadAll: 1
+  sequenceKillWhenDone: 0
+  playOnEnable: 0
+  isGlobal: 0
+  onDisableAction: 3
+  updateType: 0
+  updateTimeIndependent: 0
+  serializeData:
+    _audioTracks: []
+    _audioKeys: []
+    _cameraSwitcherTracks: []
+    _cameraSwitcherKeys: []
+    _eventTracks: []
+    _eventKeys: []
+    _goSetActiveTracks: []
+    _goSetActiveKeys: []
+    _materialTracks: []
+    _materialKeys: []
+    _orientationTracks: []
+    _orientationKeys: []
+    _propertyTracks: []
+    _propertyKeys: []
+    _rotationEulerTracks: []
+    _rotationEulerKeys: []
+    _rotationTracks: []
+    _rotationKeys: []
+    _translationTracks: []
+    _translationKeys: []
+    _unityAnimationTracks: []
+    _unityAnimationKeys: []
+    _scaleTracks: []
+    _scaleKeys: []
+    _trackLookups: []
+    _takeTrackCounts: 

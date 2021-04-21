@@ -96,6 +96,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 4f7272a5223417248a5c317bec7cf2cb, type: 3}
   - {fileID: 21300000, guid: a132a3b5f13a75747aae81eb549e7633, type: 3}
   - {fileID: 21300000, guid: e106d9b5b0d2b3a4ea68d2fdfa58dc3c, type: 3}
+  - {fileID: 21300000, guid: d78102c587a19f940810309e51418c4a, type: 3}
   - {fileID: 21300000, guid: 9be62fe5c32a1eb469191e3d9f181452, type: 3}
   - {fileID: 21300000, guid: 4a9151466de46684b88d90a5477b5646, type: 3}
   - {fileID: 21300000, guid: 39c3e746a905c374ab66507f0c7a5fc2, type: 3}
@@ -138,7 +139,9 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 00060bfa80081ba489ad4cbb7a88fb20, type: 3}
   - {fileID: 21300000, guid: bddb662b911e1c243ae530e436e0fe1b, type: 3}
   - {fileID: 21300000, guid: 1781cf2bbec743644951b0f2e31009b3, type: 3}
+  - {fileID: 21300000, guid: 8a09017b824008547a7cad0b57d49385, type: 3}
   - {fileID: 21300000, guid: 0770587b56d1e5e419099777d9ed4742, type: 3}
+  - {fileID: 21300000, guid: c53e8bcb400396847b6fd1487214d16e, type: 3}
   - {fileID: 21300000, guid: e06c0edbf517e6c429f36378a8af3c9b, type: 3}
   - {fileID: 21300000, guid: 6e46d65c795b56344b389f1886fb3982, type: 3}
   - {fileID: 21300000, guid: 3b14576c4ee59af4b857b321e5f0f6b8, type: 3}
@@ -216,6 +219,7 @@ SpriteAtlas:
   - organelleMitochondria
   - organBlobs01
   - protozoaBodySucker
+  - protozoaBodyGeneric
   - protozoaSpikeEdit
   - energySulfur
   - bacillusMethanogen
@@ -258,7 +262,9 @@ SpriteAtlas:
   - coccobacillusEdit
   - cycleArrow
   - organelleGolgiApparatus
+  - prokaryoteToxic
   - organBlobs05
+  - energyGlucoseNonGlow
   - coccusOrganotroph
   - devicerMouthClose
   - grabMacrophage

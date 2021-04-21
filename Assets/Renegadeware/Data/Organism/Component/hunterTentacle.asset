@@ -32,7 +32,7 @@ MonoBehaviour:
     danger: 0
     toxic: 0
     seekMassMin: 0.1
-  tentacleTemplate: {fileID: 3494708300621779489, guid: c9ae841029e20e647af3a67b6505d8f5,
+  tentacleTemplate: {fileID: 8124840934343364438, guid: fc50b73a492a39844ab12e058604e280,
     type: 3}
   tentacleCount: 4
   tentacleTractDelay: 0.3
