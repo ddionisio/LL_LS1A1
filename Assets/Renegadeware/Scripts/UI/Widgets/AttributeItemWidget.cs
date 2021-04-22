@@ -10,7 +10,13 @@ namespace Renegadeware.LL_LS1A1 {
         public TMP_Text textLabel;
 
         public void Setup(AttributeInfo info) {
-            icon.sprite = info.icon;
+            if(info.icon) {
+                icon.gameObject.SetActive(true);
+                icon.sprite = info.icon;
+            }
+            else
+                icon.gameObject.SetActive(false);
+
             textLabel.text = M8.Localize.Get(info.nameRef);
         }
     }

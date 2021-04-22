@@ -37,6 +37,7 @@ namespace Renegadeware.LL_LS1A1 {
                 if(mEnergySource.poolData)
                     mEnergySource.poolData.despawnCallback -= OnEnergyDespawn;
 
+                mEnergySource.Release();
                 mEnergySource = null;
             }
         }

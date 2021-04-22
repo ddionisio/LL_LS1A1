@@ -19,23 +19,44 @@ MonoBehaviour:
   duration: 90
   spawnIsRandomDir: 1
   environments:
-  - nameRef: test2
-    descRef: 
-    attributes: []
+  - nameRef: stage_1_1_title
+    descRef: stage_1_1_desc
+    attributes:
+    - icon: {fileID: 21300000, guid: d3684a0f4a569ca4a8a9de87ad463006, type: 3}
+      categoryRef: attributeCategoryHazards
+      nameRef: attributeHazardExtremeHighTemperature
+    - icon: {fileID: 21300000, guid: 4a9151466de46684b88d90a5477b5646, type: 3}
+      categoryRef: attributeCategoryEnergy
+      nameRef: energySulfur
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50
     capacity: 120
-  - nameRef: test2
-    descRef: 
-    attributes: []
+  - nameRef: stage_1_2_title
+    descRef: stage_1_2_desc
+    attributes:
+    - icon: {fileID: 21300000, guid: fb722df9380ee5240aa3ef4eabbb077e, type: 3}
+      categoryRef: attributeCategoryEnergy
+      nameRef: energyH2
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50
     capacity: 120
-  - nameRef: test2
-    descRef: 
-    attributes: []
+  - nameRef: stage_1_3_title
+    descRef: stage_1_3_desc
+    attributes:
+    - icon: {fileID: 21300000, guid: b7e4b8354e5351b428261a327991404b, type: 3}
+      categoryRef: attributeCategoryHazards
+      nameRef: attributeHazardHighSalinity
+    - icon: {fileID: 21300000, guid: a1dc6693903e6b74e97a889414d34599, type: 3}
+      categoryRef: attributeCategoryHazards
+      nameRef: attributeHazardUVRadiation
+    - icon: {fileID: 21300000, guid: 10c97fd8102aef1448d7958fe4392b18, type: 3}
+      categoryRef: attributeCategoryEnergy
+      nameRef: energyAminoAcid
+    - icon: {fileID: 21300000, guid: ea864613cadea5e4d99fadc3d22adde5, type: 3}
+      categoryRef: attributeCategoryEnergy
+      nameRef: energySunlight
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50

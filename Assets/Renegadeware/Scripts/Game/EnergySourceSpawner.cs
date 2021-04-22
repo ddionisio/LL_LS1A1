@@ -71,6 +71,9 @@ namespace Renegadeware.LL_LS1A1 {
         void OnDisable() {
             if(signalListenSpawnLock)
                 signalListenSpawnLock.callback -= OnSignalSpawnLock;
+
+            if(GameData.isInstantiated)
+                GameData.instance.signalEnvironmentChanged.callback -= OnSignalEnvironmentChange;
         }
 
         void OnEnable() {
@@ -78,17 +81,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(mSpawnLocked) {
                 //completely clear out energies
-                if(mEnergyActives != null) {
-                    for(int i = mEnergyActives.Count - 1; i >= 0; i--) {
-                        var energySrc = mEnergyActives[i];
-                        if(energySrc)
-                            energySrc.Release();
-                    }
-
-                    mEnergyActives.Clear();
-                }
-
-                mState = State.None;
+                ClearAll();
             }
             else if(mState == State.None)
                 SpawnStart();
@@ -96,6 +89,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(signalListenSpawnLock)
                 signalListenSpawnLock.callback += OnSignalSpawnLock;
+
+            GameData.instance.signalEnvironmentChanged.callback += OnSignalEnvironmentChange;
         }
 
         void Awake() {
@@ -148,6 +143,10 @@ namespace Renegadeware.LL_LS1A1 {
 
         void OnSignalSpawnLock(bool aLock) {
             spawnLocked = aLock;
+        }
+
+        void OnSignalEnvironmentChange(int ind) {
+            ClearAll();
         }
 
         private void SpawnStart() {
@@ -223,6 +222,23 @@ namespace Renegadeware.LL_LS1A1 {
             mEnergyActives.Add(energySrc);
 
             energySrc.poolData.despawnCallback += OnDespawn;
+        }
+
+        private void ClearAll() {
+            if(mEnergyActives != null) {
+                for(int i = mEnergyActives.Count - 1; i >= 0; i--) {
+                    var energySrc = mEnergyActives[i];
+                    if(energySrc) {
+                        if(energySrc.poolData)
+                            energySrc.poolData.despawnCallback -= OnDespawn;
+                        energySrc.Release();
+                    }
+                }
+
+                mEnergyActives.Clear();
+            }
+
+            mState = State.None;
         }
     }
 }

@@ -74,24 +74,16 @@ namespace Renegadeware.LL_LS1A1 {
         void OnDisable() {
             if(signalListenSpawnLock)
                 signalListenSpawnLock.callback -= OnSignalSpawnLock;
+
+            if(GameData.isInstantiated)
+                GameData.instance.signalEnvironmentChanged.callback -= OnSignalEnvironmentChange;
         }
 
         void OnEnable() {
             mSpawnLocked = spawnDefaultLocked;
 
             if(mSpawnLocked) {
-                //completely clear out energies
-                if(mEntityActives != null) {
-                    for(int i = mEntityActives.Count - 1; i >= 0; i--) {
-                        var ent = mEntityActives[i];
-                        if(ent)
-                            ent.Release();
-                    }
-
-                    mEntityActives.Clear();
-                }
-
-                mState = State.None;
+                ClearAll();
             }
             else if(mState == State.None)
                 SpawnStart();
@@ -99,6 +91,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(signalListenSpawnLock)
                 signalListenSpawnLock.callback += OnSignalSpawnLock;
+
+            GameData.instance.signalEnvironmentChanged.callback += OnSignalEnvironmentChange;
         }
 
         void Awake() {
@@ -155,6 +149,10 @@ namespace Renegadeware.LL_LS1A1 {
 
         void OnSignalSpawnLock(bool aLock) {
             spawnLocked = aLock;
+        }
+
+        void OnSignalEnvironmentChange(int ind) {
+            ClearAll();
         }
 
         private void SpawnStart() {
@@ -225,6 +223,23 @@ namespace Renegadeware.LL_LS1A1 {
             ent.poolControl.despawnCallback += OnDespawn;
 
             mEntityActives.Add(ent);
+        }
+
+        private void ClearAll() {
+            if(mEntityActives != null) {
+                for(int i = mEntityActives.Count - 1; i >= 0; i--) {
+                    var ent = mEntityActives[i];
+                    if(ent) {
+                        if(ent.poolControl)
+                            ent.poolControl.despawnCallback -= OnDespawn;
+                        ent.Release();
+                    }
+                }
+
+                mEntityActives.Clear();
+            }
+
+            mState = State.None;
         }
     }
 }

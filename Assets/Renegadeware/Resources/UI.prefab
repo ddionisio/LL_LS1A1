@@ -535,7 +535,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1906903304}
-        m_MethodName: EnvironmentPrev
+        m_MethodName: EnvironmentNext
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4998,7 +4998,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 16}
-  m_SizeDelta: {x: 450, y: 90}
+  m_SizeDelta: {x: 500, y: 110}
   m_Pivot: {x: 0.5, y: 0.00000011920929}
 --- !u!1 &714583066853961393
 GameObject:
@@ -7538,7 +7538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.011764707, g: 0.18039216, b: 0.25882354, a: 0.7019608}
+  m_Color: {r: 0.011764707, g: 0.18039216, b: 0.25882354, a: 0.8509804}
   m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -9759,7 +9759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.011764707, g: 0.18039216, b: 0.25882354, a: 0.7019608}
+  m_Color: {r: 0.011764707, g: 0.18039216, b: 0.25882354, a: 0.8509804}
   m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -14616,7 +14616,9 @@ MonoBehaviour:
 
     1
 
-    2'
+    2
+
+    3'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ecf585c4696448448a31fa025e27a7e1, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 1b6671b4703968640b07f4681149a967, type: 2}
@@ -14643,7 +14645,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 17.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -15484,7 +15486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.011764707, g: 0.18039216, b: 0.25882354, a: 0.7019608}
+  m_Color: {r: 0.011764707, g: 0.18039216, b: 0.25882354, a: 0.8509804}
   m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:

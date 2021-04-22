@@ -389,7 +389,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 11970549}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -636,7 +636,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 23972265}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1570,7 +1570,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 54531887}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1670,32 +1670,32 @@ PolygonCollider2D:
     m_Paths:
     - - {x: -0.75, y: -0.75}
       - {x: -0.75, y: 14.25}
-      - {x: 1.0151849, y: 14.260124}
-      - {x: 1.4302405, y: 13.330297}
-      - {x: 1.76776, y: 12.765629}
-      - {x: 2.933108, y: 12.701839}
-      - {x: 4.763217, y: 12.847313}
-      - {x: 5.997505, y: 12.02938}
-      - {x: 5.3758054, y: 9.952535}
-      - {x: 3.6745887, y: 8.255175}
-      - {x: 3.1530015, y: 6.9493084}
-      - {x: 4.525245, y: 6.204313}
-      - {x: 6.052284, y: 6.4509573}
-      - {x: 7.592573, y: 6.2163563}
-      - {x: 8.277425, y: 5.045977}
-      - {x: 8.406128, y: 3.7812896}
-      - {x: 9.437267, y: 2.9315295}
-      - {x: 10.939757, y: 3.0299132}
-      - {x: 12.525115, y: 3.5794353}
-      - {x: 14.129568, y: 3.906575}
-      - {x: 15.634616, y: 3.6717598}
-      - {x: 17.207466, y: 3.2461176}
-      - {x: 18.749214, y: 3.0182333}
-      - {x: 20.150196, y: 3.350099}
-      - {x: 21.167053, y: 4.015949}
-      - {x: 22.246048, y: 4.5178175}
-      - {x: 23.94247, y: 4.5192833}
-      - {x: 25.543957, y: 4.212777}
+      - {x: 1.0145609, y: 14.259707}
+      - {x: 1.4295725, y: 13.329956}
+      - {x: 1.7673726, y: 12.764986}
+      - {x: 2.9331167, y: 12.701088}
+      - {x: 4.76303, y: 12.846588}
+      - {x: 5.9968004, y: 12.029125}
+      - {x: 5.375162, y: 9.95292}
+      - {x: 3.673962, y: 8.255587}
+      - {x: 3.152296, y: 6.9490533}
+      - {x: 4.5251184, y: 6.2035737}
+      - {x: 6.0522876, y: 6.4502077}
+      - {x: 7.5921516, y: 6.2157364}
+      - {x: 8.276712, y: 5.045745}
+      - {x: 8.405468, y: 3.7809353}
+      - {x: 9.437037, y: 2.9308157}
+      - {x: 10.939905, y: 3.029178}
+      - {x: 12.525313, y: 3.5787122}
+      - {x: 14.129586, y: 3.9058247}
+      - {x: 15.6344595, y: 3.6710262}
+      - {x: 17.207314, y: 3.2453835}
+      - {x: 18.749249, y: 3.0174837}
+      - {x: 20.150494, y: 3.34941}
+      - {x: 21.16742, y: 4.015293}
+      - {x: 22.246212, y: 4.517085}
+      - {x: 23.942402, y: 4.518536}
+      - {x: 25.543787, y: 4.2120466}
       - {x: 26.25, y: 4}
       - {x: 26.25, y: -0.75}
       - {x: 19.249996, y: -0.7499999}
@@ -2029,7 +2029,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 76461556}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -2602,7 +2602,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 96660768}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2956,7 +2956,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 122252092}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -3855,7 +3855,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 175759744}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4159,7 +4159,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 189688543}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4394,11 +4394,11 @@ MonoBehaviour:
   gameRootGO: {fileID: 1344762203}
   transition: {fileID: 830167073}
   debugLevel: {fileID: 0}
-  debugPlay: 1
-  debugPlayEnvIndex: 2
+  debugPlay: 0
+  debugPlayEnvIndex: 0
   debugPlayOrganism: {fileID: 11400000, guid: 92edcc054f0b4cc4791df045d0e5546b, type: 2}
   debugPlaySpawnCountOverride: 0
-  debugPlayTimeUnlimited: 1
+  debugPlayTimeUnlimited: 0
 --- !u!1 &207903989
 GameObject:
   m_ObjectHideFlags: 0
@@ -4623,7 +4623,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219917563}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -5067,7 +5067,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 238309285}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -5214,36 +5214,36 @@ PolygonCollider2D:
     - - {x: -0.75, y: -14.25}
       - {x: -0.75, y: 0.25}
       - {x: 26.25, y: 0.25}
-      - {x: 26.248466, y: -3.2681856}
-      - {x: 25.64223, y: -3.2169917}
-      - {x: 24.17742, y: -2.9683092}
-      - {x: 22.37842, y: -2.37848}
-      - {x: 21.457626, y: -1.8945147}
-      - {x: 20.33362, y: -1.5391326}
-      - {x: 18.84599, y: -1.7704256}
-      - {x: 18.207922, y: -3.065605}
-      - {x: 17.94496, y: -5.1232915}
-      - {x: 17.17665, y: -6.491984}
-      - {x: 16.001371, y: -6.984691}
-      - {x: 14.789047, y: -7.2472405}
-      - {x: 13.204652, y: -7.000283}
-      - {x: 12.231278, y: -5.4003863}
-      - {x: 12.290535, y: -2.9588213}
-      - {x: 11.544783, y: -1.1889966}
-      - {x: 9.131335, y: -0.80356514}
-      - {x: 5.7702765, y: -1.1246328}
-      - {x: 2.8678837, y: -1.9969774}
-      - {x: 2.379709, y: -3.1542587}
-      - {x: 2.4972434, y: -4.7220025}
-      - {x: 1.769237, y: -6.1167235}
-      - {x: 1.9205626, y: -7.4092345}
-      - {x: 3.1930804, y: -9.140559}
-      - {x: 3.259072, y: -10.320771}
-      - {x: 1.7220529, y: -11.747799}
-      - {x: 1.1220304, y: -13.435456}
-      - {x: 1, y: -14.2682495}
-      - {x: -0.29629633, y: -14.2682495}
-      - {x: -0.75, y: -14.2682495}
+      - {x: 26.248528, y: -3.267438}
+      - {x: 25.642353, y: -3.2162526}
+      - {x: 24.177597, y: -2.967581}
+      - {x: 22.378714, y: -2.3777895}
+      - {x: 21.457914, y: -1.8938223}
+      - {x: 20.333677, y: -1.5383847}
+      - {x: 18.845545, y: -1.7698212}
+      - {x: 18.207205, y: -3.0653884}
+      - {x: 17.944248, y: -5.123056}
+      - {x: 17.176151, y: -6.491424}
+      - {x: 16.001146, y: -6.983976}
+      - {x: 14.789024, y: -7.246491}
+      - {x: 13.205069, y: -6.9996595}
+      - {x: 12.232003, y: -5.4001927}
+      - {x: 12.291271, y: -2.9586816}
+      - {x: 11.545245, y: -1.1884065}
+      - {x: 9.131359, y: -0.8028155}
+      - {x: 5.770132, y: -1.123897}
+      - {x: 2.8673873, y: -1.9964151}
+      - {x: 2.378961, y: -3.154315}
+      - {x: 2.496509, y: -4.7218513}
+      - {x: 1.7684994, y: -6.1165876}
+      - {x: 1.9198647, y: -7.4095097}
+      - {x: 3.1923747, y: -9.140815}
+      - {x: 3.2583764, y: -10.320492}
+      - {x: 1.7214266, y: -11.747387}
+      - {x: 1.1213009, y: -13.435282}
+      - {x: 1, y: -14.2675}
+      - {x: -0.29629633, y: -14.2675}
+      - {x: -0.75, y: -14.2675}
       - {x: -0.75, y: -14.25}
 --- !u!114 &245604271
 MonoBehaviour:
@@ -6179,7 +6179,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 262645016}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -7091,7 +7091,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337486477}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -8628,7 +8628,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 471632354}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9191,7 +9191,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 499557741}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9664,7 +9664,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 517507933}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11151,7 +11151,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656714206}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -12124,7 +12124,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 704993813}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -17758,7 +17758,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 731827423}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -17913,7 +17913,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 732030939}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -18076,7 +18076,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 733076138}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -19916,34 +19916,34 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -5.195109, y: -1.787376}
-      - {x: -7.8843174, y: -0.99541867}
-      - {x: -9.314821, y: 0.55562955}
-      - {x: -9.394045, y: 2.7432017}
-      - {x: -7.944558, y: 4.2880735}
-      - {x: -5.5066175, y: 4.339183}
-      - {x: -3.1295228, y: 3.097104}
-      - {x: -0.55787385, y: 2.7284787}
-      - {x: 2.2830732, y: 3.827519}
-      - {x: 4.8381658, y: 3.5280323}
-      - {x: 7.0561004, y: 3.150876}
-      - {x: 9.384631, y: 4.5646043}
-      - {x: 10.918278, y: 6.690806}
-      - {x: 14.111676, y: 7.452681}
-      - {x: 18.79468, y: 6.3421264}
-      - {x: 19.731693, y: 3.6617103}
-      - {x: 17.84364, y: 2.710854}
-      - {x: 15.411384, y: 2.828702}
-      - {x: 13.129418, y: 3.299408}
-      - {x: 11.709011, y: 2.3419282}
-      - {x: 11.542511, y: -0.16112325}
-      - {x: 9.709023, y: -1.73327}
-      - {x: 6.9856734, y: -1.2460177}
-      - {x: 5.264808, y: -0.07543015}
-      - {x: 2.9409204, y: 0.51979554}
-      - {x: 0.14971529, y: -0.1689547}
-      - {x: -2.7233968, y: -1.3119208}
-      - {x: -5.195109, y: -1.787376}
+    - - {x: -5.195026, y: -1.7866307}
+      - {x: -7.883766, y: -0.9949099}
+      - {x: -9.314128, y: 0.5559154}
+      - {x: -9.393342, y: 2.7429385}
+      - {x: -7.9442534, y: 4.287388}
+      - {x: -5.506789, y: 4.338453}
+      - {x: -3.129753, y: 3.0963902}
+      - {x: -0.55778897, y: 2.7277336}
+      - {x: 2.2831676, y: 3.8267748}
+      - {x: 4.8380594, y: 3.5272896}
+      - {x: 7.056241, y: 3.1501396}
+      - {x: 9.385139, y: 4.564053}
+      - {x: 10.918696, y: 6.690183}
+      - {x: 14.111677, y: 7.4519305}
+      - {x: 18.794178, y: 6.341569}
+      - {x: 19.730997, y: 3.6619916}
+      - {x: 17.843485, y: 2.711588}
+      - {x: 15.411477, y: 2.8294463}
+      - {x: 13.129272, y: 3.300144}
+      - {x: 11.708361, y: 2.3423023}
+      - {x: 11.541841, y: -0.16078746}
+      - {x: 9.708825, y: -1.7325463}
+      - {x: 6.9859567, y: -1.2453233}
+      - {x: 5.2651167, y: -0.07474655}
+      - {x: 2.9409237, y: 0.52054554}
+      - {x: 0.14948636, y: -0.16824052}
+      - {x: -2.7236075, y: -1.311201}
+      - {x: -5.195026, y: -1.7866307}
 --- !u!114 &873745553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20214,30 +20214,30 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: -24.5, y: -0.75}
-      - {x: -24.499252, y: 4.0182347}
-      - {x: -23.892046, y: 3.993264}
-      - {x: -22.487856, y: 4.051119}
-      - {x: -20.913837, y: 4.3915467}
-      - {x: -19.465252, y: 4.173881}
-      - {x: -17.96323, y: 3.2869902}
-      - {x: -16.455065, y: 2.9656305}
-      - {x: -15.377279, y: 3.9901128}
-      - {x: -15.356549, y: 5.43834}
-      - {x: -14.35535, y: 6.5255256}
-      - {x: -11.923558, y: 6.224425}
-      - {x: -10.093945, y: 4.9283156}
-      - {x: -8.464667, y: 4.543086}
-      - {x: -7.5152674, y: 6.267772}
-      - {x: -8.828611, y: 8.506682}
-      - {x: -9.449686, y: 10.673967}
-      - {x: -8.5707035, y: 11.044509}
-      - {x: -7.2278404, y: 11.268242}
-      - {x: -6.4526453, y: 12.29084}
-      - {x: -5.4797683, y: 12.502712}
-      - {x: -3.7077827, y: 11.821912}
-      - {x: -2.5781221, y: 11.566703}
-      - {x: -1.9170579, y: 12.749876}
-      - {x: -1.7519389, y: 13.79804}
+      - {x: -24.499283, y: 4.0174856}
+      - {x: -23.892015, y: 3.9925144}
+      - {x: -22.48776, y: 4.050375}
+      - {x: -20.913815, y: 4.390797}
+      - {x: -19.465502, y: 4.1731744}
+      - {x: -17.963501, y: 3.2862911}
+      - {x: -16.45486, y: 2.964909}
+      - {x: -15.376592, y: 3.989812}
+      - {x: -15.355852, y: 5.4380627}
+      - {x: -14.355091, y: 6.5248213}
+      - {x: -11.923829, y: 6.2237263}
+      - {x: -10.094252, y: 4.9276314}
+      - {x: -8.464363, y: 4.542401}
+      - {x: -7.5145173, y: 6.267782}
+      - {x: -8.827922, y: 8.506979}
+      - {x: -9.44901, y: 10.673643}
+      - {x: -8.570496, y: 11.043788}
+      - {x: -7.2274523, y: 11.2676}
+      - {x: -6.452242, y: 12.290207}
+      - {x: -5.4798255, y: 12.501965}
+      - {x: -3.7079458, y: 11.82118}
+      - {x: -2.5778165, y: 11.566018}
+      - {x: -1.9163493, y: 12.749632}
+      - {x: -1.7511903, y: 13.797996}
       - {x: -1.75, y: 14.25}
       - {x: 0.25, y: 14.25}
       - {x: 0.25, y: -0.75}
@@ -21075,7 +21075,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 931653421}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -21764,7 +21764,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 976714412}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -22072,7 +22072,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 988888023}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -22226,7 +22226,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 991655392}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -22580,7 +22580,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 994476423}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -22915,7 +22915,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1002162441}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -26192,7 +26192,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289497926}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -26389,7 +26389,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289985375}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -26888,7 +26888,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1302269106}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -27365,7 +27365,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1314950910}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -28137,7 +28137,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340578298}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -28691,7 +28691,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1379640029}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -29018,7 +29018,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1386484782}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -29217,7 +29217,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1400438417}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -29739,7 +29739,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1447711484}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -30190,7 +30190,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1465214026}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -30509,7 +30509,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1527275402}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -30856,7 +30856,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1530646390}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -33500,40 +33500,40 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -1.7682321, y: -14.249191}
-      - {x: -1.7430756, y: -13.683061}
-      - {x: -1.7722794, y: -12.490959}
-      - {x: -2.0106359, y: -11.440482}
-      - {x: -2.8832412, y: -10.775522}
-      - {x: -3.971516, y: -10.31114}
-      - {x: -4.5869617, y: -9.342783}
-      - {x: -4.002, y: -7.9947023}
-      - {x: -2.8708105, y: -6.7008696}
-      - {x: -2.5051298, y: -5.606496}
-      - {x: -2.8049412, y: -4.5077252}
-      - {x: -3.0585403, y: -3.3705304}
-      - {x: -3.6477294, y: -2.58188}
-      - {x: -5.6395993, y: -1.758989}
-      - {x: -7.8519473, y: -1.6006571}
-      - {x: -9.5519, y: -2.8530226}
-      - {x: -10.202151, y: -3.660236}
-      - {x: -11.19248, y: -4.2918596}
-      - {x: -12.472017, y: -4.6198606}
-      - {x: -14.375019, y: -3.8613436}
-      - {x: -16.026669, y: -2.2205284}
-      - {x: -18.06057, y: -1.2793323}
-      - {x: -19.612991, y: -1.3446742}
-      - {x: -20.560905, y: -1.6667204}
-      - {x: -21.491402, y: -2.266098}
-      - {x: -22.604927, y: -2.7486525}
-      - {x: -23.884197, y: -3.1194887}
+    - - {x: -1.7674828, y: -14.249225}
+      - {x: -1.7423258, y: -13.683042}
+      - {x: -1.7715352, y: -12.490868}
+      - {x: -2.010005, y: -11.440077}
+      - {x: -2.8828635, y: -10.774874}
+      - {x: -3.971031, y: -10.310568}
+      - {x: -4.586214, y: -9.342726}
+      - {x: -4.001366, y: -7.995103}
+      - {x: -2.8701596, y: -6.701242}
+      - {x: -2.5043802, y: -5.606517}
+      - {x: -2.804213, y: -4.5075455}
+      - {x: -3.0578587, y: -3.3702176}
+      - {x: -3.6472692, y: -2.5812879}
+      - {x: -5.639427, y: -1.7582589}
+      - {x: -7.852156, y: -1.5999367}
+      - {x: -9.552419, y: -2.852481}
+      - {x: -10.202653, y: -3.6596773}
+      - {x: -11.192778, y: -4.291171}
+      - {x: -12.47197, y: -4.619112}
+      - {x: -14.374608, y: -3.8607166}
+      - {x: -16.02624, y: -2.2199128}
+      - {x: -18.060425, y: -1.2785966}
+      - {x: -19.613129, y: -1.3439369}
+      - {x: -20.561232, y: -1.666045}
+      - {x: -21.491756, y: -2.2654362}
+      - {x: -22.605183, y: -2.7479467}
+      - {x: -23.88439, y: -3.118764}
       - {x: -24.5, y: -3.25}
       - {x: -24.5, y: 0.25}
       - {x: 0.25, y: 0.25}
-      - {x: 0.24999999, y: -14.2682495}
-      - {x: -1.2314816, y: -14.2682495}
-      - {x: -1.75, y: -14.2682495}
-      - {x: -1.7682321, y: -14.249191}
+      - {x: 0.24999999, y: -14.2675}
+      - {x: -1.2314816, y: -14.2675}
+      - {x: -1.75, y: -14.2675}
+      - {x: -1.7674828, y: -14.249225}
 --- !u!114 &1709093305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33945,7 +33945,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1716017222}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -35022,7 +35022,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797541929}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -35659,7 +35659,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824641578}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -36023,7 +36023,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1831805354}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -36178,7 +36178,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1838185855}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -36438,7 +36438,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1862702863}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -37477,7 +37477,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1946806300}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -37649,7 +37649,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1947630721}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 0
@@ -37898,7 +37898,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1974956806}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -40392,7 +40392,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2079340256}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -41089,7 +41089,7 @@ PrefabInstance:
     - target: {fileID: 5224805621127003209, guid: f3fe9081da8332c4d831031c717cb7d7,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5224805621127003210, guid: f3fe9081da8332c4d831031c717cb7d7,
         type: 3}
@@ -41340,7 +41340,7 @@ SpriteShapeRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2123771109}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

@@ -54,7 +54,8 @@ namespace Renegadeware.LL_LS1A1 {
 
                 if(itm) {
                     itm.SetTitle(M8.Localize.Get(categoryRef));
-                    itm.gameObject.SetActive(true);
+                    itm.transform.SetAsLastSibling();
+                    itm.gameObject.SetActive(true);                    
 
                     mItemActives.Add(categoryRef, itm);
                 }

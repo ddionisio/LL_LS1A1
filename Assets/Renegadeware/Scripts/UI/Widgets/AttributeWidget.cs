@@ -34,6 +34,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(newItem) {
                 newItem.Setup(info);
 
+                newItem.transform.SetAsLastSibling();
                 newItem.gameObject.SetActive(true);
 
                 mItemActive.Add(newItem);

@@ -19,23 +19,29 @@ MonoBehaviour:
   duration: 90
   spawnIsRandomDir: 1
   environments:
-  - nameRef: test1
-    descRef: 
+  - nameRef: stage_3_1_title
+    descRef: stage_3_1_desc
     attributes: []
     spawnableCount: 3
     criteriaCount: 10
     bonusCount: 10
     capacity: 60
-  - nameRef: test2
-    descRef: 
-    attributes: []
+  - nameRef: stage_3_2_title
+    descRef: stage_3_2_desc
+    attributes:
+    - icon: {fileID: 21300000, guid: 8a09017b824008547a7cad0b57d49385, type: 3}
+      categoryRef: attributeCategoryDanger
+      nameRef: attributeDangerToxic
     spawnableCount: 3
     criteriaCount: 10
     bonusCount: 10
     capacity: 60
-  - nameRef: test2
-    descRef: 
-    attributes: []
+  - nameRef: stage_3_3_title
+    descRef: stage_3_3_desc
+    attributes:
+    - icon: {fileID: 21300000, guid: 533784bd693e8dd41b346740671a343b, type: 3}
+      categoryRef: attributeCategoryDanger
+      nameRef: attributeDangerWhirlpool
     spawnableCount: 3
     criteriaCount: 10
     bonusCount: 10

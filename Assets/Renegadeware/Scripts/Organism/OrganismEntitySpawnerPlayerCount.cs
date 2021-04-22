@@ -45,19 +45,20 @@ namespace Renegadeware.LL_LS1A1 {
 
         private M8.GenericParams mSpawnParms = new M8.GenericParams();
 
+        void OnDisable() {
+            if(GameData.isInstantiated)
+                GameData.instance.signalEnvironmentChanged.callback -= OnSignalEnvironmentChange;
+        }
+
         void OnEnable() {
             if(mEntityActives != null) {
                 //clear out active spawns
-                for(int i = 0; i < mEntityActives.Count; i++) {
-                    var ent = mEntityActives[i];
-                    if(ent && !ent.isReleased)
-                        ent.Release();
-                }
-
-                mEntityActives.Clear();
+                ClearAll();
             }
 
             mState = State.Wait;
+
+            GameData.instance.signalEnvironmentChanged.callback += OnSignalEnvironmentChange;
         }
 
         void Awake() {
@@ -123,6 +124,10 @@ namespace Renegadeware.LL_LS1A1 {
             pdc.despawnCallback -= OnDespawn;
         }
 
+        void OnSignalEnvironmentChange(int ind) {
+            ClearAll();
+        }
+
         private void SpawnStart() {
             mSpawnIndex = 0;
 
@@ -185,6 +190,19 @@ namespace Renegadeware.LL_LS1A1 {
             ent.poolControl.despawnCallback += OnDespawn;
 
             mEntityActives.Add(ent);
+        }
+
+        private void ClearAll() {
+            for(int i = 0; i < mEntityActives.Count; i++) {
+                var ent = mEntityActives[i];
+                if(ent && !ent.isReleased) {
+                    if(ent.poolControl)
+                        ent.poolControl.despawnCallback -= OnDespawn;
+                    ent.Release();
+                }
+            }
+
+            mEntityActives.Clear();
         }
     }
 }

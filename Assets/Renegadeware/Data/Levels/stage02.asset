@@ -19,23 +19,50 @@ MonoBehaviour:
   duration: 90
   spawnIsRandomDir: 1
   environments:
-  - nameRef: test1
-    descRef: 
-    attributes: []
+  - nameRef: stage_2_1_title
+    descRef: stage_2_1_desc
+    attributes:
+    - icon: {fileID: 21300000, guid: 2e12d8c68a6bfc741a7ea8ecc0011a85, type: 3}
+      categoryRef: attributeCategoryHazards
+      nameRef: attributeHazardHighMethane
+    - icon: {fileID: 21300000, guid: 13497cc51eec3e741aba419492f50f80, type: 3}
+      categoryRef: attributeCategoryHazards
+      nameRef: attributeHazardLowOxygen
+    - icon: {fileID: 21300000, guid: b73091286c6e5074ba870e2bcaaa0d66, type: 3}
+      categoryRef: attributeCategoryEnergy
+      nameRef: energyMethane
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50
     capacity: 120
-  - nameRef: test2
-    descRef: 
-    attributes: []
+  - nameRef: stage_2_2_title
+    descRef: stage_2_2_desc
+    attributes:
+    - icon: {fileID: 0}
+      categoryRef: attributeCategoryDanger
+      nameRef: attributeDangerHunter
+    - icon: {fileID: 21300000, guid: 28f08aadc18390d44bc3389315bceeb4, type: 3}
+      categoryRef: attributeCategoryEnergy
+      nameRef: energyGlucose
+    - icon: {fileID: 21300000, guid: ea864613cadea5e4d99fadc3d22adde5, type: 3}
+      categoryRef: attributeCategoryEnergy
+      nameRef: energySunlight
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50
     capacity: 120
-  - nameRef: test2
-    descRef: 
-    attributes: []
+  - nameRef: stage_2_3_title
+    descRef: stage_2_3_desc
+    attributes:
+    - icon: {fileID: 0}
+      categoryRef: attributeCategoryDanger
+      nameRef: attributeDangerMacrophage
+    - icon: {fileID: 0}
+      categoryRef: attributeCategoryDanger
+      nameRef: attributeDangerNeutrophil
+    - icon: {fileID: 21300000, guid: 28f08aadc18390d44bc3389315bceeb4, type: 3}
+      categoryRef: attributeCategoryEnergy
+      nameRef: energyGlucose
     spawnableCount: 10
     criteriaCount: 50
     bonusCount: 50
