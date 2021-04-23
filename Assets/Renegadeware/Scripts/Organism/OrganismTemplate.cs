@@ -51,19 +51,7 @@ namespace Renegadeware.LL_LS1A1 {
                 //
 
                 //try to re-attach existing components that match new body
-                var newCompIds = new int[value.componentGroups.Length + 1];
-                newCompIds[0] = value.ID;
-
-                for(int i = 0; i < value.componentGroups.Length; i++) {
-                    var grp = value.componentGroups[i];
-                    var grpCompInd = grp.GetIndex(componentIDs, 1);
-                    if(grpCompInd != -1)
-                        newCompIds[i + 1] = grp.components[grpCompInd].ID;
-                    else //set as default from group
-                        newCompIds[i + 1] = grp.defaultComponentID;
-                }
-
-                componentIDs = newCompIds;
+                componentIDs = GetNewComponents(value);
 
                 //signal body change
                 GameData.instance.signalOrganismBodyChanged.Invoke();
@@ -180,19 +168,21 @@ namespace Renegadeware.LL_LS1A1 {
             return -1;
         }
 
-        public AttributeInfo[] GetAllAttributeInfos() {
-            var gameDat = GameData.instance;
+        public int[] GetNewComponents(OrganismBody bodyPreview) {
+            //try to re-attach existing components that match new body
+            var newCompIds = new int[bodyPreview.componentGroups.Length + 1];
+            newCompIds[0] = bodyPreview.ID;
 
-            var attrList = new List<AttributeInfo>();
-
-            for(int i = 0; i < componentIDs.Length; i++) {
-                var compDat = gameDat.GetOrganismComponent<OrganismComponent>(componentIDs[i]);
-                if(compDat) {
-                    attrList.AddRange(compDat.attributeInfos);
-                }
+            for(int i = 0; i < bodyPreview.componentGroups.Length; i++) {
+                var grp = bodyPreview.componentGroups[i];
+                var grpCompInd = grp.GetIndex(componentIDs, 1);
+                if(grpCompInd != -1)
+                    newCompIds[i + 1] = grp.components[grpCompInd].ID;
+                else //set as default from group
+                    newCompIds[i + 1] = grp.defaultComponentID;
             }
 
-            return attrList.ToArray();
+            return newCompIds;
         }
 
         //User Data API

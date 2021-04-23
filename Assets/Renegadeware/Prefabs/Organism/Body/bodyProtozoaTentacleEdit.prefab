@@ -62,8 +62,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 7529037879970886102}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &253866195921002453
 GameObject:
@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 271501026232974327}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &815616940115687631
 GameObject:
@@ -233,8 +233,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 5343270205348069549}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &1074425753431216135
 GameObject:
@@ -298,8 +298,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 7691051437585211748}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &1448682067440611001
 GameObject:
@@ -363,8 +363,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 6103841258664564270}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &1497807847295740197
 GameObject:
@@ -428,8 +428,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 6070332646090413503}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &1521835905529007726
 GameObject:
@@ -620,8 +620,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3876279970488022499}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &1956593547598383328
 GameObject:
@@ -685,8 +685,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 7075095013000735557}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &2328558325360992096
 GameObject:
@@ -1025,8 +1025,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 6086601410766848089}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &4454758318657475539
 GameObject:
@@ -1090,8 +1090,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3821904369694556980}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &5306397399693307319
 GameObject:
@@ -1155,8 +1155,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 2190983124260204056}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &5313344111828124775
 GameObject:
@@ -2350,8 +2350,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 365105717080146067}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &6639939501455660326
 GameObject:
@@ -2415,8 +2415,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 246478413708904359}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &7091364790375023127
 GameObject:
@@ -2526,8 +2526,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 75511028416656178}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &7563265579264654701
 GameObject:
@@ -2591,8 +2591,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 4597785039089254396}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &7820604200350861620
 GameObject:
@@ -2656,8 +2656,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 5278501185541813372}
-  rotate: {x: 0, y: 0, z: 15}
-  speed: 60
+  rotate: {x: 0, y: 0, z: 25}
+  speed: 360
   local: 1
 --- !u!1 &8006087596015252229
 GameObject:

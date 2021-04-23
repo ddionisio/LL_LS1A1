@@ -66,17 +66,21 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 293c6061f893fa046a16aaa68e13d9d9, type: 3}
   - {fileID: 21300000, guid: c0689861d99486146937f24c7ba9fb99, type: 3}
   - {fileID: 21300000, guid: 8a9ff48124b52f941a34efbdf9a1adde, type: 3}
+  - {fileID: 21300000, guid: 3821ed81270146041a91f097758a2b70, type: 3}
   - {fileID: 21300000, guid: 2c182d91a96c3c949bcbade9ea5d4ba4, type: 3}
   - {fileID: 21300000, guid: cfce0ce1b6c72e54f9981e474f39ca7c, type: 3}
+  - {fileID: 21300000, guid: 7c1cfa02fb1fd0943986ab2d2458f5c8, type: 3}
   - {fileID: 21300002, guid: bf8c0222be72dfd48a68e5cf2a7ed5c1, type: 3}
   - {fileID: 21300000, guid: bf8c0222be72dfd48a68e5cf2a7ed5c1, type: 3}
   - {fileID: 21300000, guid: b8441e224b1ea72479379b0a1a6397c2, type: 3}
   - {fileID: 21300000, guid: d9d04e22b26a68f4a8e071c901cc442e, type: 3}
+  - {fileID: 21300000, guid: efb75e22d239b2243b026209d8e6e56b, type: 3}
   - {fileID: 21300000, guid: 085a6372711b9d147864b50f4d431fbf, type: 3}
   - {fileID: 21300000, guid: 8f3876c27f96763488ad2ef9a6178dde, type: 3}
   - {fileID: 21300000, guid: 2d1c83d242c6b46499e150745062ae33, type: 3}
   - {fileID: 21300000, guid: 2123d6d2773f0ac44869af79230925ac, type: 3}
   - {fileID: 21300000, guid: 516818d2dad0a0648bfe26a1df631695, type: 3}
+  - {fileID: 21300000, guid: 647400f265950314da6ad45bcf874b2a, type: 3}
   - {fileID: 21300000, guid: 2d8e8a03a649a064c8fd3580aa520826, type: 3}
   - {fileID: 21300000, guid: a70ad413b7ea7a846afe3a1bba66630f, type: 3}
   - {fileID: 21300000, guid: ea864613cadea5e4d99fadc3d22adde5, type: 3}
@@ -90,20 +94,26 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 15ea4eb34771de842bab6998c927f75f, type: 3}
   - {fileID: 21300000, guid: e45ca4c321af2e948b92c80ba8263f62, type: 3}
   - {fileID: 21300000, guid: 9cce38e31fcea2d45961540e106b37dd, type: 3}
+  - {fileID: 21300000, guid: 761a39f37c970494692893c09089ec0a, type: 3}
   - {fileID: 21300000, guid: 9aeb0404936b760408a498687b1aec69, type: 3}
   - {fileID: 21300000, guid: 72007b44819fffc418da24a102f988cc, type: 3}
   - {fileID: 21300000, guid: d985b654a2dd4e54482f774cec3f7b9c, type: 3}
   - {fileID: 21300000, guid: 6b3687649bb90cc4094b604ef4fb3282, type: 3}
   - {fileID: 21300000, guid: e0f6eb645cc09264e88602b6141e2de4, type: 3}
+  - {fileID: 21300000, guid: 35b493743d814c646b84f0a9509408b6, type: 3}
   - {fileID: 21300000, guid: 7927f194506da9c4bbb4ddc4349b54c0, type: 3}
   - {fileID: 21300000, guid: c41b7ac4773379f42bec55818efbfab5, type: 3}
+  - {fileID: 21300000, guid: 01c0f4d49ec0b964c90055dc756397bb, type: 3}
   - {fileID: 21300000, guid: fe13cfd4dacf4d24e893575e5bc9e85a, type: 3}
   - {fileID: 21300000, guid: bed50a0554574f34f8f18bd3090464dd, type: 3}
   - {fileID: 21300000, guid: b7e4b8354e5351b428261a327991404b, type: 3}
   - {fileID: 21300000, guid: 7428624581668694ca5e5ec7e287bb0d, type: 3}
+  - {fileID: 21300000, guid: 6507d26576316fa4a95349ea44209590, type: 3}
   - {fileID: 21300000, guid: 94135075f07c3c144aec251e1d6327c0, type: 3}
+  - {fileID: 21300000, guid: 87081c85b27f2474bb3313c3a7a6e29c, type: 3}
   - {fileID: 21300000, guid: e9c8ee955c09c344aa79e9bb93b94216, type: 3}
   - {fileID: 21300000, guid: 4f7272a5223417248a5c317bec7cf2cb, type: 3}
+  - {fileID: 21300000, guid: 6486daa5316b3854c83e63158acc4e91, type: 3}
   - {fileID: 21300000, guid: a132a3b5f13a75747aae81eb549e7633, type: 3}
   - {fileID: 21300000, guid: e106d9b5b0d2b3a4ea68d2fdfa58dc3c, type: 3}
   - {fileID: 21300000, guid: d78102c587a19f940810309e51418c4a, type: 3}
@@ -116,14 +126,18 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d99d01b61ddac4f49baba53f6e8b073e, type: 3}
   - {fileID: 21300000, guid: 2e12d8c68a6bfc741a7ea8ecc0011a85, type: 3}
   - {fileID: 21300000, guid: 965b89d63c1a0c945b857715170b3840, type: 3}
+  - {fileID: 21300000, guid: 64ac1c070f5864c4e8e957da4eaf4d65, type: 3}
   - {fileID: 21300000, guid: 6d7d8a273b763684f98c4fa77c4b0f6a, type: 3}
   - {fileID: 21300000, guid: 9743233751cc7a3498c25ae853d58382, type: 3}
+  - {fileID: 21300000, guid: 6a10bf677730ae54d8e2b89807757f75, type: 3}
   - {fileID: 21300000, guid: 326ab6c73d9e81346bb6774298a0d825, type: 3}
   - {fileID: 21300000, guid: b6d4f2d777a6f994a8bc78a81f1d4cbb, type: 3}
   - {fileID: 21300000, guid: 5427e4f7e1cb9704892fb4854f1cf6a9, type: 3}
   - {fileID: 21300000, guid: ee6d65f758ea17442a638cfcdf56ca3e, type: 3}
   - {fileID: 21300000, guid: b73091286c6e5074ba870e2bcaaa0d66, type: 3}
+  - {fileID: 21300000, guid: a2ee6238091f6714eb87397ca3bed4e9, type: 3}
   - {fileID: 21300000, guid: b5f1f248fc842084cb79fa132167e30b, type: 3}
+  - {fileID: 21300000, guid: f013bb48357125049bc747870e2952fb, type: 3}
   - {fileID: 21300000, guid: 3d3c1a5877f3a68449d49e35f93982c3, type: 3}
   - {fileID: 21300000, guid: 497fb578a1a14024da476893834217c8, type: 3}
   - {fileID: 21300000, guid: 00e1ea88552ce5e4ca29438bfbe75d3c, type: 3}
@@ -151,6 +165,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: fb722df9380ee5240aa3ef4eabbb077e, type: 3}
   - {fileID: 21300000, guid: 50b7f43a9ab9c3249bd5f6e407b6a935, type: 3}
   - {fileID: 21300000, guid: 92b13f3a79ecd6846bdd8f97dbeb8ab3, type: 3}
+  - {fileID: 21300000, guid: bffe115afd7789144bdcbd507ff72933, type: 3}
   - {fileID: 21300000, guid: 7168da6aea1c4154bbc52d54856e6639, type: 3}
   - {fileID: 21300000, guid: 0ce8d67af7ba9ee4d88171caff115eec, type: 3}
   - {fileID: 21300000, guid: 307a789a1db6ebf4a893ce7f70b38f56, type: 3}
@@ -165,10 +180,12 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 0770587b56d1e5e419099777d9ed4742, type: 3}
   - {fileID: 21300000, guid: c53e8bcb400396847b6fd1487214d16e, type: 3}
   - {fileID: 21300000, guid: e06c0edbf517e6c429f36378a8af3c9b, type: 3}
+  - {fileID: 21300000, guid: 781b8debc0b4b7741bb22f7e896e042d, type: 3}
   - {fileID: 21300000, guid: 6e46d65c795b56344b389f1886fb3982, type: 3}
   - {fileID: 21300000, guid: ab65a86c88cfee040be69a0d8640c8d2, type: 3}
   - {fileID: 21300000, guid: 93846e8c669a4194c8a1160e670c6bb5, type: 3}
   - {fileID: 21300000, guid: 2ed8269cd0aa88441b9a2b9b32b2a4de, type: 3}
+  - {fileID: 21300000, guid: 71070d9cb8e6b574a8e999cb3dde2157, type: 3}
   - {fileID: 21300000, guid: 736568ac00f21c347b4d2d74c965383e, type: 3}
   - {fileID: 21300000, guid: 6e0eb2ecd4b652c4e96026948db6f67c, type: 3}
   - {fileID: 21300000, guid: 36ce24ec9ae04524289ce0e80bf270be, type: 3}
@@ -217,17 +234,21 @@ SpriteAtlas:
   - roundRectBevel_4
   - coccobacillusMethanogenScene
   - protozoaSpike
+  - blob4
   - tutorialArrow2
   - edge_shade_left_8x1
+  - iconProtozoaTentacle
   - shadeWhite_bottomLeft
   - shadeWhite
   - coccusOrganotrophEndobiotic
   - protozoaCillia02
+  - iconMotilityWaterjet
   - buttonCellEdit
   - hunterGenericBody02
   - organBulb
   - protozoaCillia01
   - iconBodyCoccobacillus
+  - iconOrganelleGolgiApparatus
   - protozoaBodyGlow
   - bacillusOrganotrophEndobiotic
   - iconSunlight
@@ -241,20 +262,26 @@ SpriteAtlas:
   - bacillusEdit
   - coccobacillusHalophile
   - protozoaBody
+  - blob3
   - coccobacillusPhotoautotroph
   - bacillusMethanotroph
   - circleGlow
   - energyLight
   - iconMotilityAmphitrichous
+  - iconOrganelleNucleus
   - coccobacillusOrganotroph
   - devicerBody
+  - iconProtozoaVacuum
   - iconPlasmids
   - coccusEdit
   - iconSaline
   - wrongX
+  - iconOrganelleER
   - coccobacillusThermophile
+  - iconOrganelleMitochondria
   - outline1x1
   - organelleMitochondria
+  - iconToxicImmune
   - organBlobs01
   - protozoaBodySucker
   - protozoaBodyGeneric
@@ -267,14 +294,18 @@ SpriteAtlas:
   - organelleEndoplasmicReticulum
   - iconMethane
   - roundRectOutline_4_1
+  - iconOrganelleVacuole
   - bacillusOrganotroph
   - iconVoice
+  - iconProtozoaContact
   - circle32x32
   - iconBodyCoccus
   - dot
   - bacillusThermophile
   - energyMethane
+  - blob5
   - tutorialHandPointDown
+  - iconMotilityCillia
   - iconAntiphagocytic
   - protozoaBodySuckerGlow
   - protozoaSuckerTentacleEdit
@@ -302,6 +333,7 @@ SpriteAtlas:
   - energyH2
   - organBlobs03
   - roundRectOutline_4_2
+  - iconHunter
   - gradient8x8
   - hunterGenericOrganelle
   - buttonWorld
@@ -316,10 +348,12 @@ SpriteAtlas:
   - organBlobs05
   - energyGlucoseNonGlow
   - coccusOrganotroph
+  - blob2
   - devicerMouthClose
   - iconArchaeaMetanogen
   - macrophageBody
   - iconMotility
+  - blob1
   - iconRibosomes
   - coccusHalophile
   - circleGlowTiny

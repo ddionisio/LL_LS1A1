@@ -291,10 +291,13 @@ namespace Renegadeware.LL_LS1A1 {
                     }
                     //can we eat it, if we are not retreating?
                     else if(!retreat && stats.CanEat(organism.stats)) {
-                        var distSqr = (organism.position - pos).sqrMagnitude;
-                        if(distSqr < seekDistSqr) {
-                            seek = organism.transform;
-                            seekDistSqr = distSqr;
+                        //make sure it is not toxic or we are immune to it
+                        if((entity.stats.flags & OrganismFlag.ToxicImmunity) != 0 || organism.stats.toxic <= 0f) {
+                            var distSqr = (organism.position - pos).sqrMagnitude;
+                            if(distSqr < seekDistSqr) {
+                                seek = organism.transform;
+                                seekDistSqr = distSqr;
+                            }
                         }
                     }
                 }

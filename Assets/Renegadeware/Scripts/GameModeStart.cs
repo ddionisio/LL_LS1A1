@@ -19,6 +19,13 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Play")]
         public Button newButton;
+
+        [M8.Localize]
+        public string continueConfirmTitleRef;
+        [M8.Localize]
+        public string continueConfirmTextRef;
+
+        public GameObject continueRootGO;
         public Button continueButton;
 
         [Header("Ready")]
@@ -45,9 +52,9 @@ namespace Renegadeware.LL_LS1A1 {
 
             //Setup Play
             newButton.onClick.AddListener(OnPlayNew);
-            continueButton.onClick.AddListener(OnPlayContinue);
 
-            continueButton.gameObject.SetActive(LoLManager.instance.curProgress > 0);
+            continueButton.onClick.AddListener(OnPlayContinue);
+            continueRootGO.SetActive(LoLManager.instance.curProgress > 0);
         }
 
         protected override IEnumerator Start() {
@@ -72,8 +79,14 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnPlayNew() {
-            //TODO: confirmation if there's already progress to restart
-            StartCoroutine(DoPlay(true));
+            if(LoLManager.instance.curProgress > 0) {
+                ModalConfirm.Open(continueConfirmTitleRef, continueConfirmTextRef, (confirm) => {
+                    if(confirm)
+                        StartCoroutine(DoPlay(true));
+                });
+            }
+            else
+                StartCoroutine(DoPlay(true));
         }
 
         void OnPlayContinue() {
@@ -87,7 +100,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             //start new
             if(LoLManager.instance.curProgress <= 0 || isRestart) {
-                yield return introAnimator.PlayWait(introTakePlay);
+                if(introAnimator && !string.IsNullOrEmpty(introTakePlay))
+                    yield return introAnimator.PlayWait(introTakePlay);
 
                 GameData.instance.Begin(isRestart);
             }

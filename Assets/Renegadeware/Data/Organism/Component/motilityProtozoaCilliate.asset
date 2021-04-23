@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd07c7725c3c10347b42b0ea51e623fd, type: 3}
   m_Name: motilityProtozoaCilliate
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
-  nameRef: motilityFlagellaLophotrichous
-  descRef: 
+  icon: {fileID: 21300000, guid: f013bb48357125049bc747870e2952fb, type: 3}
+  nameRef: motilityCilliate
+  descRef: motilityCilliateDesc
   ID: 41
   attributeInfos: []
   stats:

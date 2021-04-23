@@ -31,6 +31,38 @@ MonoBehaviour:
     voiceDuration: 2.5
   - key: essentialPlasmidDesc
     voiceDuration: 8
+  - key: essentialOrganelleNucleus
+    voiceDuration: 2
+  - key: essentialOrganelleNucleusDesc
+    voiceDuration: 8
+  - key: essentialOrganelleER
+    voiceDuration: 3
+  - key: essentialOrganelleERDesc
+    voiceDuration: 8
+  - key: essentialOrganelleGolgiApparatus
+    voiceDuration: 3
+  - key: essentialOrganelleGolgiApparatusDesc
+    voiceDuration: 8
+  - key: essentialOrganelleMitochondria
+    voiceDuration: 2
+  - key: essentialOrganelleMitochondriaDesc
+    voiceDuration: 8
+  - key: essentialOrganelleVacuole
+    voiceDuration: 2
+  - key: essentialOrganelleVacuoleDesc
+    voiceDuration: 8
+  - key: bodyProtozoaContact
+    voiceDuration: 2
+  - key: bodyProtozoaContactDesc
+    voiceDuration: 8
+  - key: bodyProtozoaTentacle
+    voiceDuration: 2
+  - key: bodyProtozoaTentacleDesc
+    voiceDuration: 8
+  - key: bodyProtozoaVacuum
+    voiceDuration: 2
+  - key: bodyProtozoaVacuumDesc
+    voiceDuration: 8
   - key: cellStructureThermophile
     voiceDuration: 2
   - key: cellStructureThermophileDesc
@@ -58,6 +90,18 @@ MonoBehaviour:
   - key: motilityFlagellaAmphitrichous
     voiceDuration: 2
   - key: motilityFlagellaAmphitrichousDesc
+    voiceDuration: 8
+  - key: motilityWaterjet
+    voiceDuration: 2
+  - key: motilityWaterjetDesc
+    voiceDuration: 8
+  - key: motilityFlagellate
+    voiceDuration: 2
+  - key: motilityFlagellateDesc
+    voiceDuration: 8
+  - key: motilityCilliate
+    voiceDuration: 2
+  - key: motilityCilliateDesc
     voiceDuration: 8
   - key: metabolismMethanotroph
     voiceDuration: 2

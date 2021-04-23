@@ -252,8 +252,10 @@ namespace Renegadeware.LL_LS1A1 {
 
             switch(mCurMode) {
                 case Mode.ComponentBody:
-                    var bodyComp = data as OrganismComponent;
+                    var bodyComp = data as OrganismBody;
                     gameDat.signalEditBodyPreview.Invoke(bodyComp.ID);
+
+                    RefreshAttributeInfoBody(bodyComp);
                     break;
 
                 case Mode.ComponentEssential:
@@ -459,6 +461,32 @@ namespace Renegadeware.LL_LS1A1 {
                     id = compModifiedID;
                 else
                     id = mComponentIds[i];
+
+                var compDat = gameDat.GetOrganismComponent<OrganismComponent>(id);
+                if(compDat)
+                    attrList.AddRange(compDat.attributeInfos);
+            }
+
+            if(attrList.Count > 0) {
+                attrWidget.Setup(attrList.ToArray());
+                attrWidget.gameObject.SetActive(true);
+            }
+            else
+                attrWidget.gameObject.SetActive(false);
+        }
+
+        private void RefreshAttributeInfoBody(OrganismBody body) {
+            if(!attrWidget)
+                return;
+
+            var compIDs = mOrganismTemplate.GetNewComponents(body);
+
+            var gameDat = GameData.instance;
+
+            var attrList = new List<AttributeInfo>();
+
+            for(int i = 0; i < compIDs.Length; i++) {
+                var id = compIDs[i];
 
                 var compDat = gameDat.GetOrganismComponent<OrganismComponent>(id);
                 if(compDat)

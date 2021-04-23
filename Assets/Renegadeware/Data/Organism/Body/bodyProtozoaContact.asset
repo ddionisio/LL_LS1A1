@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7549050fcfd1845940fe59cc2a63d4, type: 3}
   m_Name: bodyProtozoaContact
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
-  nameRef: 
-  descRef: 
+  icon: {fileID: 21300000, guid: 6a10bf677730ae54d8e2b89807757f75, type: 3}
+  nameRef: bodyProtozoaContact
+  descRef: bodyProtozoaContactDesc
   ID: 49
-  attributeInfos: []
+  attributeInfos:
+  - icon: {fileID: 21300000, guid: 6486daa5316b3854c83e63158acc4e91, type: 3}
+    categoryRef: attributeCategoryResistance
+    nameRef: attributeResistanceToxins
   stats:
     mass: 0.1
     forwardAccel: 0
@@ -28,7 +31,7 @@ MonoBehaviour:
     lifespan: 300
     _hazardResistances: []
     _energySources: []
-    flags: 0
+    flags: 16
     danger: 1
     toxic: 0
     seekMassMin: 0
@@ -36,7 +39,12 @@ MonoBehaviour:
     type: 3}
   _gamePrefab: {fileID: 2161190409157588760, guid: 724c7512a5825d148aa426903e6e7973,
     type: 3}
-  componentEssentials: []
+  componentEssentials:
+  - {fileID: 11400000, guid: c2f4cacf839dff543b37be50ca0f348c, type: 2}
+  - {fileID: 11400000, guid: 4e886e3928fabc847a97ffcf75926475, type: 2}
+  - {fileID: 11400000, guid: b67656b5263af27458a1b6ac63fe07e2, type: 2}
+  - {fileID: 11400000, guid: f2f8c1c23aa16ca49af574cb8e656ea5, type: 2}
+  - {fileID: 11400000, guid: 2c42e36ded72a8344ad0148ae92fb077, type: 2}
   componentGroups:
   - {fileID: 11400000, guid: 9ccc731b9f2442e46a637156f14e6e38, type: 2}
   - {fileID: 11400000, guid: 64e10a157cfe6e44bb636fc681e22805, type: 2}
