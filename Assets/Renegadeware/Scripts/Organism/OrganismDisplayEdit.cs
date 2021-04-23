@@ -29,13 +29,14 @@ namespace Renegadeware.LL_LS1A1 {
                     var anchorT = anchorList[i];
 
                     GameObject go;
-                    if(mCache.Count > 0)
+                    if(mCache.Count > 0) {
                         go = mCache.RemoveLast();
+                        go.transform.SetParent(anchorT);
+                    }
                     else
-                        go = Instantiate(mPrefabGO);
+                        go = Instantiate(mPrefabGO, anchorT);
 
                     var t = go.transform;
-                    t.SetParent(anchorT, false);
                     t.localPosition = Vector3.zero;
                     t.localRotation = Quaternion.identity;
 

@@ -55,6 +55,9 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Data")]
         public M8.SceneAssetPath scene;
+
+        [M8.Localize]
+        public string titleRef;
         
         public int progressCount = 2; //number of progress for this particular level before going to next (use LoL cur. progress)
         public float duration = 60f; //play duration

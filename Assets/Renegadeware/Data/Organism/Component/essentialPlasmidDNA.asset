@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b5b3bfad5724341b9c98a25b779080, type: 3}
   m_Name: essentialPlasmidDNA
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: fe13cfd4dacf4d24e893575e5bc9e85a, type: 3}
   nameRef: essentialPlasmid
-  descRef: 
+  descRef: essentialPlasmidDesc
   ID: 18
   attributeInfos: []
   stats:

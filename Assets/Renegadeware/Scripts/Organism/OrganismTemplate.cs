@@ -88,6 +88,21 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        public bool isValid {
+            get {
+                if(!isEssentialComponentsFilled)
+                    return false;
+
+                //check components
+                for(int i = 0; i < componentIDs.Length; i++) {
+                    if(componentIDs[i] == GameData.invalidID)
+                        return false;
+                }
+
+                return true;
+            }
+        }
+
         private const string userDataKeySubID = "_id";
 
         private const string userDataKeySubCompEssentialCount = "_compECount";
@@ -163,6 +178,21 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             return -1;
+        }
+
+        public AttributeInfo[] GetAllAttributeInfos() {
+            var gameDat = GameData.instance;
+
+            var attrList = new List<AttributeInfo>();
+
+            for(int i = 0; i < componentIDs.Length; i++) {
+                var compDat = gameDat.GetOrganismComponent<OrganismComponent>(componentIDs[i]);
+                if(compDat) {
+                    attrList.AddRange(compDat.attributeInfos);
+                }
+            }
+
+            return attrList.ToArray();
         }
 
         //User Data API

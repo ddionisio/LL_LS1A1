@@ -11,6 +11,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public const int organismComponentCapacity = 8;
 
+        public const string speechGroupInfo = "info";
+
         [Header("Levels")]
         public LevelData[] levels;
 
@@ -93,11 +95,19 @@ namespace Renegadeware.LL_LS1A1 {
 
         //[Header("Input Settings")]
 
+        [Header("Text Refs")]
+        [M8.Localize]
+        public string textPlayLeaveTitleRef;
+        [M8.Localize]
+        public string textPlayLeaveDescRef;
+
         [Header("Organism Components")]
         public OrganismComponent[] organismComponents;
 
         [Header("Signals")]
         public M8.SignalInteger signalEnvironmentChanged;
+
+        public SignalModeSelectChange signalModeSelectChange;
 
         public M8.Signal signalEnvironmentDragBegin;
         public M8.SignalVector2 signalEnvironmentDrag; //receive delta

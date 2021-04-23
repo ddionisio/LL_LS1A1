@@ -19,3 +19,59 @@ MonoBehaviour:
   languageExtraInfos:
   - key: welcome
     voiceDuration: 1.5
+  - key: essentialNucleoid
+    voiceDuration: 2
+  - key: essentialNucleoidDesc
+    voiceDuration: 8
+  - key: essentialRibosome
+    voiceDuration: 2
+  - key: essentialRibosomeDesc
+    voiceDuration: 8
+  - key: essentialPlasmid
+    voiceDuration: 2.5
+  - key: essentialPlasmidDesc
+    voiceDuration: 8
+  - key: cellStructureThermophile
+    voiceDuration: 2
+  - key: cellStructureThermophileDesc
+    voiceDuration: 8
+  - key: cellStructureMethanogen
+    voiceDuration: 2
+  - key: cellStructureMethanogenDesc
+    voiceDuration: 8
+  - key: cellStructureHalophile
+    voiceDuration: 2
+  - key: cellStructureHalophileDesc
+    voiceDuration: 8
+  - key: motilityFlagellaMonotrichous
+    voiceDuration: 2
+  - key: motilityFlagellaMonotrichousDesc
+    voiceDuration: 8
+  - key: motilityFlagellaLophotrichous
+    voiceDuration: 2
+  - key: motilityFlagellaLophotrichousDesc
+    voiceDuration: 8
+  - key: motilityFlagellaPeritrichous
+    voiceDuration: 2
+  - key: motilityFlagellaPeritrichousDesc
+    voiceDuration: 8
+  - key: motilityFlagellaAmphitrichous
+    voiceDuration: 2
+  - key: motilityFlagellaAmphitrichousDesc
+    voiceDuration: 8
+  - key: metabolismMethanotroph
+    voiceDuration: 2
+  - key: metabolismMethanotrophDesc
+    voiceDuration: 8
+  - key: metabolismPhotoautotroph
+    voiceDuration: 2
+  - key: metabolismPhotoautotrophDesc
+    voiceDuration: 8
+  - key: metabolismOrganotroph
+    voiceDuration: 2
+  - key: metabolismOrganotrophDesc
+    voiceDuration: 8
+  - key: metabolismEndobiotic
+    voiceDuration: 4
+  - key: metabolismEndobioticDesc
+    voiceDuration: 8

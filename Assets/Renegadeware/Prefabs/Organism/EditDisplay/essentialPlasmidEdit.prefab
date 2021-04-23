@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: a44ac7793e05d8148a07b482a78da98e, type: 3}
-  m_Color: {r: 0.5254902, g: 0.46274513, b: 0.5921569, a: 1}
+  m_Color: {r: 0.7960785, g: 0.47058827, b: 0.4666667, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8158462342132412463}
   m_Layer: 0
-  m_Name: plasmid
+  m_Name: essentialPlasmidEdit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -182,9 +182,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: a44ac7793e05d8148a07b482a78da98e, type: 3}
-  m_Color: {r: 0.36862746, g: 0.32156864, b: 0.43137258, a: 1}
+  m_Color: {r: 0.6666667, g: 0.3137255, b: 0.35686275, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -46,8 +46,10 @@ namespace Renegadeware.LL_LS1A1 {
         private M8.GenericParams mSpawnParms = new M8.GenericParams();
 
         void OnDisable() {
-            if(GameData.isInstantiated)
+            if(GameData.isInstantiated) {
                 GameData.instance.signalEnvironmentChanged.callback -= OnSignalEnvironmentChange;
+                GameData.instance.signalModeSelectChange.callback -= OnSignalModeSelectChange;
+            }
         }
 
         void OnEnable() {
@@ -59,6 +61,7 @@ namespace Renegadeware.LL_LS1A1 {
             mState = State.Wait;
 
             GameData.instance.signalEnvironmentChanged.callback += OnSignalEnvironmentChange;
+            GameData.instance.signalModeSelectChange.callback += OnSignalModeSelectChange;
         }
 
         void Awake() {
@@ -126,6 +129,11 @@ namespace Renegadeware.LL_LS1A1 {
 
         void OnSignalEnvironmentChange(int ind) {
             ClearAll();
+        }
+
+        void OnSignalModeSelectChange(ModeSelect curMode, ModeSelect toMode) {
+            if(toMode == ModeSelect.Edit)
+                ClearAll();
         }
 
         private void SpawnStart() {

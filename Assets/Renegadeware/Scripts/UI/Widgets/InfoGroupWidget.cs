@@ -33,21 +33,25 @@ namespace Renegadeware.LL_LS1A1 {
                     return;
 
                 if(mSelectIndex != -1) {
-                    if(mSelectIndex < mItems.Count)
-                        mItems[mSelectIndex].isSelected = false;
+                    var itm = GetItemWidget(mSelectIndex);
+                    if(itm)
+                        itm.isSelected = false;
                 }
 
                 mSelectIndex = value;
 
                 if(mSelectIndex != -1) {
-                    var selectItm = mItems[mSelectIndex];
+                    var selectItm = GetItemWidget(mSelectIndex);
+                    if(selectItm) {
+                        selectItm.isSelected = true;
 
-                    selectItm.isSelected = true;
-
-                    selectCallback?.Invoke(mSelectIndex, selectItm.data);
+                        selectCallback?.Invoke(mSelectIndex, selectItm.data);
+                    }
                 }
             }
         }
+
+        public M8.CacheList<InfoWidget> items { get { return mItems; } }
 
         public int itemCount { get { return mItems.Count; } }
 
@@ -59,53 +63,60 @@ namespace Renegadeware.LL_LS1A1 {
 
         private int mSelectIndex;
 
+        public void SelectFirstItem() {
+            if(mItems.Count > 0)
+                selectIndex = mItems[0].index;
+        }
+
         public int GetIndex(InfoData info) {
             for(int i = 0; i < mItems.Count; i++) {
                 if(mItems[i].data == info)
-                    return i;
+                    return mItems[i].index;
             }
 
             return -1;
         }
 
         public InfoData GetItem(int index) {
-            if(index >= mItems.Count)
-                return null;
-
-            return mItems[index].data;
-        }
-
-        public void Add(InfoData[] infos) {
-            for(int i = 0; i < infos.Length; i++) {
-                int ind = mItems.Count;
-
-                var itm = AllocateItem();
-                itm.Setup(ind, infos[i]);
+            for(int i = 0; i < mItems.Count; i++) {
+                if(mItems[i].index == index)
+                    return mItems[i].data;
             }
 
-            RefreshNavigation();
+            return null;
         }
 
-        public void Add(InfoData info) {
-            int ind = mItems.Count;
+        public InfoWidget GetItemWidget(int index) {
+            for(int i = 0; i < mItems.Count; i++) {
+                if(mItems[i].index == index)
+                    return mItems[i];
+            }
 
+            return null;
+        }
+
+        public InfoWidget Add(InfoData info, int index) {
             var itm = AllocateItem();
 
-            itm.Setup(ind, info);
+            itm.Setup(index, info);
 
             RefreshNavigation();
+
+            return itm;
         }
 
         public void Remove(int index) {
             if(index >= mItems.Count)
                 return;
 
-            var itm = mItems[index];
-            mItems.RemoveAt(index);
+            InfoWidget itm = GetItemWidget(index);
+            if(itm) {
+                mItems.Remove(itm);
 
-            itm.gameObject.SetActive(false);
+                itm.gameObject.SetActive(false);
 
-            mItemCache.Add(itm);
+                mItemCache.Add(itm);
+            }
 
             if(mSelectIndex == index)
                 mSelectIndex = -1;
@@ -116,7 +127,13 @@ namespace Renegadeware.LL_LS1A1 {
         public void Remove(InfoData info) {
             for(int i = 0; i < mItems.Count; i++) {
                 if(mItems[i].data == info) {
-                    Remove(i);
+                    var itm = mItems[i];
+
+                    mItems.RemoveAt(i);
+
+                    itm.gameObject.SetActive(false);
+
+                    mItemCache.Add(itm);
                     break;
                 }
             }
@@ -138,7 +155,7 @@ namespace Renegadeware.LL_LS1A1 {
         void ItemClick(InfoWidget itm) {
             var dat = itm.data;
 
-            var ind = GetIndex(dat);
+            var ind = itm.index;
 
             selectIndex = ind;
 

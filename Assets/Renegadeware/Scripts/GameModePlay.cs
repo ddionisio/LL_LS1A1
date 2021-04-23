@@ -90,6 +90,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public OrganismTemplateSpawner gameSpawner { get { return mOrganismSpawner; } }
 
+        public ModeSelect currentModeSelect { get; private set; }
+
         /////////////////////////////
 
         private LevelData mLevelData;
@@ -252,6 +254,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoEnvironmentSelect() {
+            currentModeSelect = ModeSelect.Environment;
+
             var hud = HUD.instance;
 
             //initialize environment
@@ -276,9 +280,12 @@ namespace Renegadeware.LL_LS1A1 {
             while(mModeSelectNext == ModeSelect.None)
                 yield return null;
 
+            GameData.instance.signalModeSelectChange.Invoke(ModeSelect.Environment, mModeSelectNext);
+
             //hide environment if we are editing
-            if(mModeSelectNext == ModeSelect.Edit)
+            if(mModeSelectNext == ModeSelect.Edit) {
                 StartCoroutine(DoTransitionHide());
+            }
 
             //hide hud
             if(hud.modeSelectFlags != ModeSelectFlags.None)
@@ -312,12 +319,15 @@ namespace Renegadeware.LL_LS1A1 {
 
             //show/hide hud?
             var modeSelectFlags = HUDGetModeSelectFlags();
-            if(modeSelectFlags != ModeSelectFlags.None) {
+
+            if(modeSelectFlags == ModeSelectFlags.None) {
                 if(hud.ElementIsVisible(HUD.Element.ModeSelect))
                     hud.ElementHide(HUD.Element.ModeSelect);
             }
-            else if(!hud.ElementIsVisible(HUD.Element.ModeSelect))
+            else if(!hud.ElementIsVisible(HUD.Element.ModeSelect)) {
+                hud.ModeSelectSetVisible(modeSelectFlags);
                 hud.ElementShow(HUD.Element.ModeSelect);
+            }
 
             yield return DoTransitionShow();
 
@@ -328,6 +338,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoOrganismEdit() {
+            currentModeSelect = ModeSelect.Edit;
+
             var gameDat = GameData.instance;
 
             editRootGO.SetActive(true);
@@ -338,6 +350,7 @@ namespace Renegadeware.LL_LS1A1 {
             yield return DoTransitionShow();
 
             //open organism edit modal
+            mModalParms[ModalOrganismEditor.parmTitleRef] = level.titleRef;
             mModalParms[ModalOrganismEditor.parmOrganismBodyGroup] = level.organismBodyGroup;
             mModalParms[ModalOrganismEditor.parmOrganismTemplate] = gameDat.organismTemplateCurrent;
 
@@ -349,6 +362,12 @@ namespace Renegadeware.LL_LS1A1 {
             mModeSelectNext = ModeSelect.None;
             while(mModeSelectNext == ModeSelect.None)
                 yield return null;
+
+            //clear body if essentials are not filled
+            if(!gameDat.organismTemplateCurrent.isEssentialComponentsFilled)
+                gameDat.organismTemplateCurrent.body = null;
+
+            gameDat.signalModeSelectChange.Invoke(ModeSelect.Edit, mModeSelectNext);
 
             //hide organism edit
             StartCoroutine(DoTransitionHide());
@@ -369,6 +388,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoSimulation(bool isRestart) {
+            currentModeSelect = ModeSelect.Play;
+
             var gameDat = GameData.instance;
 
             var hud = HUD.instance;
@@ -456,6 +477,8 @@ namespace Renegadeware.LL_LS1A1 {
                 //if(M8.Util.CheckTag(gameObject, GameData.instance.inputSpawnTagFilter))
                 yield return null;
             }
+
+            GameData.instance.signalModeSelectChange.Invoke(ModeSelect.Play, mModeSelectNext);
 
             //hide hud
             HUD.instance.ElementHide(HUD.Element.Gameplay);
@@ -557,7 +580,17 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnModeSelect(ModeSelect toMode) {
-            mModeSelectNext = toMode;
+            //confirm
+            if(modeSelect == ModeSelect.Play && mOrganismSpawner.entityCount > 0) {
+                ModalConfirm.Open(
+                    GameData.instance.textPlayLeaveTitleRef, GameData.instance.textPlayLeaveDescRef, 
+                    confirm => {
+                        if(confirm)
+                            mModeSelectNext = toMode;
+                    });
+            }
+            else
+                mModeSelectNext = toMode;
         }
 
         void OnHUDTimeIndexChange(int timeIndex) {
@@ -683,7 +716,7 @@ namespace Renegadeware.LL_LS1A1 {
         private ModeSelectFlags HUDGetModeSelectFlags() {
             //check if current organism template is valid
             var organismTemplate = GameData.instance.organismTemplateCurrent;
-            var organismTemplateValid = organismTemplate.isEssentialComponentsFilled;
+            var organismTemplateValid = organismTemplate.isValid;
 
             ModeSelectFlags modeFlags = ModeSelectFlags.None;
 
@@ -704,6 +737,7 @@ namespace Renegadeware.LL_LS1A1 {
                     modeFlags |= ModeSelectFlags.Environment;
                     break;
                 case ModeSelect.Play:
+                case ModeSelect.Retry:
                     modeFlags = ModeSelectFlags.Environment | ModeSelectFlags.Edit;
                     break;
             }

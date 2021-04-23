@@ -12,6 +12,7 @@ namespace Renegadeware.LL_LS1A1 {
         public TMP_Text descText;
         public Image iconImage;
         public GameObject selectGO;
+        public GameObject highlightGO;
 
         public int index { get; private set; }
 
@@ -22,7 +23,17 @@ namespace Renegadeware.LL_LS1A1 {
             set { if(selectGO) selectGO.SetActive(value); }
         }
 
+        public Selectable selectable {
+            get {
+                if(!mSelectable)
+                    mSelectable = GetComponent<Selectable>();
+                return mSelectable;
+            }
+        }
+
         public event System.Action<InfoWidget> clickCallback;
+
+        private Selectable mSelectable;
 
         public void Setup(int index, InfoData aData) {
             this.index = index;
@@ -33,11 +44,32 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(iconImage) iconImage.sprite = data.icon;
 
+            if(selectable)
+                selectable.interactable = true;
+
+            if(highlightGO)
+                highlightGO.SetActive(false);
+
             isSelected = false;
         }
 
+        public void PlaySpeech() {
+            if(!data || !LoLExt.LoLManager.isInstantiated)
+                return;
+
+            var lolMgr = LoLExt.LoLManager.instance;
+
+            lolMgr.StopSpeakQueue();
+
+            if(!string.IsNullOrEmpty(data.nameRef))
+                lolMgr.SpeakTextQueue(data.nameRef, GameData.speechGroupInfo, 0);
+            if(!string.IsNullOrEmpty(data.descRef))
+                lolMgr.SpeakTextQueue(data.descRef, GameData.speechGroupInfo, 1);
+        }
+
         void IPointerClickHandler.OnPointerClick(PointerEventData eventData) {
-            clickCallback?.Invoke(this);
+            if(selectable && selectable.interactable)
+                clickCallback?.Invoke(this);
         }
     }
 }

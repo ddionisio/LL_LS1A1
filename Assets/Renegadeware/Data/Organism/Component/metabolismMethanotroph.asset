@@ -12,11 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
   m_Name: metabolismMethanotroph
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ed300ac8df91098429bc85117ecb01f8, type: 3}
   nameRef: metabolismMethanotroph
-  descRef: 
+  descRef: metabolismMethanotrophDesc
   ID: 23
-  attributeInfos: []
+  attributeInfos:
+  - icon: {fileID: 21300000, guid: 2e12d8c68a6bfc741a7ea8ecc0011a85, type: 3}
+    categoryRef: attributeCategoryResistance
+    nameRef: attributeHazardHighMethane
+  - icon: {fileID: 21300000, guid: 13497cc51eec3e741aba419492f50f80, type: 3}
+    categoryRef: attributeCategoryResistance
+    nameRef: attributeResistanceAnaerobic
+  - icon: {fileID: 21300000, guid: b73091286c6e5074ba870e2bcaaa0d66, type: 3}
+    categoryRef: attributeCategoryConsumes
+    nameRef: energyMethane
   stats:
     mass: 0
     forwardAccel: 0

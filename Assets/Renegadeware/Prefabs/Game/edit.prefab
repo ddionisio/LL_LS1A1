@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5229585543488625863}
   - component: {fileID: 5229585543488625862}
+  - component: {fileID: 4644727910153186841}
   m_Layer: 0
   m_Name: organismDisplay
   m_TagString: Untagged
@@ -24,8 +25,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5229585543488625860}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.40673664, w: 0.9135454}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5229585544849742332}
@@ -45,6 +46,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cacheRoot: {fileID: 5229585544849742332}
+--- !u!114 &4644727910153186841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5229585543488625860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ffa4fb7e6d9359428693b935485bbd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 5229585543488625863}
+  pulsePerSecond: 0.25
+  ofs: {x: 0, y: 0.5, z: 0}
+  local: 1
 --- !u!1 &5229585544580914609
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
   m_Name: bacteriaSpirillumMotilities
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2ed8269cd0aa88441b9a2b9b32b2a4de, type: 3}
   nameRef: categoryMotility
   descRef: 
+  isHidden: 0
+  defaultIndex: 0
   components:
   - {fileID: 11400000, guid: ea7b00eeed5e9ae43991d3c461f68fb8, type: 2}

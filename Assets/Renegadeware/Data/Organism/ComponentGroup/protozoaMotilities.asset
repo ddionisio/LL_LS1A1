@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
   m_Name: protozoaMotilities
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2ed8269cd0aa88441b9a2b9b32b2a4de, type: 3}
   nameRef: categoryMotility
   descRef: 
   isHidden: 0
-  defaultIndex: 0
+  defaultIndex: -1
   components:
-  - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}
   - {fileID: 11400000, guid: 9eef14ae300851344b1a13dabf31ded3, type: 2}
   - {fileID: 11400000, guid: f9983b6b0683daf4a8cc6667676b97c9, type: 2}

@@ -75,8 +75,10 @@ namespace Renegadeware.LL_LS1A1 {
             if(signalListenSpawnLock)
                 signalListenSpawnLock.callback -= OnSignalSpawnLock;
 
-            if(GameData.isInstantiated)
+            if(GameData.isInstantiated) {
                 GameData.instance.signalEnvironmentChanged.callback -= OnSignalEnvironmentChange;
+                GameData.instance.signalModeSelectChange.callback -= OnSignalModeSelectChange;
+            }
         }
 
         void OnEnable() {
@@ -93,6 +95,7 @@ namespace Renegadeware.LL_LS1A1 {
                 signalListenSpawnLock.callback += OnSignalSpawnLock;
 
             GameData.instance.signalEnvironmentChanged.callback += OnSignalEnvironmentChange;
+            GameData.instance.signalModeSelectChange.callback += OnSignalModeSelectChange;
         }
 
         void Awake() {
@@ -153,6 +156,11 @@ namespace Renegadeware.LL_LS1A1 {
 
         void OnSignalEnvironmentChange(int ind) {
             ClearAll();
+        }
+
+        void OnSignalModeSelectChange(ModeSelect curMode, ModeSelect toMode) {
+            if(toMode == ModeSelect.Edit)
+                ClearAll();
         }
 
         private void SpawnStart() {

@@ -61,9 +61,8 @@ namespace Renegadeware.LL_LS1A1 {
             var envInf = mEnvInfos[mEnvCurInd];
 
             LoLManager.instance.StopSpeakQueue();
-
-            LoLManager.instance.SpeakTextQueue(envInf.nameRef, speakGroup, 0);
-            LoLManager.instance.SpeakTextQueue(envInf.descRef, speakGroup, 1);
+            
+            LoLManager.instance.SpeakText(envInf.descRef);
         }
 
         void M8.IModalPop.Pop() {
@@ -83,6 +82,8 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             RefreshDisplay();
+
+            SpeakTitle();
         }
 
         IEnumerator DoEnvironmentSelect() {
@@ -97,6 +98,8 @@ namespace Renegadeware.LL_LS1A1 {
 
                 if(!string.IsNullOrEmpty(selectTakeEnter))
                     yield return selectAnimator.PlayWait(selectTakeEnter);
+
+                SpeakTitle();
             }
             else {
                 yield return null;
@@ -117,6 +120,12 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(completedGO)
                 completedGO.SetActive(GameModePlay.instance.level.IsEnvironmentComplete(mEnvCurInd));
+        }
+
+        private void SpeakTitle() {
+            var envInf = mEnvInfos[mEnvCurInd];
+            LoLManager.instance.StopSpeakQueue();
+            LoLManager.instance.SpeakText(envInf.nameRef);
         }
 
         private void ClearRout() {

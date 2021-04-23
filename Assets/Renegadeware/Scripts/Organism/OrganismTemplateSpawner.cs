@@ -55,10 +55,10 @@ namespace Renegadeware.LL_LS1A1 {
             if(entities != null)
                 entities.Clear();
 
-            if(pool)
-                pool.RemoveType(mTemplate.name);
-
             if(mTemplate) {
+                if(pool)
+                    pool.RemoveType(mTemplate.name);
+
                 DestroyImmediate(mTemplate.gameObject);
                 mTemplate = null;
             }
@@ -68,7 +68,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(entities != null)
                 entities.Clear();
 
-            if(pool)
+            if(pool && mTemplate)
                 pool.ReleaseAllByType(mTemplate.name);
         }
 

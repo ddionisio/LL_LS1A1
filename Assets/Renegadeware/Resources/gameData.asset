@@ -52,6 +52,8 @@ MonoBehaviour:
   - 0
   - 1
   - 6
+  textPlayLeaveTitleRef: confirmPlayExitTitle
+  textPlayLeaveDescRef: confirmPlayExitDesc
   organismComponents:
   - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
   - {fileID: 11400000, guid: 4329496c0722ab44aa16fa732b665e59, type: 2}
@@ -102,6 +104,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5cdeaaeb80665fe45a945a9bc8e34d7d, type: 2}
   - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}
   signalEnvironmentChanged: {fileID: 11400000, guid: 3a152a70959bc3b4397fabc399cde072,
+    type: 2}
+  signalModeSelectChange: {fileID: 11400000, guid: c21d0c713f797c84a9579a99a3e9d8a0,
     type: 2}
   signalEnvironmentDragBegin: {fileID: 11400000, guid: 7433fe8b40cd609409be89c81e89fc82,
     type: 2}

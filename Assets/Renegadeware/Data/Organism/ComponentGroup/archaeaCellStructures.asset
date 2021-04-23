@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
   m_Name: archaeaCellStructures
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 70f8ceb9279c83f48806b362de6e4412, type: 3}
   nameRef: categoryCellStructure
   descRef: 
   isHidden: 0
-  defaultIndex: 0
+  defaultIndex: -1
   components:
   - {fileID: 11400000, guid: 65185ca8c2e47544cb3b205dc68eb9c1, type: 2}
   - {fileID: 11400000, guid: 60624a6baca2e204b8c611a71d2b4b77, type: 2}

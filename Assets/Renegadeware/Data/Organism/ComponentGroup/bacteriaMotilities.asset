@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
   m_Name: bacteriaMotilities
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2ed8269cd0aa88441b9a2b9b32b2a4de, type: 3}
   nameRef: categoryMotility
   descRef: 
+  isHidden: 0
+  defaultIndex: -1
   components:
-  - {fileID: 11400000, guid: e02bdba5f875ed34d8080f7e353e32a7, type: 2}
+  - {fileID: 11400000, guid: db09fd21c5381a948bf0da2f936ea583, type: 2}
   - {fileID: 11400000, guid: 8fffb5d0c83b5c449ac9e4bbff93511c, type: 2}
-  - {fileID: 11400000, guid: 050280ab4662e4a48b0ba2e96ece2626, type: 2}
   - {fileID: 11400000, guid: 050280ab4662e4a48b0ba2e96ece2626, type: 2}

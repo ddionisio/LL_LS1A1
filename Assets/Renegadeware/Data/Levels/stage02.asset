@@ -15,6 +15,7 @@ MonoBehaviour:
   scene:
     name: stage02
     path: Assets/Renegadeware/Scenes/stage02.unity
+  titleRef: stageTitle_2
   progressCount: 3
   duration: 90
   spawnIsRandomDir: 1

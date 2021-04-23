@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
   m_Name: bodyGroupBacteria
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 30f7411b3df4b4f4da9c75f81cd949a1, type: 3}
   nameRef: categoryBody
   descRef: 
   isHidden: 0

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b5b3bfad5724341b9c98a25b779080, type: 3}
   m_Name: essentialNucleoid
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f6e8ab3303d7f384c978b2f8e23a13ef, type: 3}
   nameRef: essentialNucleoid
-  descRef: 
+  descRef: essentialNucleoidDesc
   ID: 3
   attributeInfos: []
   stats:
@@ -30,6 +30,8 @@ MonoBehaviour:
     _energySources: []
     flags: 0
     danger: 0
+    toxic: 0
+    seekMassMin: 0
   _editPrefab: {fileID: 7640818982007545761, guid: acb10b4de881e9e4bac44c896008106c,
     type: 3}
   _anchorName: body

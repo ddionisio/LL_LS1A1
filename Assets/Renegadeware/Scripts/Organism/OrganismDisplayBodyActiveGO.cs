@@ -12,8 +12,13 @@ namespace Renegadeware.LL_LS1A1 {
             public GameObject activeGO;
 
             public void ApplyActive(int curBodyID) {
+                if(activeGO && bodyID == curBodyID)
+                    activeGO.SetActive(true);
+            }
+
+            public void Hide() {
                 if(activeGO)
-                    activeGO.SetActive(bodyID == curBodyID);
+                    activeGO.SetActive(false);
             }
         }
 
@@ -30,6 +35,9 @@ namespace Renegadeware.LL_LS1A1 {
         private OrganismDisplayEdit mDisplayEdit;
 
         void OnEnable() {
+            for(int i = 0; i < displays.Length; i++)
+                displays[i].Hide();
+
             if(displayEdit) {
                 var curBodyID = displayEdit.bodyID;
 

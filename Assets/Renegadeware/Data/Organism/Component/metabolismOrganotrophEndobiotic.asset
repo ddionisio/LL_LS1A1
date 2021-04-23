@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
   m_Name: metabolismOrganotrophEndobiotic
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 341ac229a1274b34c9c649bd666b60fc, type: 3}
   nameRef: metabolismEndobiotic
-  descRef: 
+  descRef: metabolismEndobioticDesc
   ID: 26
-  attributeInfos: []
+  attributeInfos:
+  - icon: {fileID: 21300000, guid: 3d3c1a5877f3a68449d49e35f93982c3, type: 3}
+    categoryRef: attributeCategoryResistance
+    nameRef: attributeResistanceAntiphagocytic
   stats:
     mass: 0
     forwardAccel: 0

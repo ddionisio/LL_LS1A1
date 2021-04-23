@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7549050fcfd1845940fe59cc2a63d4, type: 3}
   m_Name: bodyBacteriaCoccus
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b6d4f2d777a6f994a8bc78a81f1d4cbb, type: 3}
   nameRef: bodyCoccus
   descRef: 
   ID: 21

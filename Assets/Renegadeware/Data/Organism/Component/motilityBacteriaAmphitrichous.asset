@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd07c7725c3c10347b42b0ea51e623fd, type: 3}
   m_Name: motilityBacteriaAmphitrichous
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
-  nameRef: motilityFlagellaMonotrichous
-  descRef: 
+  icon: {fileID: 21300000, guid: e0f6eb645cc09264e88602b6141e2de4, type: 3}
+  nameRef: motilityFlagellaAmphitrichous
+  descRef: motilityFlagellaAmphitrichousDesc
   ID: 30
   attributeInfos: []
   stats:

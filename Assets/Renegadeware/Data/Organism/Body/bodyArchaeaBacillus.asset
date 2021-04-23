@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d7549050fcfd1845940fe59cc2a63d4, type: 3}
   m_Name: bodyArchaeaBacillus
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 041d0e0b0c917164ba20e6c53bca3b8a, type: 3}
   nameRef: bodyBacillus
   descRef: 
   ID: 14

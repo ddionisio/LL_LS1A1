@@ -8,6 +8,7 @@ using LoLExt;
 
 namespace Renegadeware.LL_LS1A1 {
     public class ModalOrganismEditor : M8.ModalController, M8.IModalPush, M8.IModalPop, M8.IModalOpening, M8.IModalClosing {
+        public const string parmTitleRef = "ott";
         public const string parmOrganismBodyGroup = "obg"; //OrganismComponentGroup
         public const string parmOrganismTemplate = "ot"; //OrganismTemplate
 
@@ -20,6 +21,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Display")]
         public TMP_Text titleText;
+        public InfoWidget infoWidget;
+        public AttributeGroupWidget attrWidget;
 
         [Header("Category")]
         public GameObject categoryRootGO;
@@ -56,6 +59,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             mCurMode = Mode.Category;
 
+            var titleString = "";
+
             if(parms != null) {
                 parms.TryGetValue(parmOrganismBodyGroup, out mBodyGroup);
 
@@ -63,13 +68,21 @@ namespace Renegadeware.LL_LS1A1 {
                 parms.TryGetValue(parmOrganismTemplate, out mOrganismTemplate);
                 RefreshComponentIds();
 
+                if(parms.ContainsKey(parmTitleRef))
+                    titleString = M8.Localize.Get(parms.GetValue<string>(parmTitleRef));
+
                 //setup categories
                 RefreshCategoryWidget();
             }
+
+            if(titleText)
+                titleText.text = titleString;
         }
 
         IEnumerator M8.IModalOpening.Opening() {
             yield return DoEnter();
+
+            RefreshAttributeInfo(-1, 0);
         }
 
         IEnumerator M8.IModalClosing.Closing() {
@@ -138,11 +151,46 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         IEnumerator DoTransition(Mode toMode) {
+            HideInfo();
+
             yield return DoExit();
 
             mCurMode = toMode;
 
+            switch(mCurMode) {
+                case Mode.Category:
+                    categoryWidget.selectIndex = -1;
+                    break;
+
+                case Mode.ComponentEssential:
+                    var bodyComp = GetBodyComp();
+
+                    //add components
+                    componentWidget.Clear();
+
+                    for(int i = 0; i < bodyComp.componentEssentials.Length; i++) {
+                        var comp = bodyComp.componentEssentials[i];
+                        if(mOrganismTemplate.GetComponentEssentialIndex(comp.ID) == -1) {
+                            var widget = componentWidget.Add(comp, i);
+                            widget.selectable.interactable = i == 0;
+                        }
+                    }
+
+                    componentWidget.SelectFirstItem();
+                    break;
+            }
+
             yield return DoEnter();
+
+            switch(mCurMode) {
+                case Mode.Component:
+                    if(componentWidget.selectIndex != -1) {
+                        var itm = componentWidget.GetItem(componentWidget.selectIndex);
+                        if(itm)
+                            RefreshInfo(itm);
+                    }
+                    break;
+            }
         }
 
         void CategoryClick(int index, InfoData data) {
@@ -185,7 +233,8 @@ namespace Renegadeware.LL_LS1A1 {
             if(comps != null) {
                 componentWidget.Clear();
 
-                componentWidget.Add(comps);
+                for(int i = 0; i < comps.Length; i++)
+                    componentWidget.Add(comps[i], i);
 
                 componentWidget.selectIndex = mCompIndex;
 
@@ -212,13 +261,18 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
 
                 case Mode.Component:
-                    gameDat.signalEditComponentPreview.Invoke(mCategoryIndex - 1, (data as OrganismComponent).ID);
+                    var compID = (data as OrganismComponent).ID;
+
+                    gameDat.signalEditComponentPreview.Invoke(mCategoryIndex, compID);
+
+                    RefreshAttributeInfo(mCategoryIndex, compID);
                     break;
             }
 
             if(componentAcceptButton) componentAcceptButton.interactable = mCompIndex != -1;
 
             //update info window
+            RefreshInfo(data);
         }
 
         void ComponentConfirm() {
@@ -233,21 +287,9 @@ namespace Renegadeware.LL_LS1A1 {
                     //check if essential components are filled
                     if(mOrganismTemplate.isEssentialComponentsFilled) {
                         //transition back to categories
-                        categoryWidget.selectIndex = 1;
                         StartCoroutine(DoTransition(Mode.Category));
                     }
                     else { //enter essential components mode
-                        var bodyComp = GetBodyComp();
-
-                        //add components
-                        componentWidget.Clear();
-
-                        for(int i = 0; i < bodyComp.componentEssentials.Length; i++) {
-                            var comp = bodyComp.componentEssentials[i];
-                            if(mOrganismTemplate.GetComponentEssentialIndex(comp.ID) == -1)
-                                componentWidget.Add(comp);
-                        }
-
                         mCompIndex = -1;
 
                         StartCoroutine(DoTransition(Mode.ComponentEssential));
@@ -255,7 +297,10 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
 
                 case Mode.ComponentEssential:
-                    var itm = componentWidget.GetItem(mCompIndex) as OrganismComponent;
+                    var compItemWidget = componentWidget.GetItemWidget(mCompIndex);
+                    var itm = compItemWidget.data as OrganismComponent;
+                    if(!itm)
+                        return;
 
                     var ind = GetBodyComp().GetComponentEssentialIndex(itm.ID);
 
@@ -266,11 +311,14 @@ namespace Renegadeware.LL_LS1A1 {
 
                     mCompIndex = -1;
 
-                    if(componentWidget.itemCount > 0) //prep for next component
-                        componentWidget.selectIndex = 0;
+                    int nextInd = compItemWidget.index + 1;
+                    var widget = componentWidget.GetItemWidget(nextInd);
+                    if(widget) { //prep for next component
+                        componentWidget.selectIndex = widget.index;
+                        widget.selectable.interactable = true;
+                    }
                     else {
                         //transition back to categories
-                        categoryWidget.selectIndex = 1;
                         StartCoroutine(DoTransition(Mode.Category));
                     }
                     break;
@@ -282,8 +330,23 @@ namespace Renegadeware.LL_LS1A1 {
 
                     mOrganismTemplate.SetComponentID(mCategoryIndex, compId);
 
+                    //refresh category highlight
+                    bool isHighlight = false;
+                    for(int i = 0; i < categoryWidget.itemCount; i++) {
+                        var categoryItemWidget = categoryWidget.items[i];
+                        if(!isHighlight) {
+                            if(mComponentIds[i] == GameData.invalidID) {
+                                categoryItemWidget.highlightGO.SetActive(true);
+                                isHighlight = true;
+                            }
+                            else
+                                categoryItemWidget.highlightGO.SetActive(false);
+                        }
+                        else
+                            categoryItemWidget.highlightGO.SetActive(false);
+                    }
+
                     //transition back to categories
-                    categoryWidget.selectIndex = mCategoryIndex;
                     StartCoroutine(DoTransition(Mode.Category));
                     break;
             }
@@ -295,8 +358,9 @@ namespace Renegadeware.LL_LS1A1 {
             //refresh (undo preview)
             gameDat.signalEditRefresh.Invoke();
 
+            RefreshAttributeInfo(-1, 0);
+
             //transition back to categories
-            categoryWidget.selectIndex = mCategoryIndex;
             StartCoroutine(DoTransition(Mode.Category));
         }
 
@@ -321,19 +385,39 @@ namespace Renegadeware.LL_LS1A1 {
 
             if(mComponentIds.Count <= 0 || mComponentIds[0] == GameData.invalidID) {
                 //only put body
-                categoryWidget.Add(mBodyGroup);
+                var widget = categoryWidget.Add(mBodyGroup, 0);
+                widget.highlightGO.SetActive(true);
             }
             else {
                 //get current body selected
                 var bodyComp = GetBodyComp();
                 if(bodyComp) {
                     //put in other categories based on body
-                    categoryWidget.Add(mBodyGroup);
-                    categoryWidget.Add(bodyComp.componentGroups);
+                    categoryWidget.Add(mBodyGroup, 0);
+
+                    bool isHighlight = false;
+
+                    for(int i = 0; i < bodyComp.componentGroups.Length; i++) {
+                        int ind = i + 1;
+
+                        var grp = bodyComp.componentGroups[i];
+                        if(!grp.isHidden) {
+                            var widget = categoryWidget.Add(grp, ind);
+
+                            //highlight if no component has been picked yet
+                            if(!isHighlight) {
+                                if(mComponentIds[ind] == GameData.invalidID) {
+                                    widget.highlightGO.SetActive(true);
+                                    isHighlight = true;
+                                }
+                            }
+                        }
+                    }
                 }
                 else {
                     //only put body
-                    categoryWidget.Add(mBodyGroup);
+                    var widget = categoryWidget.Add(mBodyGroup, 0);
+                    widget.highlightGO.SetActive(true);
                 }
             }
         }
@@ -347,9 +431,57 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        private void RefreshInfo(InfoData info) {
+            if(!string.IsNullOrEmpty(info.descRef)) {
+                if(infoWidget) {
+                    infoWidget.Setup(0, info);
+                    infoWidget.gameObject.SetActive(true);
+                }
+            }
+            else
+                HideInfo();
+        }
+
+        /// <summary>
+        /// Set compModifiedInd to a valid index to apply modified ID
+        /// </summary>
+        private void RefreshAttributeInfo(int compModifiedInd, int compModifiedID) {
+            if(!attrWidget)
+                return;
+
+            var gameDat = GameData.instance;
+
+            var attrList = new List<AttributeInfo>();
+
+            for(int i = 0; i < mComponentIds.Count; i++) {
+                int id;
+                if(i == compModifiedInd)
+                    id = compModifiedID;
+                else
+                    id = mComponentIds[i];
+
+                var compDat = gameDat.GetOrganismComponent<OrganismComponent>(id);
+                if(compDat)
+                    attrList.AddRange(compDat.attributeInfos);
+            }
+
+            if(attrList.Count > 0) {
+                attrWidget.Setup(attrList.ToArray());
+                attrWidget.gameObject.SetActive(true);
+            }
+            else
+                attrWidget.gameObject.SetActive(false);
+        }
+
+        private void HideInfo() {
+            if(infoWidget) infoWidget.gameObject.SetActive(false);
+        }
+
         private void HideAll() {
             if(categoryRootGO) categoryRootGO.SetActive(false);
             if(componentRootGO) componentRootGO.SetActive(false);
+            if(infoWidget) infoWidget.gameObject.SetActive(false);
+            if(attrWidget) attrWidget.gameObject.SetActive(false);
         }
     }
 }

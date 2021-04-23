@@ -12,11 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
   m_Name: cellStructureHalophile
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 8114ba4d5787f154b95a9b964f5fb39e, type: 3}
   nameRef: cellStructureHalophile
-  descRef: 
+  descRef: cellStructureHalophileDesc
   ID: 12
-  attributeInfos: []
+  attributeInfos:
+  - icon: {fileID: 21300000, guid: b7e4b8354e5351b428261a327991404b, type: 3}
+    categoryRef: attributeCategoryResistance
+    nameRef: attributeHazardHighSalinity
+  - icon: {fileID: 21300000, guid: a1dc6693903e6b74e97a889414d34599, type: 3}
+    categoryRef: attributeCategoryResistance
+    nameRef: attributeHazardUVRadiation
+  - icon: {fileID: 21300000, guid: 10c97fd8102aef1448d7958fe4392b18, type: 3}
+    categoryRef: attributeCategoryConsumes
+    nameRef: energyAminoAcid
+  - icon: {fileID: 21300000, guid: ea864613cadea5e4d99fadc3d22adde5, type: 3}
+    categoryRef: attributeCategoryConsumes
+    nameRef: energySunlight
   stats:
     mass: 0
     forwardAccel: 0

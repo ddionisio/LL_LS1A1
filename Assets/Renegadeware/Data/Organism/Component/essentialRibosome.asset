@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b5b3bfad5724341b9c98a25b779080, type: 3}
   m_Name: essentialRibosome
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 736568ac00f21c347b4d2d74c965383e, type: 3}
   nameRef: essentialRibosome
-  descRef: 
+  descRef: essentialRibosomeDesc
   ID: 4
   attributeInfos: []
   stats:
@@ -30,6 +30,8 @@ MonoBehaviour:
     _energySources: []
     flags: 0
     danger: 0
+    toxic: 0
+    seekMassMin: 0
   _editPrefab: {fileID: 541852455636073335, guid: 4c46817dd2b19c642beb32eb6c4e722c,
     type: 3}
   _anchorName: ribosome
