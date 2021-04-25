@@ -33,6 +33,7 @@ namespace Renegadeware.LL_LS1A1 {
 
         [Header("Gameplay Time Group")]
         public Button timePlayButton;
+        public GameObject timeHintGO;
         public GameObject[] timePlayStateActives;
 
         public Image timeProgress;
@@ -129,6 +130,8 @@ namespace Renegadeware.LL_LS1A1 {
             if(gameplayTransition) gameplayTransition.Stop();
 
             if(spawnPlacementRootGO) spawnPlacementRootGO.SetActive(false);
+
+            if(timeHintGO) timeHintGO.SetActive(false);
 
             modeSelectFlags = ModeSelectFlags.None;
             ApplyModeSelectVisible();

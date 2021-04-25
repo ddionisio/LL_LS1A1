@@ -52,9 +52,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             //Setup Play
             newButton.onClick.AddListener(OnPlayNew);
-
             continueButton.onClick.AddListener(OnPlayContinue);
-            continueRootGO.SetActive(LoLManager.instance.curProgress > 0);
         }
 
         protected override IEnumerator Start() {
@@ -74,6 +72,8 @@ namespace Renegadeware.LL_LS1A1 {
             if(titleText) titleText.text = M8.Localize.Get(titleRef);
 
             if(readyGO) readyGO.SetActive(true);
+
+            if(continueRootGO) continueRootGO.SetActive(LoLManager.instance.curProgress > 0);
 
             yield return readyAnimator.PlayWait(readyTakeEnter);
         }

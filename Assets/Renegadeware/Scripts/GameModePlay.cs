@@ -22,6 +22,7 @@ namespace Renegadeware.LL_LS1A1 {
         
         [Header("Game")]
         public GameObject gameRootGO; //should include OrganismTemplateSpawner
+        public GamePlayFlow gameFlow; //use for tutorial, explanations
 
         [Header("Transition")]
         public AnimatorEnterExit transition; //this is also treated as the root GO of transition
@@ -34,6 +35,7 @@ namespace Renegadeware.LL_LS1A1 {
         public OrganismTemplate debugPlayOrganism;
         public int debugPlaySpawnCountOverride = 0; //set to > 0 to override spawnable count
         public bool debugPlayTimeUnlimited = false;
+        public bool debugWin = false; //set to true to win right away
 
         /////////////////////////////
 
@@ -57,6 +59,10 @@ namespace Renegadeware.LL_LS1A1 {
         public bool environmentIsDragging { get { return environments[environmentCurrentIndex].isDragging; } }
 
         public int environmentSpawnableCount { get { return debugPlay && debugPlaySpawnCountOverride > 0 ? debugPlaySpawnCountOverride : environmentCurrentInfo.spawnableCount; } }
+
+        /////////////////
+        //Edit
+        public OrganismDisplayEdit editDisplay { get { return mOrganismEdit; } }
 
         /////////////////
         //Game
@@ -91,6 +97,8 @@ namespace Renegadeware.LL_LS1A1 {
         public OrganismTemplateSpawner gameSpawner { get { return mOrganismSpawner; } }
 
         public ModeSelect currentModeSelect { get; private set; }
+
+        public int timeIndex { get { return mGameTimeIndex; } }
 
         /////////////////////////////
 
@@ -182,7 +190,22 @@ namespace Renegadeware.LL_LS1A1 {
             environments = envList.ToArray();
 
             //set current environment
-            environmentCurrentIndex = debugPlay ? debugPlayEnvIndex : 0;
+            if(debugPlay)
+                environmentCurrentIndex = debugPlayEnvIndex;
+            else {
+                environmentCurrentIndex = Random.Range(0, level.environments.Length);
+
+                //ensure it is not complete
+                for(int i = 0; i < level.environments.Length; i++) {
+                    if(!level.IsEnvironmentComplete(environmentCurrentIndex))
+                        break;
+
+                    environmentCurrentIndex++;
+                    if(environmentCurrentIndex == level.environments.Length)
+                        environmentCurrentIndex = 0;
+                }
+            }
+
             EnvironmentInitCurrent();
 
             environmentRootGO.SetActive(true);
@@ -235,6 +258,11 @@ namespace Renegadeware.LL_LS1A1 {
             //Loading
             yield return base.Start();
 
+            if(LoLManager.isInstantiated) {
+                while(!LoLManager.instance.isReady)
+                    yield return null;
+            }
+
             //hook-up hud interaction
             var hud = HUD.instance;
 
@@ -274,6 +302,9 @@ namespace Renegadeware.LL_LS1A1 {
             //don't show mode select if no buttons available
             if(hud.modeSelectFlags != ModeSelectFlags.None)
                 hud.ElementShow(HUD.Element.ModeSelect);
+
+            if(gameFlow)
+                yield return gameFlow.EnvironmentStart();
 
             //wait for mode select
             mModeSelectNext = ModeSelect.None;
@@ -358,6 +389,9 @@ namespace Renegadeware.LL_LS1A1 {
 
             HUD.instance.ElementShow(HUD.Element.ModeSelect);
 
+            if(gameFlow)
+                yield return gameFlow.EditStart();
+
             //wait for mode select
             mModeSelectNext = ModeSelect.None;
             while(mModeSelectNext == ModeSelect.None)
@@ -435,6 +469,9 @@ namespace Renegadeware.LL_LS1A1 {
             while(hud.isBusy)
                 yield return null;
 
+            if(gameFlow)
+                yield return gameFlow.GameStart();
+
             gameIsInputEnabled = true;
                         
             var gameStartTime = Time.time;
@@ -473,6 +510,11 @@ namespace Renegadeware.LL_LS1A1 {
                     break;
                 }
 
+                if(debugWin) {
+                    isTimeExpired = true;
+                    break;
+                }
+
                 //some simulation update
                 //if(M8.Util.CheckTag(gameObject, GameData.instance.inputSpawnTagFilter))
                 yield return null;
@@ -491,14 +533,23 @@ namespace Renegadeware.LL_LS1A1 {
 
             //determine next mode if time expired
             if(isTimeExpired) {
+                int entityCount;
+
+                if(debugWin) {
+                    entityCount = environmentCurrentInfo.criteriaCount;
+                    debugWin = false;
+                }
+                else
+                    entityCount = mOrganismSpawner.entityCount;
+
                 //met criteria?
-                if(mOrganismSpawner.entityCount >= environmentCurrentInfo.criteriaCount) { //victory
+                if(entityCount >= environmentCurrentInfo.criteriaCount) { //victory
                     //save progress
-                    level.ApplyStats(environmentCurrentIndex, gameDat.organismTemplateCurrent.ID, mOrganismSpawner.entityCount);
+                    level.ApplyStats(environmentCurrentIndex, gameDat.organismTemplateCurrent.ID, entityCount);
                     gameDat.Progress();
 
                     //setup stats for victory display
-                    mModalParms[ModalVictory.parmCount] = mOrganismSpawner.entityCount;
+                    mModalParms[ModalVictory.parmCount] = entityCount;
                     mModalParms[ModalVictory.parmCriteriaCount] = environmentCurrentInfo.criteriaCount;
                     mModalParms[ModalVictory.parmBonusCount] = environmentCurrentInfo.bonusCount;
 
@@ -510,14 +561,29 @@ namespace Renegadeware.LL_LS1A1 {
                     //check if we are ready to move on
                     if(level.IsComplete())
                         mModeSelectNext = ModeSelect.NextLevel;
-                    else
+                    else {
                         mModeSelectNext = ModeSelect.Environment;
+
+                        //next environment
+                        for(int i = 0; i < level.environments.Length; i++) {
+                            if(!level.IsEnvironmentComplete(environmentCurrentIndex))
+                                break;
+
+                            environmentCurrentIndex++;
+                            if(environmentCurrentIndex == level.environments.Length)
+                                environmentCurrentIndex = 0;
+                        }
+                    }
+
+                    if(gameFlow)
+                        yield return gameFlow.Victory();
                 }
                 else { //retry
                     mModeSelectNext = ModeSelect.None;
 
-                    mModalParms[ModalRetry.parmCurCount] = mOrganismSpawner.entityCount;
+                    mModalParms[ModalRetry.parmCurCount] = entityCount;
                     mModalParms[ModalRetry.parmCount] = environmentCurrentInfo.criteriaCount;
+                    mModalParms[ModalRetry.parmHintTextRef] = environmentCurrentInfo.hintRef;
                     mModalParms[ModalRetry.parmCallback] = (System.Action<ModeSelect>)OnModeSelect;
 
                     M8.ModalManager.main.Open(gameDat.modalRetry, mModalParms);

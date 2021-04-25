@@ -83,7 +83,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             RefreshDisplay();
 
-            SpeakTitle();
+            //SpeakTitle();
         }
 
         IEnumerator DoEnvironmentSelect() {

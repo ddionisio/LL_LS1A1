@@ -12,16 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 811b3785e1353444696c109edec202ba, type: 3}
   m_Name: stage03
   m_EditorClassIdentifier: 
+  introScene:
+    name: intro03
+    path: Assets/Renegadeware/Scenes/intro03.unity
   scene:
     name: stage03
     path: Assets/Renegadeware/Scenes/stage03.unity
   titleRef: stageTitle_3
-  progressCount: 3
+  progressCount: 2
   duration: 90
   spawnIsRandomDir: 1
   environments:
   - nameRef: stage_3_1_title
     descRef: stage_3_1_desc
+    hintRef: hint_3_1
     attributes: []
     spawnableCount: 3
     criteriaCount: 10
@@ -29,6 +33,7 @@ MonoBehaviour:
     capacity: 60
   - nameRef: stage_3_2_title
     descRef: stage_3_2_desc
+    hintRef: hint_3_2
     attributes:
     - icon: {fileID: 21300000, guid: 8a09017b824008547a7cad0b57d49385, type: 3}
       categoryRef: attributeCategoryDanger
@@ -39,6 +44,7 @@ MonoBehaviour:
     capacity: 60
   - nameRef: stage_3_3_title
     descRef: stage_3_3_desc
+    hintRef: hint_3_3
     attributes:
     - icon: {fileID: 21300000, guid: 533784bd693e8dd41b346740671a343b, type: 3}
       categoryRef: attributeCategoryDanger

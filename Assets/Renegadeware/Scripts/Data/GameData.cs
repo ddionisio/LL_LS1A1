@@ -24,6 +24,7 @@ namespace Renegadeware.LL_LS1A1 {
         public string modalOrganismEdit = "organismEdit";
         public string modalRetry = "retry";
         public string modalVictory = "victory";
+        public string modalCellClassification = "cellClassification";
 
         [Header("Scoring")]
         public int scoreBase = 1000;
@@ -248,6 +249,17 @@ namespace Renegadeware.LL_LS1A1 {
             }
         }
 
+        public int totalScore {
+            get {
+                int score = 0;
+
+                for(int i = 0; i < levels.Length; i++)
+                    score += levels[i].GetScore();
+
+                return score;
+            }
+        }
+
         private const string userDataKeyOrganismTemplateCount = "organismCount";
         private const string userDataKeyOrganismTemplate = "organism";
         private const string userDataKeyOrganismTemplateCurrent = "organismCurrent";
@@ -308,6 +320,8 @@ namespace Renegadeware.LL_LS1A1 {
         /// Called in start scene
         /// </summary>
         public void Begin(bool isRestart) {
+            isGameStarted = true;
+
             if(isRestart) {
                 ResetUserData();
 
@@ -315,8 +329,6 @@ namespace Renegadeware.LL_LS1A1 {
             }
             else
                 LoadUserData();
-
-            isGameStarted = true;
 
             Current();
         }
@@ -330,11 +342,23 @@ namespace Renegadeware.LL_LS1A1 {
             var curProgress = lolMgr.curProgress;
 
             //grab level index, and load level scene
+            bool isIntro = false;
             int levelIndex = 0;
 
             int levelProgressCount = 0;
             for(int i = 0; i < levels.Length; i++) {
+                var level = levels[i];
+
+                if(level.introScene.isValid && curProgress == levelProgressCount) {
+                    isIntro = true;
+                    break;
+                }
+
                 levelProgressCount += levels[i].progressCount;
+
+                if(level.introScene.isValid)
+                    levelProgressCount++;
+
                 if(curProgress < levelProgressCount)
                     break;
 
@@ -342,7 +366,10 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             if(levelIndex < levels.Length) {
-                levels[levelIndex].scene.Load();
+                if(isIntro)
+                    levels[levelIndex].introScene.Load();
+                else
+                    levels[levelIndex].scene.Load();
             }
             else { //end
                 endScene.Load();
@@ -367,13 +394,20 @@ namespace Renegadeware.LL_LS1A1 {
                 for(int i = 0; i < levels.Length; i++) {
                     var lvl = levels[i];
 
-                    if(lvl.scene == curScene) {
+                    if(lvl.introScene.isValid && lvl.introScene == curScene) {
+                        curProgress = levelProgressCount;
+                        break;
+                    }
+                    else if(lvl.scene == curScene) {
                         curProgress = levelProgressCount;
                         curProgress += lvl.GetProgressCount();
                         break;
                     }
 
                     levelProgressCount += lvl.progressCount;
+
+                    if(lvl.introScene.isValid)
+                        levelProgressCount++;
                 }
 
                 isGameStarted = true;
@@ -385,7 +419,9 @@ namespace Renegadeware.LL_LS1A1 {
             if(isGameStarted) {
                 SaveUserData();
 
-                LoLManager.instance.ApplyProgress(curProgress + 1);
+                if(LoLManager.isInstantiated) {
+                    LoLManager.instance.ApplyProgress(curProgress + 1, totalScore);
+                }
             }
         }
 
@@ -478,8 +514,12 @@ namespace Renegadeware.LL_LS1A1 {
             if(LoLManager.isInstantiated) {
                 int progressCount = 0;
 
-                for(int i = 0; i < levels.Length; i++)
+                for(int i = 0; i < levels.Length; i++) {
                     progressCount += levels[i].progressCount;
+
+                    if(levels[i].introScene.isValid)
+                        progressCount++;
+                }
 
                 LoLManager.instance.progressMax = progressCount;
             }

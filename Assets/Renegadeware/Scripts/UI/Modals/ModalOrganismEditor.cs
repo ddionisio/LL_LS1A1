@@ -23,6 +23,7 @@ namespace Renegadeware.LL_LS1A1 {
         public TMP_Text titleText;
         public InfoWidget infoWidget;
         public AttributeGroupWidget attrWidget;
+        public CanvasGroup canvasGroup;
 
         [Header("Category")]
         public GameObject categoryRootGO;

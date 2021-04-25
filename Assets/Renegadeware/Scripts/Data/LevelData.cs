@@ -13,6 +13,9 @@ namespace Renegadeware.LL_LS1A1 {
             [M8.Localize]
             public string descRef;
 
+            [M8.Localize]
+            public string hintRef;
+
             public AttributeInfo[] attributes;
 
             [Header("Spawn Settings")]
@@ -54,11 +57,12 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         [Header("Data")]
+        public M8.SceneAssetPath introScene;
         public M8.SceneAssetPath scene;
 
         [M8.Localize]
         public string titleRef;
-        
+
         public int progressCount = 2; //number of progress for this particular level before going to next (use LoL cur. progress)
         public float duration = 60f; //play duration
 
@@ -108,6 +112,22 @@ namespace Renegadeware.LL_LS1A1 {
             progressCount = Mathf.Clamp(progressCount, 0, progressCount);
 
             return progressCount;
+        }
+
+        public int GetScore() {
+            var gameDat = GameData.instance;
+
+            int score = 0;
+
+            for(int i = 0; i < stats.Length; i++) {
+                var env = environments[i];
+
+                var count = stats[i].count;
+                if(count > 0)
+                    score += gameDat.GetScore(count, env.criteriaCount, env.bonusCount);
+            }
+
+            return score;
         }
 
         public void ApplyStats(int envInd, int templateID, int spawnCount) {
