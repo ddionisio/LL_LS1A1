@@ -40,9 +40,9 @@ namespace Renegadeware.LL_LS1A1 {
         [M8.Animator.TakeSelector(animatorField = "introAnimator")]
         public string introTakePlay;
 
-        [Header("Music")]
-        [M8.MusicPlaylist]
-        public string music;
+        //[Header("Music")]
+        //[M8.MusicPlaylist]
+        //public string music;
 
         protected override void OnInstanceInit() {
             base.OnInstanceInit();
@@ -66,7 +66,9 @@ namespace Renegadeware.LL_LS1A1 {
 
             //Title/Ready
 
-            M8.MusicPlaylist.instance.Play(music, true, true);
+            //M8.MusicPlaylist.instance.Play(music, true, true);
+            if(MusicCycle.isInstantiated)
+                MusicCycle.instance.Play();
 
             //Setup Title
             if(titleText) titleText.text = M8.Localize.Get(titleRef);

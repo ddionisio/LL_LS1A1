@@ -64,6 +64,7 @@ GameObject:
   - component: {fileID: 140190670}
   - component: {fileID: 6753473943224891002}
   - component: {fileID: 140190668}
+  - component: {fileID: 2551176027845801460}
   m_Layer: 5
   m_Name: prevButton
   m_TagString: Untagged
@@ -173,6 +174,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2551176027845801460}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2551176027845801460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140190666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &237498664
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,6 +462,7 @@ GameObject:
   - component: {fileID: 530000909}
   - component: {fileID: 8740699305602254200}
   - component: {fileID: 530000907}
+  - component: {fileID: 506450903014425328}
   m_Layer: 5
   m_Name: nextButton
   m_TagString: Untagged
@@ -545,6 +572,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 506450903014425328}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &506450903014425328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530000905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &689335680
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,6 +609,7 @@ GameObject:
   - component: {fileID: 689335684}
   - component: {fileID: 7808075639259945571}
   - component: {fileID: 689335682}
+  - component: {fileID: 4168474028778448927}
   m_Layer: 5
   m_Name: acceptButton
   m_TagString: Untagged
@@ -657,7 +710,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 441444733013359749}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4168474028778448927}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4168474028778448927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689335680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &704756462
 GameObject:
   m_ObjectHideFlags: 0
@@ -1112,6 +1190,7 @@ GameObject:
   - component: {fileID: 822671734}
   - component: {fileID: 5468672627848710515}
   - component: {fileID: 822671732}
+  - component: {fileID: 2787959539604925086}
   m_Layer: 5
   m_Name: playButton
   m_TagString: Untagged
@@ -1213,7 +1292,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8002070883751542464}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2787959539604925086}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2787959539604925086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822671730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &841705089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1854,6 +1958,7 @@ GameObject:
   - component: {fileID: 1344878290}
   - component: {fileID: 334270043260594327}
   - component: {fileID: 1344878288}
+  - component: {fileID: 8809931701899787274}
   m_Layer: 5
   m_Name: envButton
   m_TagString: Untagged
@@ -1954,7 +2059,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6718192776119351842}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8809931701899787274}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8809931701899787274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344878286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &1352473271
 GameObject:
   m_ObjectHideFlags: 0
@@ -1967,6 +2097,7 @@ GameObject:
   - component: {fileID: 1352473275}
   - component: {fileID: 8718981045619234401}
   - component: {fileID: 1352473273}
+  - component: {fileID: 5592612686621497698}
   m_Layer: 5
   m_Name: cancelButton
   m_TagString: Untagged
@@ -2067,7 +2198,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3149881648060876325}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5592612686621497698}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5592612686621497698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352473271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &1547763766
 GameObject:
   m_ObjectHideFlags: 0
@@ -2141,6 +2297,7 @@ GameObject:
   - component: {fileID: 1754526134}
   - component: {fileID: 748898936830818738}
   - component: {fileID: 1754526132}
+  - component: {fileID: 3649784284992062056}
   m_Layer: 5
   m_Name: editButton
   m_TagString: Untagged
@@ -2241,7 +2398,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 396445066214039006}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3649784284992062056}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3649784284992062056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754526130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &1906903302
 GameObject:
   m_ObjectHideFlags: 0
@@ -7227,6 +7409,9 @@ MonoBehaviour:
   spawnPlacementColorGroup: {fileID: 7839109166461672889}
   spawnPlacementColorValid: {r: 0.5803922, g: 0.7411765, b: 0.4666667, a: 1}
   spawnPlacementColorInvalid: {r: 0.9960785, g: 0.4431373, b: 0.43137258, a: 1}
+  sfxSpawnPlacement: boop
+  sfxSpawnPlacementInvalid: wrong
+  sfxMedal: correct
 --- !u!1 &924027125062908939
 GameObject:
   m_ObjectHideFlags: 0
@@ -14645,6 +14830,7 @@ GameObject:
   - component: {fileID: 1987020131890194861}
   - component: {fileID: 7980598869929392769}
   - component: {fileID: 2312158574093003351}
+  - component: {fileID: 5886572298220864128}
   m_Layer: 5
   m_Name: retryButton
   m_TagString: Untagged
@@ -14758,6 +14944,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5886572298220864128}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5886572298220864128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3082184895947009322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &3093176239189616819
 GameObject:
   m_ObjectHideFlags: 0
@@ -17686,6 +17897,7 @@ GameObject:
   - component: {fileID: 3045728902240417871}
   - component: {fileID: 4594581160544254399}
   - component: {fileID: 7163336633767491797}
+  - component: {fileID: 4460545190153513624}
   m_Layer: 5
   m_Name: continueButton
   m_TagString: Untagged
@@ -17815,6 +18027,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 4460545190153513624}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4460545190153513624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3825122440936985368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &3903540039401237315
 GameObject:
   m_ObjectHideFlags: 0
@@ -17827,6 +18064,7 @@ GameObject:
   - component: {fileID: 4912721116149406310}
   - component: {fileID: 9183870198825776373}
   - component: {fileID: 3172584355722383653}
+  - component: {fileID: 1291115063942784024}
   m_Layer: 5
   m_Name: timePlay
   m_TagString: Untagged
@@ -17928,7 +18166,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6034854693997721926}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1291115063942784024}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1291115063942784024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903540039401237315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &3916490578836534924
 GameObject:
   m_ObjectHideFlags: 0
@@ -18816,6 +19079,7 @@ GameObject:
   - component: {fileID: 850112915278176836}
   - component: {fileID: 5477113927818580532}
   - component: {fileID: 2388272213123759118}
+  - component: {fileID: 9148128171557089152}
   m_Layer: 5
   m_Name: zoomOut
   m_TagString: Untagged
@@ -18913,7 +19177,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3604323888169052941}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 9148128171557089152}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &9148128171557089152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3994030600811399123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &4000702206217153408
 GameObject:
   m_ObjectHideFlags: 0
@@ -24414,6 +24703,7 @@ GameObject:
   - component: {fileID: 1828399167210239203}
   - component: {fileID: 634213045237110658}
   - component: {fileID: 7945674548534611296}
+  - component: {fileID: 4203836983070090258}
   m_Layer: 5
   m_Name: closeButton
   m_TagString: Untagged
@@ -24543,6 +24833,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 4203836983070090258}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4203836983070090258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5142386207912299758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &5144627217997112374
 GameObject:
   m_ObjectHideFlags: 0
@@ -26872,6 +27187,7 @@ GameObject:
   - component: {fileID: 3751285431168410737}
   - component: {fileID: 8247676321026006990}
   - component: {fileID: 7070153260718769965}
+  - component: {fileID: 1919035547222410211}
   m_Layer: 5
   m_Name: optionButton
   m_TagString: Untagged
@@ -26989,6 +27305,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1919035547222410211}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7070153260718769965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27007,6 +27334,20 @@ MonoBehaviour:
   modal: options
   onlyIfEmpty: 0
   closeIfOpened: 1
+--- !u!114 &1919035547222410211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5653450172260328546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &5656025899902641388
 GameObject:
   m_ObjectHideFlags: 0
@@ -28081,6 +28422,7 @@ GameObject:
   - component: {fileID: 7091617629556874467}
   - component: {fileID: 62669611721755153}
   - component: {fileID: 4133654165806151388}
+  - component: {fileID: 499273076866985537}
   m_Layer: 5
   m_Name: envButton
   m_TagString: Untagged
@@ -28194,6 +28536,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 499273076866985537}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &499273076866985537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5874678117880402557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &5918617304387482515
 GameObject:
   m_ObjectHideFlags: 0
@@ -29045,6 +29412,7 @@ GameObject:
   - component: {fileID: 5205520886251738794}
   - component: {fileID: 6802206932974248700}
   - component: {fileID: 6734065253616543145}
+  - component: {fileID: 3067366296871365432}
   m_Layer: 5
   m_Name: editButton
   m_TagString: Untagged
@@ -29158,6 +29526,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3067366296871365432}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3067366296871365432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6141282390369043858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &6182507739244419359
 GameObject:
   m_ObjectHideFlags: 0
@@ -33749,6 +34142,7 @@ GameObject:
   - component: {fileID: 2056525164988876882}
   - component: {fileID: 1759315189758453484}
   - component: {fileID: 5202448357128707259}
+  - component: {fileID: 8121532169790258926}
   m_Layer: 5
   m_Name: noButton
   m_TagString: Untagged
@@ -33867,6 +34261,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8121532169790258926}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8121532169790258926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7098889935416213767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &7099169940772917749
 GameObject:
   m_ObjectHideFlags: 0
@@ -36249,6 +36668,7 @@ GameObject:
   - component: {fileID: 6947493122113007974}
   - component: {fileID: 3865989130327276490}
   - component: {fileID: 2401947733656417073}
+  - component: {fileID: 680725119765264895}
   m_Layer: 5
   m_Name: yesButton
   m_TagString: Untagged
@@ -36367,6 +36787,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 680725119765264895}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &680725119765264895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7765658953741238179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &7788129930916439014
 GameObject:
   m_ObjectHideFlags: 0
@@ -36741,6 +37186,7 @@ GameObject:
   - component: {fileID: 4563074067200170156}
   - component: {fileID: 3947364119905473098}
   - component: {fileID: 2837074558938839608}
+  - component: {fileID: 3420963775577653886}
   m_Layer: 5
   m_Name: zoomIn
   m_TagString: Untagged
@@ -36838,7 +37284,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8428934119480455326}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3420963775577653886}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &3420963775577653886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7889477617134506198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &7895362057193718164
 GameObject:
   m_ObjectHideFlags: 0
@@ -37333,6 +37804,7 @@ GameObject:
   - component: {fileID: 6909625278593080741}
   - component: {fileID: 2054155496157657173}
   - component: {fileID: 1520895335359483276}
+  - component: {fileID: 1366539049980352184}
   m_Layer: 5
   m_Name: okButton
   m_TagString: Untagged
@@ -37451,6 +37923,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1366539049980352184}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1366539049980352184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8188928666412832145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: tap
+  mode: 0
 --- !u!1 &8191141404048060758
 GameObject:
   m_ObjectHideFlags: 0
@@ -38746,6 +39243,7 @@ MonoBehaviour:
   - {fileID: 4322144212963475210}
   - {fileID: 5558507958515408042}
   - {fileID: 5520229173363992479}
+  sfxSuccess: success
 --- !u!114 &108085603842964582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39878,6 +40376,7 @@ MonoBehaviour:
   descRef: timeExpireDesc
   descLabel: {fileID: 4802401558273846197}
   hintLabel: {fileID: 3745930596333538413}
+  sfxLose: lose
 --- !u!114 &2318566114444473476
 MonoBehaviour:
   m_ObjectHideFlags: 0

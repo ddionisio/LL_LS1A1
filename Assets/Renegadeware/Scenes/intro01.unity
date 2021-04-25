@@ -522,7 +522,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &429244696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,7 +548,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429244695}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.38, z: 0}
+  m_LocalPosition: {x: 0, y: 9.63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1230929385}
@@ -605,12 +605,12 @@ MonoBehaviour:
     numLoop: 1
     loopMode: 0
     loopBackToFrame: 0
-    trackCounter: 9
+    trackCounter: 11
     groupCounter: 0
     rootGroup:
       group_name: 
       group_id: 0
-      elements: 060000000300000005000000070000000900000008000000
+      elements: 06000000030000000500000007000000090000000a0000000b000000
       foldout: 1
     groupValues: []
   _defaultTakeName: 
@@ -629,49 +629,23 @@ MonoBehaviour:
     _cameraSwitcherKeys: []
     _eventTracks:
     - _version: 1
-      id: 8
-      name: Track5
+      id: 10
+      name: Track7
       foldout: 1
       _targetPath: 
-      obj: {fileID: 2143051858}
+      obj: {fileID: 1082640513}
       componentName: 
     _eventKeys:
     - interp: 0
-      frame: 5
+      frame: 45
       easeType: 1
       amplitude: 0
       period: 0
       customEase: []
       useSendMessage: 0
-      parameters:
-      - paramName: withChildren
-        valueType: 13
-        val_int: 0
-        val_string: 
-        val_vect4: {x: 0, y: 0, z: 0, w: 0}
-        val_obj: {fileID: 0}
-        val_typeAssembly: 
-        lsArray: []
-      methodName: PlayLoop
-      componentType: ParticleController
-    - interp: 0
-      frame: 80
-      easeType: 1
-      amplitude: 0
-      period: 0
-      customEase: []
-      useSendMessage: 0
-      parameters:
-      - paramName: loop
-        valueType: 13
-        val_int: 0
-        val_string: 
-        val_vect4: {x: 0, y: 0, z: 0, w: 0}
-        val_obj: {fileID: 0}
-        val_typeAssembly: 
-        lsArray: []
-      methodName: SetLoop
-      componentType: ParticleController
+      parameters: []
+      methodName: Play
+      componentType: SoundPlaylistProxy
     _goSetActiveTracks:
     - _version: 1
       id: 3
@@ -708,6 +682,13 @@ MonoBehaviour:
       _targetPath: 
       obj: {fileID: 1581503712}
       startActive: 0
+    - _version: 1
+      id: 11
+      name: Track7
+      foldout: 1
+      _targetPath: 
+      obj: {fileID: 2143051858}
+      startActive: 1
     _goSetActiveKeys:
     - interp: 0
       frame: 40
@@ -743,6 +724,14 @@ MonoBehaviour:
       endFrame: -1
     - interp: 0
       frame: 45
+      easeType: 1
+      amplitude: 0
+      period: 0
+      customEase: []
+      setActive: 1
+      endFrame: -1
+    - interp: 0
+      frame: 5
       easeType: 1
       amplitude: 0
       period: 0
@@ -969,13 +958,16 @@ MonoBehaviour:
     - type: 4
       index: 4
       keyIndices: 04000000
-    - type: 3
-      index: 0
-      keyIndices: 0000000001000000
     - type: 11
       index: 0
       keyIndices: 000000000100000002000000
-    _takeTrackCounts: 0400000006000000
+    - type: 3
+      index: 0
+      keyIndices: 00000000
+    - type: 4
+      index: 5
+      keyIndices: 05000000
+    _takeTrackCounts: 0400000007000000
 --- !u!4 &446981737
 Transform:
   m_ObjectHideFlags: 0
@@ -1062,6 +1054,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9aed749047e1b34a91971378d3132ac, type: 3}
+--- !u!1 &1082640513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1082640515}
+  - component: {fileID: 1082640514}
+  m_Layer: 0
+  m_Name: spawnSFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1082640514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082640513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c3208c7ade34784eb92281584183c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: revive
+  mode: 0
+--- !u!4 &1082640515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082640513}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1230929384
 GameObject:
   m_ObjectHideFlags: 0
@@ -1534,6 +1571,7 @@ Transform:
   - {fileID: 145926111}
   - {fileID: 102884537}
   - {fileID: 1445649872}
+  - {fileID: 2143051862}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2079,15 +2117,15 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2143051858}
   serializedVersion: 6
-  lengthInSec: 5
+  lengthInSec: 3
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 1
-  prewarm: 1
-  playOnAwake: 0
+  looping: 0
+  prewarm: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -6736,10 +6774,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2143051858}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.25, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 1581503713}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}

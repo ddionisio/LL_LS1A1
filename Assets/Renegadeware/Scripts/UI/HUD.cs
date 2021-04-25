@@ -53,6 +53,14 @@ namespace Renegadeware.LL_LS1A1 {
         public Color spawnPlacementColorValid = Color.green;
         public Color spawnPlacementColorInvalid = Color.red;
 
+        [Header("SFX")]
+        [M8.SoundPlaylist]
+        public string sfxSpawnPlacement;
+        [M8.SoundPlaylist]
+        public string sfxSpawnPlacementInvalid;
+        [M8.SoundPlaylist]
+        public string sfxMedal;
+
         public bool isBusy { 
             get {
                 return (modeSelectTransition && modeSelectTransition.isPlaying) || (gameplayTransition && gameplayTransition.isPlaying);
@@ -95,6 +103,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         private int mZoomIndex;
         private CameraControl.ZoomLevelInfo[] mZoomInfos;
+
+        private int mLastMedalInd;
 
         public bool ElementIsVisible(Element elem) {
             switch(elem) {
@@ -159,7 +169,18 @@ namespace Renegadeware.LL_LS1A1 {
                     organismProgressMedalActives[i].SetActive(false);
             }
 
+            if(medalInd > mLastMedalInd) {
+                mLastMedalInd = medalInd;
+
+                if(!string.IsNullOrEmpty(sfxMedal))
+                    M8.SoundPlaylist.instance.Play(sfxMedal, false);
+            }
+
             organismSpawnCountLabel.text = currentCount.ToString();
+        }
+
+        public void ResetMedalCounter() {
+            mLastMedalInd = -1;
         }
 
         public void SpawnPlacementSetCount(int count) {

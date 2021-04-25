@@ -13,6 +13,10 @@ namespace Renegadeware.LL_LS1A1 {
         public M8.TextMeshPro.TextMeshProCounter scoreLabel;
         public GameObject[] medals;
 
+        [Header("SFX")]
+        [M8.SoundPlaylist]
+        public string sfxSuccess;
+
         void M8.IModalPush.Push(M8.GenericParams parms) {
             int count = 0, criteriaCount = 0, bonusCount = 0;
 
@@ -48,6 +52,9 @@ namespace Renegadeware.LL_LS1A1 {
                         medals[i].SetActive(false);
                 }
             }
+
+            if(!string.IsNullOrEmpty(sfxSuccess))
+                M8.SoundPlaylist.instance.Play(sfxSuccess, false);
         }
     }
 }

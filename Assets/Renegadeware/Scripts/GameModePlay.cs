@@ -463,6 +463,8 @@ namespace Renegadeware.LL_LS1A1 {
 
             hud.OrganismProgressApply(0, envInfo.criteriaCount, envInfo.bonusCount);
 
+            hud.ResetMedalCounter();
+
             hud.ElementShow(HUD.Element.Gameplay);
             hud.ElementShow(HUD.Element.ModeSelect);
 
@@ -563,16 +565,6 @@ namespace Renegadeware.LL_LS1A1 {
                         mModeSelectNext = ModeSelect.NextLevel;
                     else {
                         mModeSelectNext = ModeSelect.Environment;
-
-                        //next environment
-                        for(int i = 0; i < level.environments.Length; i++) {
-                            if(!level.IsEnvironmentComplete(environmentCurrentIndex))
-                                break;
-
-                            environmentCurrentIndex++;
-                            if(environmentCurrentIndex == level.environments.Length)
-                                environmentCurrentIndex = 0;
-                        }
                     }
 
                     if(gameFlow)
@@ -716,7 +708,14 @@ namespace Renegadeware.LL_LS1A1 {
                         HUD.instance.SpawnPlacementSetCount(mGameSpawnCount);
 
                         RefreshSpawnPlacementActive();
+
+                        if(!string.IsNullOrEmpty(hud.sfxSpawnPlacement))
+                            M8.SoundPlaylist.instance.Play(hud.sfxSpawnPlacement, false);
                     }
+                }
+                else {
+                    if(!string.IsNullOrEmpty(hud.sfxSpawnPlacement))
+                        M8.SoundPlaylist.instance.Play(hud.sfxSpawnPlacementInvalid, false);
                 }
             }
             else

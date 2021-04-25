@@ -18,6 +18,10 @@ namespace Renegadeware.LL_LS1A1 {
         public TMP_Text descLabel;
         public TMP_Text hintLabel;
 
+        [Header("SFX")]
+        [M8.SoundPlaylist]
+        public string sfxLose;
+
         private string mHintTextRef;
 
         private System.Action<ModeSelect> mCallback;
@@ -67,6 +71,9 @@ namespace Renegadeware.LL_LS1A1 {
                 else
                     hintLabel.text = "";
             }
+
+            if(!string.IsNullOrEmpty(sfxLose))
+                M8.SoundPlaylist.instance.Play(sfxLose, false);
         }
 
         public void GotoEnvironmentClick() {
