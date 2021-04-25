@@ -196,6 +196,17 @@
     "intro02_intro1": "A new strategy for adaptation is in order.",
     "intro02_classification0": "We will now be moving forward as bacteria.",
     "intro02_classification1": "Though they are structurally similar to archaea, they differ in how their membrane is structured.",
-    "intro02_classification2": "Now let’s see how they fare with the next environments!"
+    "intro02_classification2": "Now let’s see how they fare with the next environments!",
+    "intro03_intro0": "After devouring many in its path, the perfect cell has outgrown the simple life of being a prokaryotic cell.",
+    "intro03_intro1": "In order to further grow, the perfect cell needs a more complex internal system to sustain its life.",
+    "intro03_forward0": "Some of these digested organisms have found a way to integrate itself inside the perfect cell.",
+    "intro03_forward1": "By taking refuge inside, they in return, provide the perfect cell further room to grow.",
+    "intro03_forward2": "This is known as endosymbiosis. The smaller organisms inside allow the perfect cell to further evolve as they are given a safe haven.",
+    "intro03_protist0": "Now it’s time to move on as eukaryotes.",
+    "intro03_protist1": "Unlike prokaryotes, eukaryotes have membrane-bound organelles.",
+    "intro03_protist2": "This allows eukaryotes to have more complex system such as unique appendages for hunting, as well as a way to communicate to other cells.",
+    "end": "THE END",
+    "end_thanks": "Thank you for playing!",
+    "total_score": "TOTAL SCORE:"
   }
 }

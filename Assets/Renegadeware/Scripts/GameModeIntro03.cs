@@ -13,6 +13,12 @@ namespace Renegadeware.LL_LS1A1 {
         [M8.Animator.TakeSelector(animatorField = "animator")]
         public string takeEnter;
 
+        public ModalDialogFlow dialogIntro;
+
+        public ModalDialogFlow dialogForward;
+
+        public ModalDialogFlow dialogProtis;
+
         protected override void OnInstanceInit() {
             base.OnInstanceInit();
         }
@@ -22,6 +28,30 @@ namespace Renegadeware.LL_LS1A1 {
 
             while(!LoLManager.instance.isReady)
                 yield return null;
+
+            yield return dialogIntro.Play();
+
+            yield return animator.PlayWait(takeEnter);
+
+            yield return dialogForward.Play();
+
+            //classification
+            var classificationParms = new M8.GenericParams();
+            classificationParms[ModalCellClassification.parmIndex] = 2;
+
+            M8.ModalManager.main.Open(GameData.instance.modalCellClassification, classificationParms);
+
+            //bacteria dialog
+            yield return dialogProtis.Play();
+
+            M8.ModalManager.main.CloseAll();
+
+            while(M8.ModalManager.main.isBusy)
+                yield return null;
+
+            //proceed
+            GameData.instance.Progress();
+            GameData.instance.Current();
         }
     }
 }

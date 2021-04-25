@@ -93,6 +93,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 2e99fba36c7e80141bda7f530bc87d3a, type: 3}
   - {fileID: 21300000, guid: 15ea4eb34771de842bab6998c927f75f, type: 3}
   - {fileID: 21300000, guid: e45ca4c321af2e948b92c80ba8263f62, type: 3}
+  - {fileID: 21300000, guid: c96007c36dc294d47acfbace1c4b5f9f, type: 3}
   - {fileID: 21300000, guid: 9cce38e31fcea2d45961540e106b37dd, type: 3}
   - {fileID: 21300000, guid: 761a39f37c970494692893c09089ec0a, type: 3}
   - {fileID: 21300000, guid: 9aeb0404936b760408a498687b1aec69, type: 3}
@@ -261,6 +262,7 @@ SpriteAtlas:
   - iconMotilityLophotrichous
   - bacillusEdit
   - coccobacillusHalophile
+  - heart
   - protozoaBody
   - blob3
   - coccobacillusPhotoautotroph
