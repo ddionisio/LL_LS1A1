@@ -49,10 +49,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: d93c409e7f89e594ba7a9c49dfad2275, type: 2}
-  energyCapacity: 40
+  energyCapacity: 50
   energyIsUnlimited: 0
   energyRate: 2
-  lifespan: 15
+  lifespan: 16
   moveMode: 1
   moveAccel: 1.25
   moveSpeedCap: 1

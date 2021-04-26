@@ -32,8 +32,10 @@ namespace Renegadeware.LL_LS1A1 {
             //Loading
             yield return base.Start();
 
-            while(!LoLManager.instance.isReady)
-                yield return null;
+            if(LoLManager.isInstantiated) {
+                while(!LoLManager.instance.isReady)
+                    yield return null;
+            }
 
             //intro
             yield return dialogIntro.Play();
@@ -74,6 +76,9 @@ namespace Renegadeware.LL_LS1A1 {
 
             //proceed
             GameData.instance.Progress();
+
+            yield return new WaitForSeconds(0.3f);
+
             GameData.instance.Current();
         }
     }

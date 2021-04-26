@@ -292,8 +292,8 @@ namespace Renegadeware.LL_LS1A1 {
                             }
                         }
 
-                        if(toxicCount > 0)
-                            entity.stats.ForcedLifeExpire();
+                        if(toxicCount > 0 && (entity.stats.flags & OrganismFlag.ToxicKamikazi) != 0)
+                            entity.stats.energy = 0f;
                     }
                     break;
 

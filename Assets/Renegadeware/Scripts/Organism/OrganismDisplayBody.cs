@@ -36,7 +36,9 @@ namespace Renegadeware.LL_LS1A1 {
         public List<Transform> GetAnchors(string anchorName) {
             if(mAnchors == null) {
                 mAnchors = new Dictionary<string, List<Transform>>();
-                GenerateAnchors(anchorRoot);
+
+                if(anchorRoot)
+                    GenerateAnchors(anchorRoot);
             }
 
             List<Transform> anchors;
@@ -47,6 +49,8 @@ namespace Renegadeware.LL_LS1A1 {
         private void GenerateAnchors(Transform parent) {
             for(int i = 0; i < parent.childCount; i++) {
                 var t = parent.GetChild(i);
+                if(!t)
+                    continue;
 
                 List<Transform> anchors;
                 if(!mAnchors.TryGetValue(t.name, out anchors)) {

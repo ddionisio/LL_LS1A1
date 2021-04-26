@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 2023845852459399258}
-  rotatePerSecond: {x: 0, y: 0, z: 90}
+  rotatePerSecond: {x: 0, y: 0, z: 270}
   local: 1
   updateType: 0
   resetOnDisable: 0
@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 3279120332235226903}
-  rotatePerSecond: {x: 0, y: 0, z: -90}
+  rotatePerSecond: {x: 0, y: 0, z: -270}
   local: 1
   updateType: 0
   resetOnDisable: 0

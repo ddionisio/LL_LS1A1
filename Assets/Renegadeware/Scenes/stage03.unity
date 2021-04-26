@@ -4392,6 +4392,7 @@ MonoBehaviour:
   environmentRootGO: {fileID: 1459091782}
   editRootGO: {fileID: 2005665436}
   gameRootGO: {fileID: 1344762203}
+  gameFlow: {fileID: 0}
   transition: {fileID: 830167073}
   debugLevel: {fileID: 0}
   debugPlay: 0
@@ -23617,10 +23618,10 @@ MonoBehaviour:
   templateEntity: {fileID: 1336636819221178673, guid: de9839fd714762545a7c6790d91b3add,
     type: 3}
   templateEntityIsPrefab: 1
-  templateCapacity: 16
+  templateCapacity: 20
   spawnDefaultLocked: 0
   spawnStartCount: 8
-  spawnCount: 16
+  spawnCount: 20
   spawnWait: 1
   signalListenSpawnLock: {fileID: 0}
 --- !u!1 &1043303423

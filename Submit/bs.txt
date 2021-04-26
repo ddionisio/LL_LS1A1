@@ -1,0 +1,11 @@
+Perfect Cell
+
+Journey into the depths to grow and evolve as the perfect cell. Keep moving forward!
+
+Controls:
+Use the touchpad or mouse for interactions.
+
+Camera Movement - You can use the arrow keys or WASD to move the camera, or drag with the mouse.
+Camera Zoom In/Out - Press the +/- sign found above the timer bar at the bottom. You can also press Q/E or +/- on the keyboard.
+Time Skip - While playing, you can speed up the time by pressing the button found at the bottom of the screen, left of the timer bar.
+Environment Select/Organism Edit - While playing, if you want to select a new environment or modify the organism, you can do so by pressing the buttons found at the bottom right of the screen.

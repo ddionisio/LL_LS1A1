@@ -27,7 +27,7 @@ namespace LoLSDK
         // PLUMBING
         // *************************************
 
-        public const string SDK_VERSION = "V5.1";
+        public const string SDK_VERSION = "5.1";
 
         [DllImport("__Internal")]
         public static extern void _PostWindowMessage(string msgName, string jsonPayload);
@@ -212,6 +212,7 @@ namespace LoLSDK
         }
     }
 
+#if UNITY_EDITOR
     public class MockWebGL : ILOLSDK_EDITOR
     {
 
@@ -420,4 +421,5 @@ namespace LoLSDK
             Debug.Log("GetPlayerActivityId");
         }
     }
+#endif
 }

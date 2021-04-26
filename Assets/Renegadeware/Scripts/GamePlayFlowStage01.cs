@@ -88,6 +88,8 @@ namespace Renegadeware.LL_LS1A1 {
         }
 
         void OnBodyChanged() {
+            mIsBodySelected = true; //disabled
+
             if(mIsBodySelected)
                 return;
 

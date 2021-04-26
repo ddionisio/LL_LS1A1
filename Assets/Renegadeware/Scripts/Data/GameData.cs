@@ -144,13 +144,13 @@ namespace Renegadeware.LL_LS1A1 {
         public OrganismTemplate organismTemplateCurrent {
             get {
                 if(!mOrganismTemplateCurrent) {
-                    var usrData = LoLManager.isInstantiated ? LoLManager.instance.userData : null;
+                    //var usrData = LoLManager.isInstantiated ? LoLManager.instance.userData : null;
 
-                    if(usrData)
-                        mOrganismTemplateCurrent = OrganismTemplate.LoadFrom(usrData, userDataKeyOrganismTemplateCurrent);
-                    else {
+                    //if(usrData)
+                        //mOrganismTemplateCurrent = OrganismTemplate.LoadFrom(usrData, userDataKeyOrganismTemplateCurrent);
+                    //else {
                         mOrganismTemplateCurrent = OrganismTemplate.CreateEmpty();
-                    }
+                    //}
                 }
 
                 return mOrganismTemplateCurrent;
@@ -266,7 +266,7 @@ namespace Renegadeware.LL_LS1A1 {
         private const string userDataKeyOrganismTemplateIDCounter = "organismIDCounter";
 
         private OrganismTemplate mOrganismTemplateCurrent; //currently editting organism
-        private List<OrganismTemplate> mOrganismTemplateList; //saved organisms made by player
+        private List<OrganismTemplate> mOrganismTemplateList = new List<OrganismTemplate>(); //saved organisms made by player
 
         private int mOrganismTemplateIDCounter = 1;
 
@@ -553,7 +553,7 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             //load organism ID Counter
-            mOrganismTemplateIDCounter = usrData.GetInt(userDataKeyOrganismTemplateIDCounter, 1);
+            /*mOrganismTemplateIDCounter = usrData.GetInt(userDataKeyOrganismTemplateIDCounter, 1);
 
             //load organism template current
             if(mOrganismTemplateCurrent)
@@ -569,7 +569,7 @@ namespace Renegadeware.LL_LS1A1 {
             mOrganismTemplateList = new List<OrganismTemplate>(organismCount);
 
             for(int i = 0; i < organismCount; i++)
-                mOrganismTemplateList.Add(OrganismTemplate.LoadFrom(usrData, userDataKeyOrganismTemplate + i));
+                mOrganismTemplateList.Add(OrganismTemplate.LoadFrom(usrData, userDataKeyOrganismTemplate + i));*/
         }
 
         private void SaveUserData() {
@@ -590,7 +590,7 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             //save organism template ID Counter
-            usrData.SetInt(userDataKeyOrganismTemplateIDCounter, mOrganismTemplateIDCounter);
+            /*usrData.SetInt(userDataKeyOrganismTemplateIDCounter, mOrganismTemplateIDCounter);
 
             //save organism template current
             if(mOrganismTemplateCurrent)
@@ -608,7 +608,7 @@ namespace Renegadeware.LL_LS1A1 {
                     organismTemplate.SaveTo(usrData, userDataKeyOrganismTemplate + curInd);
                     curInd++;
                 }
-            }
+            }*/
         }
 
         private void ResetUserData() {

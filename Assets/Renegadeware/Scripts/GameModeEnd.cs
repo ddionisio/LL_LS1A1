@@ -24,18 +24,20 @@ namespace Renegadeware.LL_LS1A1 {
             base.OnInstanceInit();
 
             uiRootGO.SetActive(false);
-
-            scoreLabel.SetCountImmediate(0);
-
-            if(LoLManager.isInstantiated)
-                scoreLabel.count = LoLManager.instance.curScore;
         }
 
         protected override IEnumerator Start() {
             yield return base.Start();
 
-            while(!LoLManager.instance.isReady)
-                yield return null;
+            if(LoLManager.isInstantiated) {
+                while(!LoLManager.instance.isReady)
+                    yield return null;
+            }
+
+            scoreLabel.SetCountImmediate(0);
+
+            if(LoLManager.isInstantiated)
+                scoreLabel.count = LoLManager.instance.curScore;
 
             yield return animator.PlayWait(takePlay);
 

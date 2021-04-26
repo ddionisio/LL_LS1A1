@@ -62,7 +62,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 55f7967882e192f4eaa634fff276aa17, type: 2}
     flags: 48
     danger: 0
-    toxic: 20
+    toxic: 25
     seekMassMin: 0
   _bodyDisplay: {fileID: 7380308056833433566}
   _sensor: {fileID: 0}

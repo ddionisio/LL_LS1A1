@@ -166,6 +166,20 @@ namespace Renegadeware.LL_LS1A1 {
         protected override void OnInstanceInit() {
             base.OnInstanceInit();
 
+            
+        }
+
+        void OnApplicationFocus(bool focus) {
+            if(!focus) {
+                if(HUD.isInstantiated) {
+                    HUD.instance.spawnPlacementIsActive = false;
+                }
+            }
+        }
+
+        protected override IEnumerator Start() {
+            yield return null;
+
             var gameDat = GameData.instance;
 
             if(debugLevel)
@@ -244,17 +258,7 @@ namespace Renegadeware.LL_LS1A1 {
             gameDat.signalOrganismBodyChanged.callback += OnOrganismBodyChanged;
             gameDat.signalOrganismComponentEssentialChanged.callback += OnOrganismComponentEssentialChanged;
             gameDat.signalOrganismComponentChanged.callback += OnOrganismComponentChanged;
-        }
 
-        void OnApplicationFocus(bool focus) {
-            if(!focus) {
-                if(HUD.isInstantiated) {
-                    HUD.instance.spawnPlacementIsActive = false;
-                }
-            }
-        }
-
-        protected override IEnumerator Start() {
             //Loading
             yield return base.Start();
 
@@ -576,7 +580,7 @@ namespace Renegadeware.LL_LS1A1 {
                     mModalParms[ModalRetry.parmCurCount] = entityCount;
                     mModalParms[ModalRetry.parmCount] = environmentCurrentInfo.criteriaCount;
                     mModalParms[ModalRetry.parmHintTextRef] = environmentCurrentInfo.hintRef;
-                    mModalParms[ModalRetry.parmCallback] = (System.Action<ModeSelect>)OnModeSelect;
+                    mModalParms[ModalRetry.parmCallback] = (System.Action<ModeSelect>)OnModeSelectRetry;
 
                     M8.ModalManager.main.Open(gameDat.modalRetry, mModalParms);
 
@@ -635,6 +639,10 @@ namespace Renegadeware.LL_LS1A1 {
             }
 
             mTransitionState = TransitionState.Hidden;
+        }
+
+        void OnModeSelectRetry(ModeSelect toMode) {
+            mModeSelectNext = toMode;
         }
 
         void OnModeSelect(ModeSelect toMode) {

@@ -3478,6 +3478,7 @@ MonoBehaviour:
   environmentRootGO: {fileID: 1459091782}
   editRootGO: {fileID: 2005665436}
   gameRootGO: {fileID: 1344762203}
+  gameFlow: {fileID: 0}
   transition: {fileID: 830167073}
   debugLevel: {fileID: 0}
   debugPlay: 0
@@ -29184,7 +29185,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2047579231
 Transform:
   m_ObjectHideFlags: 0

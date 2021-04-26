@@ -33,7 +33,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 9a3aaefb553796740a30212451b99437, type: 2}
     _energySources:
     - {fileID: 11400000, guid: d93c409e7f89e594ba7a9c49dfad2275, type: 2}
-    flags: 1
+    flags: 0
     danger: 0
     toxic: 0
     seekMassMin: 0
