@@ -526,8 +526,6 @@ namespace Renegadeware.LL_LS1A1 {
                 yield return null;
             }
 
-            GameData.instance.signalModeSelectChange.Invoke(ModeSelect.Play, mModeSelectNext);
-
             //hide hud
             HUD.instance.ElementHide(HUD.Element.Gameplay);
             HUD.instance.ElementHide(HUD.Element.ModeSelect);
@@ -596,6 +594,8 @@ namespace Renegadeware.LL_LS1A1 {
                 mOrganismSpawner.Destroy();
 
             gameRootGO.SetActive(false);
+
+            GameData.instance.signalModeSelectChange.Invoke(ModeSelect.Play, mModeSelectNext);
 
             //hide environment if we are editing
             if(mModeSelectNext == ModeSelect.Edit)
