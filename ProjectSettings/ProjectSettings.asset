@@ -456,6 +456,8 @@ PlayerSettings:
   switchSocketInitializeEnabled: 1
   switchNetworkInterfaceManagerInitializeEnabled: 1
   switchPlayerConnectionEnabled: 1
+  switchUseMicroSleepForYield: 1
+  switchMicroSleepForYieldTime: 25
   ps4NPAgeRating: 12
   ps4NPTitleSecret: 
   ps4NPTrophyPackPath: 
@@ -586,7 +588,8 @@ PlayerSettings:
   gcIncremental: 0
   assemblyVersionValidation: 1
   gcWBarrierValidation: 0
-  apiCompatibilityLevelPerPlatform: {}
+  apiCompatibilityLevelPerPlatform:
+    WebGL: 3
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: Template_2D
