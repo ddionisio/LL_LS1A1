@@ -23,6 +23,7 @@ MonoBehaviour:
   modalOrganismEdit: organismEdit
   modalRetry: retry
   modalVictory: victory
+  modalCellClassification: cellClassification
   scoreBase: 1000
   scoreBonus: 500
   environmentSolidTag: Solid
@@ -58,6 +59,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd3c29ba0e6d69940a79dd4e93e81871, type: 2}
   - {fileID: 11400000, guid: 4329496c0722ab44aa16fa732b665e59, type: 2}
   - {fileID: 11400000, guid: 556857367a22be0419e19b1933907bf4, type: 2}
+  - {fileID: 11400000, guid: 85c2206f3d3e3c240a1381a0c2d6877c, type: 2}
   - {fileID: 11400000, guid: b0cd3c967a408ba42a856f91908e98f8, type: 2}
   - {fileID: 11400000, guid: 4fee986f0f9c81348967252fa013f738, type: 2}
   - {fileID: 11400000, guid: 0b13a25dd9d436241a58d02e30bb66e9, type: 2}

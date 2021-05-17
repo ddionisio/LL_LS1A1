@@ -100,6 +100,8 @@ namespace Renegadeware.LL_LS1A1 {
 
         public int timeIndex { get { return mGameTimeIndex; } }
 
+        public bool isGameflowAvailable { get { return gameFlow && gameFlow.gameObject.activeSelf; } }
+
         /////////////////////////////
 
         private LevelData mLevelData;
@@ -307,7 +309,7 @@ namespace Renegadeware.LL_LS1A1 {
             if(hud.modeSelectFlags != ModeSelectFlags.None)
                 hud.ElementShow(HUD.Element.ModeSelect);
 
-            if(gameFlow)
+            if(isGameflowAvailable)
                 yield return gameFlow.EnvironmentStart();
 
             //wait for mode select
@@ -393,7 +395,7 @@ namespace Renegadeware.LL_LS1A1 {
 
             HUD.instance.ElementShow(HUD.Element.ModeSelect);
 
-            if(gameFlow)
+            if(isGameflowAvailable)
                 yield return gameFlow.EditStart();
 
             //wait for mode select
@@ -475,7 +477,7 @@ namespace Renegadeware.LL_LS1A1 {
             while(hud.isBusy)
                 yield return null;
 
-            if(gameFlow)
+            if(isGameflowAvailable)
                 yield return gameFlow.GameStart();
 
             gameIsInputEnabled = true;
@@ -569,7 +571,7 @@ namespace Renegadeware.LL_LS1A1 {
                         mModeSelectNext = ModeSelect.Environment;
                     }
 
-                    if(gameFlow)
+                    if(isGameflowAvailable)
                         yield return gameFlow.Victory();
                 }
                 else { //retry
