@@ -260,7 +260,7 @@ namespace Renegadeware.LL_LS1A1 {
                 if(grpCompInd != -1)
                     mComponentIDs[i + 1] = grp.components[grpCompInd].ID;
                 else
-                    mComponentIDs[i + 1] = GameData.invalidID;
+                    mComponentIDs[i + 1] = grp.defaultComponentID;
             }
             //
 

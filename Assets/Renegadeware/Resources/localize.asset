@@ -51,6 +51,18 @@ MonoBehaviour:
     voiceDuration: 2
   - key: essentialOrganelleVacuoleDesc
     voiceDuration: 8
+  - key: bodyArchaeaAnaerobe
+    voiceDuration: 2
+  - key: bodyArchaeaAnaerobeDesc
+    voiceDuration: 8
+  - key: bodyArchaeaHalophile
+    voiceDuration: 2
+  - key: bodyArchaeaHalophileDesc
+    voiceDuration: 8
+  - key: bodyArchaeaThermophile
+    voiceDuration: 2
+  - key: bodyArchaeaThermophileDesc
+    voiceDuration: 8
   - key: bodyProtozoaContact
     voiceDuration: 2
   - key: bodyProtozoaContactDesc
@@ -63,17 +75,9 @@ MonoBehaviour:
     voiceDuration: 2
   - key: bodyProtozoaVacuumDesc
     voiceDuration: 8
-  - key: cellStructureThermophile
-    voiceDuration: 2
-  - key: cellStructureThermophileDesc
-    voiceDuration: 8
   - key: cellStructureMethanogen
     voiceDuration: 2
   - key: cellStructureMethanogenDesc
-    voiceDuration: 8
-  - key: cellStructureHalophile
-    voiceDuration: 2
-  - key: cellStructureHalophileDesc
     voiceDuration: 8
   - key: motilityFlagellaMonotrichous
     voiceDuration: 2
@@ -102,6 +106,18 @@ MonoBehaviour:
   - key: motilityCilliate
     voiceDuration: 2
   - key: motilityCilliateDesc
+    voiceDuration: 8
+  - key: metabolismAminoAcid
+    voiceDuration: 2
+  - key: metabolismAminoAcidDesc
+    voiceDuration: 8
+  - key: metabolismHydrogen
+    voiceDuration: 2
+  - key: metabolismHydrogenDesc
+    voiceDuration: 8
+  - key: metabolismSulfur
+    voiceDuration: 2
+  - key: metabolismSulfurDesc
     voiceDuration: 8
   - key: metabolismMethanotroph
     voiceDuration: 2

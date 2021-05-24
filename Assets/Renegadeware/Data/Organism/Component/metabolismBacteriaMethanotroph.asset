@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
-  m_Name: metabolismMethanotroph
+  m_Name: metabolismBacteriaMethanotroph
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: ed300ac8df91098429bc85117ecb01f8, type: 3}
   nameRef: metabolismMethanotroph

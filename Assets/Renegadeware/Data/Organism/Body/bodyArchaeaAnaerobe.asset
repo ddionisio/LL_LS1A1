@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d7549050fcfd1845940fe59cc2a63d4, type: 3}
-  m_Name: bodyArchaeaThermophile
+  m_Name: bodyArchaeaAnaerobe
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 1dad48d92e3717e428f020ac27d5286d, type: 3}
-  nameRef: bodyArchaeaThermophile
-  descRef: bodyArchaeaThermophileDesc
-  ID: 59
+  icon: {fileID: 21300000, guid: ab65a86c88cfee040be69a0d8640c8d2, type: 3}
+  nameRef: bodyArchaeaAnaerobe
+  descRef: bodyArchaeaAnaerobeDesc
+  ID: 63
   attributeInfos: []
   stats:
-    mass: 0.01
-    forwardAccel: 0
-    turnAccel: 25
-    speedLimit: 2
-    velocityReceiveScale: 1
-    energyCapacity: 5
+    mass: 0.02
+    forwardAccel: 0.15
+    turnAccel: 15
+    speedLimit: 2.5
+    velocityReceiveScale: 1.15
+    energyCapacity: 6
     energyConsumeRate: 0
     lifespan: 25
     _hazardResistances: []
@@ -32,15 +32,15 @@ MonoBehaviour:
     danger: 0
     toxic: 0
     seekMassMin: 0
-  _editPrefab: {fileID: 6093218955505614780, guid: 09f83b3814904cc42b4b2039089abe12,
+  _editPrefab: {fileID: 1470182152462118162, guid: f80ce407f5503ba4ea19da9aa5530769,
     type: 3}
-  _gamePrefab: {fileID: 2110200038454944217, guid: 0e956bebbdcd53345ba69974722b3abd,
+  _gamePrefab: {fileID: 1922188881532647129, guid: ca7d88c74b233fc4783d503c2c326265,
     type: 3}
   componentEssentials:
   - {fileID: 11400000, guid: f0744b1421eb0dd44806305c24b7d4e5, type: 2}
   - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}
   componentGroups:
-  - {fileID: 11400000, guid: 5530529c8aa5c5f409425f3761a08dd6, type: 2}
+  - {fileID: 11400000, guid: 90fa2310ceb826d4295492ccffc089b4, type: 2}
   - {fileID: 11400000, guid: bff3dbc696111544996c7142f4cb9cbb, type: 2}
   - {fileID: 11400000, guid: b7c49f38b0c82664e9e30e4fad99108f, type: 2}
   bodyColor: {r: 0.9333334, g: 0.8745099, b: 0.8431373, a: 1}

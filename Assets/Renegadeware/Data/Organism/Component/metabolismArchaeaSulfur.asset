@@ -10,16 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
-  m_Name: cellStructureThermophile
+  m_Name: metabolismArchaeaSulfur
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 1dad48d92e3717e428f020ac27d5286d, type: 3}
-  nameRef: cellStructureThermophile
-  descRef: cellStructureThermophileDesc
-  ID: 8
+  icon: {fileID: 21300000, guid: 4a9151466de46684b88d90a5477b5646, type: 3}
+  nameRef: metabolismSulfur
+  descRef: metabolismSulfurDesc
+  ID: 60
   attributeInfos:
-  - icon: {fileID: 21300000, guid: d3684a0f4a569ca4a8a9de87ad463006, type: 3}
-    categoryRef: attributeCategoryResistance
-    nameRef: attributeHazardExtremeHighTemperature
   - icon: {fileID: 21300000, guid: 4a9151466de46684b88d90a5477b5646, type: 3}
     categoryRef: attributeCategoryConsumes
     nameRef: energySulfur
@@ -32,8 +29,7 @@ MonoBehaviour:
     energyCapacity: 0
     energyConsumeRate: 0
     lifespan: 0
-    _hazardResistances:
-    - {fileID: 11400000, guid: 5e5f9e610700cfd4a982b40bc2700aff, type: 2}
+    _hazardResistances: []
     _energySources:
     - {fileID: 11400000, guid: 0fb0c32c9ed00a74a917caefff418d43, type: 2}
     flags: 0

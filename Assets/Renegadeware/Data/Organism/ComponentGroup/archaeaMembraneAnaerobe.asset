@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6dabe59dd8a0ee54a884b5bd1b57472b, type: 3}
-  m_Name: archaeaThermophile
+  m_Name: archaeaMembraneAnaerobe
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   nameRef: 
@@ -18,6 +18,4 @@ MonoBehaviour:
   isHidden: 1
   defaultIndex: 0
   components:
-  - {fileID: 11400000, guid: 60624a6baca2e204b8c611a71d2b4b77, type: 2}
-  - {fileID: 11400000, guid: 60624a6baca2e204b8c611a71d2b4b77, type: 2}
-  - {fileID: 11400000, guid: 60624a6baca2e204b8c611a71d2b4b77, type: 2}
+  - {fileID: 11400000, guid: 27df495633d8f6a46b53fc21f2f1cff4, type: 2}
