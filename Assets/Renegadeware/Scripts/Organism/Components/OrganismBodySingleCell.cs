@@ -269,12 +269,33 @@ namespace Renegadeware.LL_LS1A1 {
                             mStickies.Clear();
                     }
 
-                    if(mEndobioticHost != null) { //absorb energy from host
+                    if(mEndobioticHost != null) { //absorb energy from host if we consume any energy (from host itself or contacts)
                         if(!mEndobioticHost.isReleased && !mEndobioticHost.stats.isLifeExpired && !mEndobioticHost.stats.energyLocked && mEndobioticHost.stats.energy > 0f) {
-                            var energyAmt = entity.stats.energyConsumeRate * Time.deltaTime;
+                            var energyConsume = entity.stats.energyConsumeRate * Time.deltaTime;
 
-                            mEndobioticHost.stats.energy -= energyAmt;
-                            entity.stats.energy += energyAmt;
+                            var energyAmt = 0f;
+
+                            //check if host body has matching energy
+                            if(mEndobioticHost.bodyComponent.IsEnergySourceMatch(entity.stats))
+                                energyAmt += energyConsume;
+                            else { //check energy contacts with host
+                                for(int i = 0; i < mEndobioticHost.contactCount; i++) {
+                                    var contactColl = mEndobioticHost.contactColliders[i];
+                                    if(contactColl.CompareTag(gameDat.energyTag)) {
+                                        var energySrc = contactColl.GetComponent<EnergySource>();
+                                        if(energySrc && energySrc.isActive && entity.stats.EnergyMatch(energySrc.data)) {
+                                            energyAmt += energyConsume;
+                                            energySrc.energy -= energyConsume;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if(energyAmt > 0f) {
+                                mEndobioticHost.stats.energy -= energyConsume;
+
+                                entity.stats.energy += energyAmt;
+                            }
                         }
                         else //detach from host
                             EndobioticDetach();

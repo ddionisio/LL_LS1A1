@@ -10,19 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
-  m_Name: metabolismBacteriaMethanotroph
+  m_Name: membraneBacteriaAnaerobeObligate
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: ed300ac8df91098429bc85117ecb01f8, type: 3}
-  nameRef: metabolismMethanotroph
-  descRef: metabolismMethanotrophDesc
-  ID: 23
+  icon: {fileID: 0}
+  nameRef: 
+  descRef: 
+  ID: 65
   attributeInfos:
-  - icon: {fileID: 21300000, guid: 2e12d8c68a6bfc741a7ea8ecc0011a85, type: 3}
+  - icon: {fileID: 21300000, guid: 13497cc51eec3e741aba419492f50f80, type: 3}
     categoryRef: attributeCategoryResistance
-    nameRef: attributeHazardHighMethane
-  - icon: {fileID: 21300000, guid: b73091286c6e5074ba870e2bcaaa0d66, type: 3}
-    categoryRef: attributeCategoryConsumes
-    nameRef: energyMethane
+    nameRef: attributeResistanceAnaerobic
   stats:
     mass: 0
     forwardAccel: 0
@@ -33,14 +30,14 @@ MonoBehaviour:
     energyConsumeRate: 0
     lifespan: 0
     _hazardResistances:
-    - {fileID: 11400000, guid: 9a3aaefb553796740a30212451b99437, type: 2}
-    _energySources:
-    - {fileID: 11400000, guid: 8dca73c42545a574faece3f8d90be4d6, type: 2}
+    - {fileID: 11400000, guid: 0e89c1a0db17f1842bc118327acebef5, type: 2}
+    _energySources: []
     flags: 0
     danger: 0
     toxic: 0
     seekMassMin: 0
-  _editPrefab: {fileID: 0}
+  _editPrefab: {fileID: 3512769295765519444, guid: 53b54a62cadd7d240b3ab27aa22d0c73,
+    type: 3}
   _gamePrefab: {fileID: 0}
   bodySprites:
   - bodyID: 19
@@ -49,5 +46,5 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f0dfad20f6592d8419ccd6e9599d7700, type: 3}
   - bodyID: 21
     sprite: {fileID: 21300000, guid: e8acec409ed58db4591136d717fb37ce, type: 3}
-  bodyEditColor: {r: 0.26666668, g: 0.18039216, b: 0.24313727, a: 1}
+  bodyEditColor: {r: 1, g: 1, b: 1, a: 1}
   _anchor: body

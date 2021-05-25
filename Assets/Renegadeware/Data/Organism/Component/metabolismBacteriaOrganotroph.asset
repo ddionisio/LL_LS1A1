@@ -27,17 +27,16 @@ MonoBehaviour:
     speedLimit: 0
     velocityReceiveScale: 0
     energyCapacity: 0
-    energyConsumeRate: 0
+    energyConsumeRate: 2
     lifespan: 0
     _hazardResistances: []
     _energySources:
     - {fileID: 11400000, guid: 55f7967882e192f4eaa634fff276aa17, type: 2}
-    flags: 3
+    flags: 0
     danger: 0
     toxic: 0
     seekMassMin: 0
-  _editPrefab: {fileID: 526060078913398496, guid: f112600ab36c99343b28e82b0a659ebf,
-    type: 3}
+  _editPrefab: {fileID: 0}
   _gamePrefab: {fileID: 0}
   bodySprites:
   - bodyID: 19

@@ -13,6 +13,7 @@ namespace Renegadeware.LL_LS1A1 {
         [Header("Body Info")]
         public OrganismComponent[] componentEssentials; //essential organelles for this body (used after picking body the first time)
         public OrganismComponentGroup[] componentGroups;
+        public EnergyData[] energyBodySources; //used for endobiotic parasites
 
         [Header("Body Display")]
         public Color bodyColor = Color.white;
@@ -37,6 +38,19 @@ namespace Renegadeware.LL_LS1A1 {
         public override void SetupEditBody(OrganismDisplayBody displayBody) {
             if(displayBody.colorGroup)
                 displayBody.colorGroup.ApplyColor(bodyColor);
+        }
+
+        public bool IsEnergySourceMatch(OrganismStats stats) {
+            for(int i = 0; i < stats.energySources.Count; i++) {
+                var energyData = stats.energySources[i];
+
+                for(int j = 0; j < energyBodySources.Length; j++) {
+                    if(energyBodySources[j] == energyData)
+                        return true;
+                }
+            }
+
+            return false;
         }
     }
 }

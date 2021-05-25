@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14d787a828849834d9a11d29fa648db9, type: 3}
-  m_Name: glucose
+  m_Script: {fileID: 11500000, guid: a8f8462dfaa80b44595a8284a3a50c3e, type: 3}
+  m_Name: oxygen
   m_EditorClassIdentifier: 

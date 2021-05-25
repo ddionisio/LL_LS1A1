@@ -9,35 +9,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d7549050fcfd1845940fe59cc2a63d4, type: 3}
-  m_Name: bodyMacrophage
+  m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
+  m_Name: membraneBacteriaAerobeObligate
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   nameRef: 
   descRef: 
-  ID: 35
+  ID: 66
   attributeInfos: []
   stats:
-    mass: 0.15
+    mass: 0
     forwardAccel: 0
     turnAccel: 0
-    speedLimit: 1.65
+    speedLimit: 0
     velocityReceiveScale: 0
-    energyCapacity: 150
-    energyConsumeRate: 1
+    energyCapacity: 0
+    energyConsumeRate: 0
     lifespan: 0
-    _hazardResistances: []
+    _hazardResistances:
+    - {fileID: 11400000, guid: 0f3f8aafaa4e57d48b0efd0fc5cd5086, type: 2}
     _energySources: []
-    flags: 0
+    flags: 3
     danger: 0
     toxic: 0
     seekMassMin: 0
-  _editPrefab: {fileID: 0}
+  _editPrefab: {fileID: 3512769295765519444, guid: 53b54a62cadd7d240b3ab27aa22d0c73,
+    type: 3}
   _gamePrefab: {fileID: 0}
-  componentEssentials: []
-  componentGroups: []
-  energyBodySources:
-  - {fileID: 11400000, guid: 55f7967882e192f4eaa634fff276aa17, type: 2}
-  bodyColor: {r: 1, g: 1, b: 1, a: 1}
-  splitMode: 0
-  deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+  bodySprites: []
+  bodyEditColor: {r: 1, g: 1, b: 1, a: 1}
+  _anchor: body

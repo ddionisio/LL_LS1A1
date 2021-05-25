@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d7549050fcfd1845940fe59cc2a63d4, type: 3}
-  m_Name: bodyBacteriaCoccus
+  m_Name: bodyBacteriaEndobiotic
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: b6d4f2d777a6f994a8bc78a81f1d4cbb, type: 3}
   nameRef: bodyCoccus
   descRef: 
-  ID: 21
+  ID: 70
   attributeInfos: []
   stats:
     mass: 0.01
@@ -25,7 +25,7 @@ MonoBehaviour:
     velocityReceiveScale: 1
     energyCapacity: 5
     energyConsumeRate: 0
-    lifespan: 25
+    lifespan: 45
     _hazardResistances: []
     _energySources: []
     flags: 0
@@ -41,8 +41,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}
   - {fileID: 11400000, guid: f1633226b2891fd4c85f9ff3f9d56f8d, type: 2}
   componentGroups:
+  - {fileID: 11400000, guid: 03d407a639c7f53408315f13d9e90abb, type: 2}
   - {fileID: 11400000, guid: 19926884ee0697c40815da502fe7b349, type: 2}
   - {fileID: 11400000, guid: f5799595bcb07b644a7e94ddc32a5f56, type: 2}
+  energyBodySources: []
   bodyColor: {r: 1, g: 1, b: 1, a: 1}
   splitMode: 0
   deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}

@@ -36,8 +36,7 @@ MonoBehaviour:
     danger: 0
     toxic: 0
     seekMassMin: 0
-  _editPrefab: {fileID: 1575206439004007712, guid: 65862098732bcc54faf766fefe29897e,
-    type: 3}
+  _editPrefab: {fileID: 0}
   _gamePrefab: {fileID: 0}
   bodySprites:
   - bodyID: 19
@@ -46,5 +45,5 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 9aeb0404936b760408a498687b1aec69, type: 3}
   - bodyID: 21
     sprite: {fileID: 21300000, guid: 64596e49036c7424499b8200a90b9e20, type: 3}
-  bodyEditColor: {r: 0.909804, g: 0.89019614, b: 0.50980395, a: 1}
+  bodyEditColor: {r: 0.6627451, g: 0.8196079, b: 0.5176471, a: 1}
   _anchor: body

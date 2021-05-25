@@ -36,6 +36,8 @@ MonoBehaviour:
   _gamePrefab: {fileID: 0}
   componentEssentials: []
   componentGroups: []
+  energyBodySources:
+  - {fileID: 11400000, guid: 55f7967882e192f4eaa634fff276aa17, type: 2}
   bodyColor: {r: 1, g: 1, b: 1, a: 1}
   splitMode: 0
   deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

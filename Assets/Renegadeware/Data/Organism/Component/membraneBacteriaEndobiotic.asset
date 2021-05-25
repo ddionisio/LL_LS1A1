@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4b311ac12e141d45bcb95a5e64a7726, type: 3}
+  m_Name: membraneBacteriaEndobiotic
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  nameRef: 
+  descRef: 
+  ID: 67
+  attributeInfos:
+  - icon: {fileID: 21300000, guid: 3d3c1a5877f3a68449d49e35f93982c3, type: 3}
+    categoryRef: attributeCategoryResistance
+    nameRef: attributeResistanceAntiphagocytic
+  stats:
+    mass: 0
+    forwardAccel: 0
+    turnAccel: 0
+    speedLimit: 0
+    velocityReceiveScale: 0
+    energyCapacity: 0
+    energyConsumeRate: 0
+    lifespan: 0
+    _hazardResistances:
+    - {fileID: 11400000, guid: 0f3f8aafaa4e57d48b0efd0fc5cd5086, type: 2}
+    _energySources: []
+    flags: 8
+    danger: 0
+    toxic: 0
+    seekMassMin: 0
+  _editPrefab: {fileID: 4869866281698309007, guid: 0538a6dcdfad83941a19b71c9caac55c,
+    type: 3}
+  _gamePrefab: {fileID: 0}
+  bodySprites:
+  - bodyID: 19
+    sprite: {fileID: 21300000, guid: a70ad413b7ea7a846afe3a1bba66630f, type: 3}
+  - bodyID: 20
+    sprite: {fileID: 21300000, guid: c7c6b179af86f384b9f1d8ea8f01616f, type: 3}
+  - bodyID: 21
+    sprite: {fileID: 21300000, guid: b8441e224b1ea72479379b0a1a6397c2, type: 3}
+  bodyEditColor: {r: 1, g: 1, b: 1, a: 1}
+  _anchor: body

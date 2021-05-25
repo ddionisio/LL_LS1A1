@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7549050fcfd1845940fe59cc2a63d4, type: 3}
+  m_Name: bodyBacteriaCoccus
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: b6d4f2d777a6f994a8bc78a81f1d4cbb, type: 3}
+  nameRef: bodyCoccus
+  descRef: 
+  ID: 21
+  attributeInfos: []
+  stats:
+    mass: 0.01
+    forwardAccel: 0
+    turnAccel: 25
+    speedLimit: 2
+    velocityReceiveScale: 1
+    energyCapacity: 5
+    energyConsumeRate: 0
+    lifespan: 25
+    _hazardResistances: []
+    _energySources: []
+    flags: 0
+    danger: 0
+    toxic: 0
+    seekMassMin: 0
+  _editPrefab: {fileID: 6093218955505614780, guid: 09f83b3814904cc42b4b2039089abe12,
+    type: 3}
+  _gamePrefab: {fileID: 2110200038454944217, guid: 0e956bebbdcd53345ba69974722b3abd,
+    type: 3}
+  componentEssentials:
+  - {fileID: 11400000, guid: f0744b1421eb0dd44806305c24b7d4e5, type: 2}
+  - {fileID: 11400000, guid: bced03456ca3e2044aa1a737c83a6c3a, type: 2}
+  - {fileID: 11400000, guid: f1633226b2891fd4c85f9ff3f9d56f8d, type: 2}
+  componentGroups:
+  - {fileID: 11400000, guid: 19926884ee0697c40815da502fe7b349, type: 2}
+  - {fileID: 11400000, guid: f5799595bcb07b644a7e94ddc32a5f56, type: 2}
+  energyBodySources: []
+  bodyColor: {r: 1, g: 1, b: 1, a: 1}
+  splitMode: 0
+  deathTint: {r: 0.5, g: 0.5, b: 0.5, a: 1}
